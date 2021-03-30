@@ -70,19 +70,39 @@
             <v-card class="listeCards">
               <v-list-item-content class="contenuCards" >
               <v-row  class="premiereLigne">
+                <v-col cols="5">
                 <v-list-item class="nomRestaurant"><h1>{{restaurant[0].Name}}</h1></v-list-item> 
+                </v-col>
+                <v-col cols="3" class="colCards">
+                  <v-list-item class="notes"><v-rating background-color="orange lighten-3" color="orange" :value="starAverage(restaurant)" half-icon="mdi-star-half" half-increments readonly ></v-rating></v-list-item>
+                </v-col>
+                <v-col cols="4" class="photo">
+                  <v-list-item ><v-img max-height="300" max-width="500" :src="restaurant[0].LogoUrl"></v-img></v-list-item> 
+                </v-col>
               </v-row>
               <v-row>
-                <v-col class="colCards">
+                <v-col cols="3" class="colCards">
                   <v-list-item class="nomTypes"><font v-for="type in calculTypes(restaurant,[])" :key="type" class="nomType" >{{type}}</font></v-list-item>
                 </v-col>
-                <v-col class="colCards">
-                  <v-list-item class="notes"><v-rating background-color="orange lighten-3" color="orange" :value="restaurant[0].Rating.StarRating" readonly ></v-rating></v-list-item>
+                <v-col cols="5" class="colDifLivreurs">
+                  <v-row>
+                    <v-col>
+                      <v-card-title>Délais : </v-card-title>
+                      <v-card-text>
+                          <v-chip class="tempsLivraison" v-for="resto in restaurant" :key="resto.id">{{resto.Api}} : {{resto.DeliveryEtaMinutes.RangeLower}} - {{resto.DeliveryEtaMinutes.RangeUpper}} min</v-chip>
+                      </v-card-text>
+                    </v-col>
+                    <v-col>
+                      <v-card-title>Frais de livraison : </v-card-title>
+                      <v-card-text>
+                          <v-chip class="tempsLivraison" v-for="resto in restaurant" :key="resto.id">{{resto.Api}} : {{resto.DeliveryCost}}{{devise}} </v-chip>
+                      </v-card-text>
+                    </v-col>
+                  </v-row>
+                </v-col>
+                <v-col  cols="3">
                 </v-col>
               </v-row>
-              <v-col class="photo">
-                <v-list-item ><v-img max-height="200" max-width="300" :src="restaurant[0].LogoUrl"></v-img></v-list-item> 
-              </v-col>
               </v-list-item-content>
             </v-card>      
           </v-list-item>
@@ -152,7 +172,7 @@
 }
 
 .nomTypes{
-  margin:20px;
+  margin-top:20%;
   margin-left: 60px;
   color:gray;
 }
@@ -179,6 +199,15 @@
   padding:0px;
   margin:0px;
 }
+
+.colDifLivreurs{
+  margin-top:40px;
+}
+
+.tempsLivraison{
+  margin:5px;
+}
+
 </style>
 
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
@@ -201,6 +230,7 @@ export default {
       affichageRecherche:false,
       affichageFiltre: false,
       offre:false,
+      devise:"",
       filtrer : false,
       delais: 120,
       choixFraisLivraison: ["3","5","7","7+"],
@@ -229,6 +259,7 @@ export default {
             (result) => {
               var datas = [];
               if (this.PaysChoisit == "Royaume-Unis") {
+                this.devise="$"
                 if (result.result.hits && result.result.hits.length > 0) {
                   result.result.hits.map(function (sug) {
                     datas.push(sug.suggestion);
@@ -237,6 +268,7 @@ export default {
                   this.suggestionsHere = datas;
                 }
               } else if ((this.PaysChoisit = "France")) {
+                this.devise="€"
                 if (result.features && result.features.length > 0) {
                   result.features.map(function (sug) {
                     datas.push(sug.properties.label);
@@ -342,6 +374,15 @@ export default {
     },
     listeUnique(value, index, self) {
       return self.indexOf(value) === index;
+    },
+    starAverage(sameRestaurants){
+      var average=0;
+      for(var restaurantNum in sameRestaurants){
+        average=average+sameRestaurants[restaurantNum].Rating.StarRating
+      }
+      average=average/sameRestaurants.length
+      console.log(average)
+      return average
     }
   },
 };
