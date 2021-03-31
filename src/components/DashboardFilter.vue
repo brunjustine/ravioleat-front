@@ -4,7 +4,7 @@
         <v-subheader class="search-title">Type de Nourriture</v-subheader>
         <v-select v-model="foodFilter" :items="foodTypes" multiple></v-select>
         <!--Offres-->
-        <v-checkbox v-model="offre" label="Restaurants avec des offres"></v-checkbox>
+        <v-checkbox v-model="offer" label="Restaurants avec des offres"></v-checkbox>
         <!--Délais de livraison max-->
         <v-subheader class="search-title">Délais livraison max</v-subheader>
         <v-card-text>
@@ -16,7 +16,7 @@
         </v-card-text>
         <!--Frais de livraison-->
         <v-subheader class="search-title">Frais de livraison</v-subheader>
-        <v-slider v-model="deliveryFilter" :tick-labels="deliveryCost" step="1" ticks="always" tick-size="4" :max="3"></v-slider>
+        <v-slider v-model="deliveryCostFilter" :tick-labels="deliveryCost" step="1" ticks="always" tick-size="4" :max="3"></v-slider>
         <!--Notes-->
         <v-subheader class="search-title">Notes</v-subheader>
         <v-rating v-model="grade" background-color="orange lighten-3" color="orange" large></v-rating>
@@ -28,10 +28,11 @@
 export default {
     name: "DashboardFilter",
     props: {
-      allRestaurants: [],
+      allRestaurants: Array,
     },
     data: () => ({
         delay: 120,
+        offer:false,
         deliveryCost: ["0","3","5","7","7+"],
         deliveryCostFilter:0,
         foodFilter:[],
@@ -40,6 +41,7 @@ export default {
     }),
     methods: {
         filterRestaurants() {
+          console.log(this.allRestaurants)
         }
     }
 }

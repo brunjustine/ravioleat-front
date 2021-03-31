@@ -120,12 +120,6 @@ export default {
       offre:false,
       devise:"",
       filtrer : false,
-      delais: 120,
-      choixFraisLivraison: ["3","5","7","7+"],
-      fraisLivraison:3,
-      typeChosit:[],
-      typeNourriture: ['Fast Food','Burgers','Pizza','Asiatique','Sushis','Cuisine Saine', 'Halal', 'Indienne','Petit déjeuné'],
-      note:0,
   }),
   methods: {
     onKeypressCity(e) {
