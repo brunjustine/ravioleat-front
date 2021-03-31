@@ -1,12 +1,12 @@
 <template>
     <v-card id="card-filter">
         <!--Type-->
-        <v-subheader class="TitreRecherche">Type de Nourriture</v-subheader>
+        <v-subheader class="search-title">Type de Nourriture</v-subheader>
         <v-select v-model="foodFilter" :items="foodTypes" multiple></v-select>
         <!--Offres-->
         <v-checkbox v-model="offre" label="Restaurants avec des offres"></v-checkbox>
         <!--Délais de livraison max-->
-        <v-subheader class="TitreRecherche">Délais livraison max</v-subheader>
+        <v-subheader class="search-title">Délais livraison max</v-subheader>
         <v-card-text>
           <v-row>
             <v-col class="px-4">
@@ -15,10 +15,10 @@
           </v-row>
         </v-card-text>
         <!--Frais de livraison-->
-        <v-subheader class="TitreRecherche">Frais de livraison</v-subheader>
+        <v-subheader class="search-title">Frais de livraison</v-subheader>
         <v-slider v-model="deliveryFilter" :tick-labels="deliveryCost" step="1" ticks="always" tick-size="4" :max="3"></v-slider>
         <!--Notes-->
-        <v-subheader class="TitreRecherche">Notes</v-subheader>
+        <v-subheader class="search-title">Notes</v-subheader>
         <v-rating v-model="grade" background-color="orange lighten-3" color="orange" large></v-rating>
         <v-btn depressed color="primary" v-on:click="filterRestaurants()" >Filtrer</v-btn>
     </v-card>
@@ -51,6 +51,10 @@ export default {
     height: min-content;
     margin:2%;
     padding: 15px;
+}
+
+.search-title {
+  font-size: 20px;
 }
 </style>
 

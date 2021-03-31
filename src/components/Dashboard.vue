@@ -106,19 +106,8 @@
   margin-right: 20px;
 }
 
-#cardFiltre{
-  height: min-content;
-  margin:2%;
-  padding: 15px;
-}
-
 .prixAffichage {
   width: 60px;
-}
-
-.TitreRecherche {
-  
-  font-size: 20px;
 }
 
 .listeAdresse{
