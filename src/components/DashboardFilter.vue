@@ -1,5 +1,5 @@
 <template>
-    <v-card id="card-filter">
+    <v-card id="card-filter" max-width="280">
         <!--Type-->
         <v-subheader class="search-title">Types de Nourriture</v-subheader>
         <v-select v-model="foodFilter" :items="foodTypes" multiple></v-select>
@@ -16,7 +16,7 @@
         </v-card-text>
         <!--Frais de livraison-->
         <v-subheader class="search-title">Frais de livraison</v-subheader>
-        <v-slider v-model="deliveryCostFilter" :tick-labels="deliveryCost" step="1" ticks="always" tick-size="4" :max="3"></v-slider>
+        <v-slider v-model="deliveryCostFilter" :tick-labels="deliveryCost" step="1" ticks="always" tick-size="5" :max="4"></v-slider>
         <!--Notes-->
         <v-subheader class="search-title">Notes</v-subheader>
         <v-rating v-model="grade" background-color="orange lighten-3" color="orange" large></v-rating>
@@ -30,7 +30,8 @@ export default {
     props: {
       allRestaurants: Array,
     },
-    data: () => ({
+    data: function() {
+      return {  
         delay: 120,
         offer:false,
         deliveryCost: ["0","3","5","7","7+"],
@@ -38,11 +39,39 @@ export default {
         foodFilter:[],
         foodTypes: ['Fast Food','Burgers','Pizzas','Asiatique','Sushis','Cuisine Saine', 'Halal', 'Indienne','Petit déjeuner'],
         grade:0,
-    }),
+        filteredRestaurants: this.allRestaurants
+      }
+    },
     methods: {
         filterRestaurants() {
-          console.log(this.allRestaurants)
-        }
+          this.filteredRestaurants = this.allRestaurants
+          this.filteredRestaurants = this.filterByOffer()
+          console.log(this.filteredRestaurants)
+        },
+        filterByDeliveryCost(){
+
+        },
+        filterByDeliveryDelay(){
+          
+        },
+        filterByFoodTypes(){
+
+        },
+        filterByOffer(){
+          if (this.offer==true ){
+            return this.filteredRestaurants.filter(element =>
+              {
+                let plateformes = element.filter(e => e.Offers.length >0)
+                return plateformes.length >0
+              }
+            ); 
+          } else {
+            return this.filteredRestaurants
+          }
+        },
+        filterByGrade(){
+
+        }        
     }
 }
 </script>
