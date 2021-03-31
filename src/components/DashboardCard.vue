@@ -22,7 +22,7 @@
                             <v-col>
                                 <v-card-title>Délais : </v-card-title>
                                 <v-card-text>
-                                    <v-chip class="tempsLivraison" v-for="resto in restaurant" :key="resto.id">{{resto.Api}} : {{resto.DeliveryEtaMinutes.RangeLower}} - {{resto.DeliveryEtaMinutes.RangeUpper}} min</v-chip>
+                                    <v-chip class="tempsLivraison" v-for="resto in restaurant" :key="resto.id">{{resto.Api}} <font v-if="resto.DeliveryEtaMinutes!=null">: {{resto.DeliveryEtaMinutes.RangeLower}} - {{resto.DeliveryEtaMinutes.RangeUpper}} min</font></v-chip>
                                 </v-card-text>
                             </v-col>
                             <v-col>
