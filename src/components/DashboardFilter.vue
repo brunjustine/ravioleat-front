@@ -44,30 +44,35 @@ export default {
     },
     methods: {
         filterRestaurants() {
-          this.filteredRestaurants = this.allRestaurants
-          this.filteredRestaurants = this.filterByOffer()
+          let tmpRestaurants = this.allRestaurants
+          this.filteredRestaurants = tmpRestaurants.filter(restaurant =>
+          {
+            //let plateformes = this.filterByOffer(restaurant)
+            //this.filterByFoodTypes()
+            return plateformes.length > 0
+          })
+          
           console.log(this.filteredRestaurants)
+        },
+        filterByFoodTypes(){
+          if (this.foodFilter.length>0) {
+            return this.filteredRestaurants.filter()
+          }
+          console.log(this.foodFilter)
+
+        },
+        filterByOffer: function (restaurant){
+          if (this.offer==true ){
+            return restaurant.filter(plateforme => plateforme.Offers.length >0)
+          } else {
+            return restaurant
+          }
         },
         filterByDeliveryCost(){
 
         },
         filterByDeliveryDelay(){
           
-        },
-        filterByFoodTypes(){
-
-        },
-        filterByOffer(){
-          if (this.offer==true ){
-            return this.filteredRestaurants.filter(element =>
-              {
-                let plateformes = element.filter(e => e.Offers.length >0)
-                return plateformes.length >0
-              }
-            ); 
-          } else {
-            return this.filteredRestaurants
-          }
         },
         filterByGrade(){
 
