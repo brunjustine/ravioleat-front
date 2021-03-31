@@ -117,9 +117,7 @@ export default {
       allRestaurants:[],
       affichageRecherche:false,
       affichageFiltre: false,
-      offre:false,
       devise:"",
-      filtrer : false,
   }),
   methods: {
     onKeypressCity(e) {
