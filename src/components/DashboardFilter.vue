@@ -37,7 +37,7 @@ export default {
         deliveryCost: ["0","3","5","7","7+"],
         deliveryCostFilter:0,
         foodFilter:[],
-        foodTypes: ['Fast Food','Burgers','Pizzas','Asiatique','Sushis','Cuisine Saine', 'Halal', 'Indienne','Petit déjeuner'],
+        foodTypes: ['Fast Food','Burger','Pizza','Asiatique','Sushis','Cuisine Saine', 'Halal', 'Indien','Petit déjeuner'],
         grade:0,
         filteredRestaurants: this.allRestaurants
       }
@@ -47,19 +47,18 @@ export default {
           let tmpRestaurants = this.allRestaurants
           this.filteredRestaurants = tmpRestaurants.filter(restaurant =>
           {
-            //let plateformes = this.filterByOffer(restaurant)
-            //this.filterByFoodTypes()
+            let plateformes = this.filterByOffer(restaurant)
+            plateformes = this.filterByFoodTypes(plateformes)
             return plateformes.length > 0
           })
-          
           console.log(this.filteredRestaurants)
         },
-        filterByFoodTypes(){
+        filterByFoodTypes(restaurant){
           if (this.foodFilter.length>0) {
-            return this.filteredRestaurants.filter()
+            return restaurant.filter(plateforme => plateforme.CuisineTypes.find(type => this.foodFilter.includes(type.Name)))
+          } else {
+            return restaurant
           }
-          console.log(this.foodFilter)
-
         },
         filterByOffer: function (restaurant){
           if (this.offer==true ){
