@@ -1,12 +1,12 @@
 <template>
     <v-card id="card-filter">
         <!--Type-->
-        <v-subheader class="search-title">Type de Nourriture</v-subheader>
+        <v-subheader class="search-title">Types de Nourriture</v-subheader>
         <v-select v-model="foodFilter" :items="foodTypes" multiple></v-select>
         <!--Offres-->
         <v-checkbox v-model="offer" label="Restaurants avec des offres"></v-checkbox>
         <!--Délais de livraison max-->
-        <v-subheader class="search-title">Délais livraison max</v-subheader>
+        <v-subheader class="search-title">Délais de livraison max</v-subheader>
         <v-card-text>
           <v-row>
             <v-col class="px-4">
@@ -36,7 +36,7 @@ export default {
         deliveryCost: ["0","3","5","7","7+"],
         deliveryCostFilter:0,
         foodFilter:[],
-        foodTypes: ['Fast Food','Burgers','Pizza','Asiatique','Sushis','Cuisine Saine', 'Halal', 'Indienne','Petit déjeuné'],
+        foodTypes: ['Fast Food','Burgers','Pizzas','Asiatique','Sushis','Cuisine Saine', 'Halal', 'Indienne','Petit déjeuner'],
         grade:0,
     }),
     methods: {
