@@ -40,29 +40,7 @@
       <div class="filtre-CardsRestaurants">
 
         <!--FILTRAGE-->
-        <v-card id="cardFiltre" v-if="affichageFiltre">
-          <!--Type-->
-          <v-subheader class="TitreRecherche">Type de Nourriture</v-subheader>
-          <v-select v-model="typeChosit" :items="typeNourriture" multiple></v-select>
-          <!--Offres-->
-          <v-checkbox v-model="offre" label="Restaurants avec des offres"></v-checkbox>
-          <!--Délais de livraison max-->
-          <v-subheader class="TitreRecherche">Délais livraison max</v-subheader>
-          <v-card-text>
-            <v-row>
-              <v-col class="px-4">
-                <v-slider v-model="delais" thumb-label="always" :min="10" :max="120" step="5" ></v-slider>
-              </v-col>
-            </v-row>
-          </v-card-text>
-          <!--Frais de livraison-->
-          <v-subheader class="TitreRecherche">Frais de livraison</v-subheader>
-          <v-slider v-model="fraisLivraison" :tick-labels="choixFraisLivraison" step="1" ticks="always" tick-size="4" :max="3"></v-slider>
-          <!--Notes-->
-          <v-subheader class="TitreRecherche">Notes</v-subheader>
-          <v-rating v-model="note" background-color="orange lighten-3" color="orange" large></v-rating>
-          <v-btn depressed color="primary" v-on:click="filtrerRecherche()" >Filtrer</v-btn>
-        </v-card>
+        <DashboardFilter v-if="affichageFiltre" v-bind:allRestaurants="this.allRestaurants"/>
 
         <!--CARTES RESTAURANTS-->
         <div id="contenantListeCards">
@@ -214,9 +192,13 @@
 
 <script>
 import axios from 'axios';
+import DashboardFilter from '@/components/DashboardFilter.vue'
 
 export default {
   name: "Dashboard",
+  components: {
+        DashboardFilter
+  },
   data: () => ({
       inputCity: "", //adresse
       numAdresses: "",
