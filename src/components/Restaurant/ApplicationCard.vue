@@ -3,7 +3,8 @@
     <v-card elevation="4" class="text-center" style="margin: 5px">
       <v-card-title class="justify-center" style="font-size: xx-large; font-weight: bold">
         <span class="title">
-          {{ beautyAppliName(appliName) }}
+<!--          {{ beautyAppliName(appliName) }}-->
+          <img width="6%" height="6%" :alt="appliName" :src="require('/src/assets/logos/'+appliName+'.png')">
         </span>
       </v-card-title>
       <v-row>

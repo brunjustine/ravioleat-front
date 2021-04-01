@@ -12,7 +12,8 @@
                         :delivery-e-t-a="application.deliveryETA"
                         :delivery-cost="application.deliveryCost"
                         :url-link="application.urlLink"
-                        :rating="application.rating">
+                        :rating="application.rating"
+                        style="margin: 20px" >
       </application-card>
     </div>
   </div>
@@ -27,7 +28,7 @@
     data() {
       return {
         restaurant_ids: {
-          "uber_eat": "4dc4368b-c8a5-44ac-9b92-b3cbedbf6750",
+          "uber_eat": "9dc9b606-f271-4782-8466-6d08b56816fb",
           "deliveroo": "68535",
           "just_eat": "130953",
         },
