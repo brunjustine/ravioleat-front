@@ -47,16 +47,18 @@
         </v-container>
       </v-card>
       <div class="filtre-CardsRestaurants">
+
         <!--FILTRAGE-->
         <DashboardFilter
           v-if="affichageFiltre"
           v-bind:allRestaurants="this.allRestaurants"
+          @filterRestaurants="filterRestaurants"
         />
 
         <!--CARTES RESTAURANTS-->
         <div id="contenantListeCards">
           <v-list-item
-            v-for="restaurant in allRestaurants"
+            v-for="restaurant in filteredRestaurants"
             :key="restaurant[0].Name"
           >
             <DashboardCard
@@ -131,6 +133,7 @@ export default {
     longitude: 0,
     latitude: 0,
     allRestaurants: [],
+    filteredRestaurants: [],
     affichageRecherche: false,
     affichageFiltre: false,
     devise: "",
@@ -373,8 +376,15 @@ export default {
         allRestaurant.push(sameRestaurant);
       }
       this.allRestaurants = allRestaurant;
+      this.filteredRestaurants = this.allRestaurants;
       this.affichageFiltre = true;
     },
+    async filterRestaurants(value){
+      this.filteredRestaurants = value
+    },
+    async resetFilter(){
+      this.filteredRestaurants = this.allRestaurants
+    }
   },
 };
 </script>

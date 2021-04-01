@@ -37,7 +37,7 @@ export default {
         deliveryCost: ["0","3","5","7","7+"],
         deliveryCostFilter:0,
         foodFilter:[],
-        foodTypes: ['Fast Food','Burger','Pizza','Asiatique','Sushis','Cuisine Saine', 'Halal', 'Indien','Petit déjeuner'],
+        foodTypes: ['Fast Food','Burgers','Pizza','Asiatique','Sushis','Healthy', 'Halal', 'Indien','Petit déjeuner'],
         grade:0,
         maxDelay: 120,
         minDelay: 0,
@@ -56,10 +56,9 @@ export default {
             plateformes = this.filterByDeliveryDelay(plateformes)
             plateformes = this.filterByDeliveryCost(plateformes)
             plateformes = this.filterByGrade(plateformes)
-            //console.log(plateformes)
             return plateformes.length > 0
           })
-          console.log(this.filteredRestaurants)
+          this.$emit('filterRestaurants', this.filteredRestaurants)
         },
         filterByFoodTypes(restaurant){
           if (this.foodFilter.length>0) {
@@ -117,7 +116,6 @@ export default {
             this.maxDelay = Math.max.apply(Math, rangeDelay)
             this.minCost = Math.min.apply(Math, rangeCost)
             this.maxCost = Math.max.apply(Math, rangeCost)
-            console.log(this.maxCost)
           } else {
             this.minDelay = 0
             this.maxDelay = 120
