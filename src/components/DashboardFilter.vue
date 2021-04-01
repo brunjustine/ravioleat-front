@@ -117,6 +117,7 @@ export default {
             this.maxDelay = Math.max.apply(Math, rangeDelay)
             this.minCost = Math.min.apply(Math, rangeCost)
             this.maxCost = Math.max.apply(Math, rangeCost)
+            console.log(this.maxCost)
           } else {
             this.minDelay = 0
             this.maxDelay = 120
@@ -124,11 +125,6 @@ export default {
             this.maxCost = 7
           }
         }
-    },
-    watch: {
-        filteredRestaurants: function () {
-            this.getSlidersRange()
-        },
     },
     beforeMount() {
       this.getSlidersRange()
