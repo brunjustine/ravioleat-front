@@ -55,6 +55,11 @@
 
         <!--CARTES RESTAURANTS-->
         <div id="contenantListeCards">
+          <v-row align="center" v-if="allRestaurants.length>1" id="rechercheNom">
+            <v-text-field class="inputName" v-model="inputName" label="Entrer un nom ou un mot-clé"></v-text-field>
+            <v-btn depressed color="primary" v-on:click="rechercheParNom()">Rechercher</v-btn>
+          </v-row>
+          <p id="chargement" v-if="chargement"><v-progress-circular indeterminate></v-progress-circular></p>
           <v-list-item
             v-for="restaurant in allRestaurants"
             :key="restaurant[0].Name"
@@ -106,6 +111,19 @@
   margin: 15px;
   width: 75%;
 }
+
+#chargement {
+  margin-top: 5rem;
+}
+
+#rechercheNom {
+  margin: 2rem;
+  width: 50%;
+}
+
+.inputName {
+  margin-right: 2rem;
+}
 </style>
 
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
@@ -134,6 +152,8 @@ export default {
     affichageRecherche: false,
     affichageFiltre: false,
     devise: "",
+    chargement: false,
+    inputName:""
   }),
   methods: {
     onKeypressCity(e) {
@@ -196,6 +216,7 @@ export default {
     },
     rechercheSansFiltre() {
       this.affichageFiltre = true;
+      this.chargement = true;
       var url;
       if (this.PaysChoisit == "Royaume-Uni") {
         url = "https://api.ideal-postcodes.co.uk/v1/addresses?api_key=iddqd&query=".concat(
@@ -228,120 +249,6 @@ export default {
             console.error(error);
           }
         );
-      /*const path = 'http://127.0.0.1:5000/restaurants';
-      axios.get(path)
-        .then((res) => {
-
-        })
-        .catch((error) => {
-          console.error(error);
-        });
-      */
-      // var restaurants = [
-      //   {
-      //     Api: "deliveroo",
-      //     Id: 1,
-      //     Name: "AAAA",
-      //     UniqueName: "aaaa",
-      //     Rating: { Count: "(150)", StarRating: 4.5 },
-      //     Url: "urlaaa",
-      //     LogoUrl:
-      //       "https://fac.img.pmdstatic.net/fit/http.3A.2F.2Fprd2-bone-image.2Es3-website-eu-west-1.2Eamazonaws.2Ecom.2Ffac.2F2018.2F07.2F30.2F509a5313-6545-4cb1-ad93-af5895dd35b6.2Ejpeg/850x478/quality/90/crop-from/center/pizza-royale.jpeg",
-      //     DeliveryEtaMinutes: { RangeLower: 15, RangeUpper: 20 },
-      //     IsOpenNow: true,
-      //     DeliveryCost: 1.5,
-      //     Offers: [{ Description: "Offre", OfferId: 15 }],
-      //     CuisineTypes: [{ Id: 5, Name: "Pizza", SeoName: "pizza" }],
-      //     PriceCategory: 1,
-      //   },
-      //   {
-      //     Api: "just-eat",
-      //     Id: 2,
-      //     Name: "BBBB",
-      //     UniqueName: "bbbb",
-      //     Rating: { Count: "(300)", StarRating: 3.5 },
-      //     Url: "urlbbb",
-      //     LogoUrl:
-      //       "https://www.mycuisine.com/wp-content/uploads/2018/12/burger-rossini.jpg",
-      //     DeliveryEtaMinutes: { RangeLower: 20, RangeUpper: 25 },
-      //     IsOpenNow: true,
-      //     DeliveryCost: 2.8,
-      //     Offers: [],
-      //     CuisineTypes: [{ Id: 8, Name: "Burger", SeoName: "burger" }],
-      //     PriceCategory: 2,
-      //   },
-      //   {
-      //     Api: "deliveroo",
-      //     Id: 3,
-      //     Name: "CCCC",
-      //     UniqueName: "cccc",
-      //     Rating: { Count: "(800)", StarRating: 2.9 },
-      //     Url: "urlccc",
-      //     LogoUrl:
-      //       "https://img.grouponcdn.com/deal/2mEoAK1pYRLD99WymW3SpgkjPeVe/2m-960x576/v1/c700x420.jpg",
-      //     DeliveryEtaMinutes: { RangeLower: 20, RangeUpper: 25 },
-      //     IsOpenNow: false,
-      //     DeliveryCost: 1.8,
-      //     Offers: [],
-      //     CuisineTypes: [
-      //       { Id: 5, Name: "Pizza", SeoName: "pizza" },
-      //       { Id: 15, Name: "Burger", SeoName: "burger" },
-      //     ],
-      //     PriceCategory: 2,
-      //   },
-      //   {
-      //     Api: "deliveroo",
-      //     Id: 4,
-      //     Name: "DDDD",
-      //     UniqueName: "dddd",
-      //     Rating: { Count: "(80)", StarRating: 5 },
-      //     Url: "urlddd",
-      //     LogoUrl:
-      //       "https://anoonce.fr/wp-content/uploads/2018/07/Nourriture-indienne.jpg",
-      //     DeliveryEtaMinutes: { RangeLower: 20, RangeUpper: 25 },
-      //     IsOpenNow: true,
-      //     DeliveryCost: 0.0,
-      //     Offers: [{ Description: "Super Offre", OfferId: 12 }],
-      //     CuisineTypes: [{ Id: 5, Name: "Indien", SeoName: "indien" }],
-      //     PriceCategory: 1,
-      //   },
-      //   {
-      //     Api: "uber-eats",
-      //     Id: 5,
-      //     Name: "AAAA",
-      //     UniqueName: "aaaa",
-      //     Rating: { Count: "(300)", StarRating: 4.3 },
-      //     Url: "urlaaa",
-      //     LogoUrl:
-      //       "https://fac.img.pmdstatic.net/fit/http.3A.2F.2Fprd2-bone-image.2Es3-website-eu-west-1.2Eamazonaws.2Ecom.2Ffac.2F2018.2F07.2F30.2F509a5313-6545-4cb1-ad93-af5895dd35b6.2Ejpeg/850x478/quality/90/crop-from/center/pizza-royale.jpeg",
-      //     DeliveryEtaMinutes: { RangeLower: 20, RangeUpper: 25 },
-      //     IsOpenNow: true,
-      //     DeliveryCost: 2,
-      //     Offers: [{ Description: "Offre", OfferId: 15 }],
-      //     CuisineTypes: [
-      //       { Id: 5, Name: "Pizza", SeoName: "pizza" },
-      //       { Id: 18, Name: "Italie", SeoName: "italie" },
-      //     ],
-      //     PriceCategory: 3,
-      //   },
-      // ];
-      // var allRestaurant = [];
-      // for (var restaurantNum1 in restaurants) {
-      //   var restaurant = restaurants[0];
-      //   var sameRestaurant = [];
-      //   sameRestaurant.push(restaurant);
-      //   for (var restaurantNum2 in restaurants) {
-      //     if (
-      //       restaurant.Name == restaurants[restaurantNum2].Name &&
-      //       restaurantNum2 != 0
-      //     ) {
-      //       sameRestaurant.push(restaurants[restaurantNum2]);
-      //     }
-      //   }
-      //   restaurants.shift();
-      //   allRestaurant.push(sameRestaurant);
-      // }
-      // this.allRestaurants = allRestaurant;
     },
     initRestaurants() {
       const path = "http://127.0.0.1:5000/restaurants";
@@ -368,13 +275,29 @@ export default {
             restaurantNum2 != 0
           ) {
             sameRestaurant.push(restaurants[restaurantNum2]);
+            restaurants.splice(restaurantNum2, 1)
           }
         }
         restaurants.shift();
         allRestaurant.push(sameRestaurant);
       }
       this.allRestaurants = allRestaurant;
+      this.chargement = false;
     },
+    rechercheParNom(){
+      this.chargement = true
+      const path = "http://127.0.0.1:5000/restaurants/search"
+      var params = {
+        lat: this.latitude.toString(),
+        lon: this.longitude.toString(),
+        formattedAddress: this.inputCity,
+        searchTerm: this.inputName,
+      };
+      axios.post(path, params).then((res) => {
+        var restaurants = res["data"]["data"];
+        this.regroupement(restaurants);
+      });
+    }
   },
 };
 </script>
