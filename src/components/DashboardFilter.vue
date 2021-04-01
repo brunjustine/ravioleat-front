@@ -73,7 +73,6 @@ export default {
         },
         filterByDeliveryDelay(restaurant){
           return restaurant.filter(plateforme => {
-            console.log(this.delay)
             return(plateforme.DeliveryEtaMinutes !== null) ? (parseInt(plateforme.DeliveryEtaMinutes.RangeUpper) <= this.delay) : false
           }
           )
@@ -87,7 +86,7 @@ export default {
         },
         getSliderRange(){
           let range =[]
-          if (this.filteredRestaurants !== null) {
+          if (this.filteredRestaurants.length > 0) {
             this.filteredRestaurants.forEach(restaurant => 
               restaurant.forEach(e => {
                 if (e.DeliveryEtaMinutes !== null) {

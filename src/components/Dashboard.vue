@@ -196,11 +196,11 @@ export default {
     },
     rechercheSansFiltre() {
       var url;
-      if (this.PaysChoisit == "Royaume-Uni") {
+      if (this.PaysChoisit == "Royaume-Unis") {
         url = "https://api.ideal-postcodes.co.uk/v1/addresses?api_key=iddqd&query=".concat(
           this.inputCity
         );
-      } else if ((this.PaysChoisit == "France")) {
+      } else if ((this.PaysChoisit = "France")) {
         url = "https://api-adresse.data.gouv.fr/search/?q=".concat(
           this.inputCity
         );
