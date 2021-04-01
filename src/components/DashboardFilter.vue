@@ -55,6 +55,7 @@ export default {
             plateformes = this.filterByFoodTypes(plateformes)
             plateformes = this.filterByDeliveryDelay(plateformes)
             plateformes = this.filterByDeliveryCost(plateformes)
+            plateformes = this.filterByGrade(plateformes)
             //console.log(plateformes)
             return plateformes.length > 0
           })
@@ -85,8 +86,10 @@ export default {
             (plateforme.DeliveryCost !== null) ? (parseFloat(plateforme.DeliveryCost) <= this.deliveryCostFilter) : false
           )
         },
-        filterByGrade(){
-
+        filterByGrade(restaurant){
+           return restaurant.filter(plateforme => 
+            (plateforme.Rating !== null) ? (parseFloat(plateforme.Rating.StarRating) >= this.grade) : false
+          )
         },
         getDelays(e, range){
           if (e.DeliveryEtaMinutes !== null) {
