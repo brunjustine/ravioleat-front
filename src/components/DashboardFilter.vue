@@ -129,7 +129,6 @@ export default {
           }
         },
         resetFilter(){
-          console.log("yo")
           this.$emit('filterRestaurants', this.allRestaurants)
           this.offer = false
           this.foodFilter = []
