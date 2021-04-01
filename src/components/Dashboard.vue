@@ -195,7 +195,6 @@ export default {
       this.suggestionsHere = [];
     },
     rechercheSansFiltre() {
-      this.affichageFiltre = true;
       var url;
       if (this.PaysChoisit == "Royaume-Uni") {
         url = "https://api.ideal-postcodes.co.uk/v1/addresses?api_key=iddqd&query=".concat(
@@ -374,6 +373,7 @@ export default {
         allRestaurant.push(sameRestaurant);
       }
       this.allRestaurants = allRestaurant;
+      this.affichageFiltre = true;
     },
   },
 };

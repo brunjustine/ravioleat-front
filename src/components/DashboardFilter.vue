@@ -10,7 +10,7 @@
         <v-card-text>
           <v-row>
             <v-col class="px-4">
-              <v-slider v-model="delay" thumb-label="always" :min="10" :max="120" step="5" ></v-slider>
+              <v-slider v-model="delay" thumb-label="always" :min="minDelay" :max="maxDelay" step="5" ></v-slider>
             </v-col>
           </v-row>
         </v-card-text>
@@ -39,6 +39,8 @@ export default {
         foodFilter:[],
         foodTypes: ['Fast Food','Burger','Pizza','Asiatique','Sushis','Cuisine Saine', 'Halal', 'Indien','Petit déjeuner'],
         grade:0,
+        maxDelay: 120,
+        minDelay: 0,
         filteredRestaurants: this.allRestaurants
       }
     },
@@ -49,6 +51,8 @@ export default {
           {
             let plateformes = this.filterByOffer(restaurant)
             plateformes = this.filterByFoodTypes(plateformes)
+            plateformes = this.filterByDeliveryDelay(plateformes)
+            //console.log(plateformes)
             return plateformes.length > 0
           })
           console.log(this.filteredRestaurants)
@@ -67,15 +71,45 @@ export default {
             return restaurant
           }
         },
+        filterByDeliveryDelay(restaurant){
+          return restaurant.filter(plateforme => {
+            console.log(this.delay)
+            return(plateforme.DeliveryEtaMinutes !== null) ? (parseInt(plateforme.DeliveryEtaMinutes.RangeUpper) <= this.delay) : false
+          }
+          )
+          
+        },
         filterByDeliveryCost(){
 
         },
-        filterByDeliveryDelay(){
-          
-        },
         filterByGrade(){
 
-        }        
+        },
+        getSliderRange(){
+          let range =[]
+          if (this.filteredRestaurants !== null) {
+            this.filteredRestaurants.forEach(restaurant => 
+              restaurant.forEach(e => {
+                if (e.DeliveryEtaMinutes !== null) {
+                  range.push(e.DeliveryEtaMinutes.RangeUpper)
+                  range.push(e.DeliveryEtaMinutes.RangeLower)
+                }
+              }))
+            this.minDelay = Math.min.apply(Math, range)
+            this.maxDelay = Math.max.apply(Math, range)
+          } else {
+            this.minDelay = 0
+            this.maxDelay = 120
+          }
+        }
+    },
+    watch: {
+        filteredRestaurants: function () {
+            this.getSliderRange()
+        },
+    },
+    beforeMount() {
+      this.getSliderRange()
     }
 }
 </script>
