@@ -381,9 +381,6 @@ export default {
     },
     async filterRestaurants(value){
       this.filteredRestaurants = value
-    },
-    async resetFilter(){
-      this.filteredRestaurants = this.allRestaurants
     }
   },
 };
