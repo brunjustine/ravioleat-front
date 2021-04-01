@@ -16,7 +16,7 @@
         </v-card-text>
         <!--Frais de livraison-->
         <v-subheader class="search-title">Frais de livraison</v-subheader>
-        <v-slider v-model="deliveryCostFilter" :tick-labels="deliveryCost" step="1" ticks="always" tick-size="5" :max="4"></v-slider>
+        <v-slider v-model="deliveryCostFilter" thumb-label="always" :min="minCost" :max="maxCost" step="0.5"></v-slider>
         <!--Notes-->
         <v-subheader class="search-title">Notes</v-subheader>
         <v-rating v-model="grade" background-color="orange lighten-3" color="orange" large></v-rating>
@@ -41,6 +41,8 @@ export default {
         grade:0,
         maxDelay: 120,
         minDelay: 0,
+        maxCost: 7,
+        minCost: 0,
         filteredRestaurants: this.allRestaurants
       }
     },
@@ -52,6 +54,7 @@ export default {
             let plateformes = this.filterByOffer(restaurant)
             plateformes = this.filterByFoodTypes(plateformes)
             plateformes = this.filterByDeliveryDelay(plateformes)
+            plateformes = this.filterByDeliveryCost(plateformes)
             //console.log(plateformes)
             return plateformes.length > 0
           })
@@ -72,43 +75,60 @@ export default {
           }
         },
         filterByDeliveryDelay(restaurant){
-          return restaurant.filter(plateforme => {
-            return(plateforme.DeliveryEtaMinutes !== null) ? (parseInt(plateforme.DeliveryEtaMinutes.RangeUpper) <= this.delay) : false
-          }
+          return restaurant.filter(plateforme => 
+            (plateforme.DeliveryEtaMinutes !== null) ? (parseInt(plateforme.DeliveryEtaMinutes.RangeUpper) <= this.delay) : false
           )
           
         },
-        filterByDeliveryCost(){
-
+        filterByDeliveryCost(restaurant){
+          return restaurant.filter(plateforme => 
+            (plateforme.DeliveryCost !== null) ? (parseFloat(plateforme.DeliveryCost) <= this.deliveryCostFilter) : false
+          )
         },
         filterByGrade(){
 
         },
-        getSliderRange(){
-          let range =[]
+        getDelays(e, range){
+          if (e.DeliveryEtaMinutes !== null) {
+            range.push(e.DeliveryEtaMinutes.RangeUpper)
+            range.push(e.DeliveryEtaMinutes.RangeLower)
+          }
+          return range
+        },
+        getCosts(e, range){
+          if (e.DeliveryCost !== null) {
+            range.push(e.DeliveryCost)
+          }
+          return range
+        },
+        getSlidersRange(){
+          let rangeDelay =[]
+          let rangeCost = []
           if (this.filteredRestaurants.length > 0) {
             this.filteredRestaurants.forEach(restaurant => 
               restaurant.forEach(e => {
-                if (e.DeliveryEtaMinutes !== null) {
-                  range.push(e.DeliveryEtaMinutes.RangeUpper)
-                  range.push(e.DeliveryEtaMinutes.RangeLower)
-                }
+                rangeDelay = this.getDelays(e,rangeDelay)
+                rangeCost = this.getCosts(e,rangeCost)
               }))
-            this.minDelay = Math.min.apply(Math, range)
-            this.maxDelay = Math.max.apply(Math, range)
+            this.minDelay = Math.min.apply(Math, rangeDelay)
+            this.maxDelay = Math.max.apply(Math, rangeDelay)
+            this.minCost = Math.min.apply(Math, rangeCost)
+            this.maxCost = Math.max.apply(Math, rangeCost)
           } else {
             this.minDelay = 0
             this.maxDelay = 120
+            this.minCost = 0
+            this.maxCost = 7
           }
         }
     },
     watch: {
         filteredRestaurants: function () {
-            this.getSliderRange()
+            this.getSlidersRange()
         },
     },
     beforeMount() {
-      this.getSliderRange()
+      this.getSlidersRange()
     }
 }
 </script>
