@@ -171,7 +171,7 @@ export default {
       if (this.inputCity != undefined && this.inputCity.length > 2) {
         // Call API Suggestions de HERE pour réécupérer les informations
         if (this.PaysChoisit == "Royaume-Uni") {
-          url = "https://api.ideal-postcodes.co.uk/v1/autocomplete/addresses?api_key=iddqd&limit=10&query=".concat(
+            url = "https://api.ideal-postcodes.co.uk/v1/autocomplete/addresses?api_key=iddqd&limit=10&query=".concat(
             this.inputCity
           );
         } else if ((this.PaysChoisit == "France")) {
