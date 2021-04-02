@@ -77,12 +77,20 @@
             "urlLink": restaurant['Url'],
             "rating": restaurant['Rating']});
       },
-      // priceSort() {
-      //   console.log(this.applications);
-      //   // this.applications.sort((application1, application2) => application2['DeliveryCost'] - application1['DeliveryCost']);
-      //   this.applications
-      //   console.log(this.applications)
-      // }
+      priceSort() {
+        return this.applications.sort((application1, application2) =>
+          application1.deliveryCost - application2.deliveryCost
+        )
+      },
+      fastSort() {
+        return this.applications.sort((application1, application2) =>
+          application1.deliveryETA.RangeLower - application2.deliveryETA.RangeLower)
+      },
+      bestSort() {
+        return this.applications.sort((application1, application2) =>
+          (application1.deliveryCost + application1.deliveryETA.RangeLower) -
+          (application2.deliveryCost + application2.deliveryETA.RangeLower))
+      }
     },
   }
 
