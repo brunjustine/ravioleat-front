@@ -47,7 +47,6 @@
         </v-container>
       </v-card>
       <div class="filtre-CardsRestaurants">
-
         <!--FILTRAGE-->
         <DashboardFilter
           v-if="affichageFiltre"
@@ -57,12 +56,18 @@
 
         <!--CARTES RESTAURANTS-->
         <div id="contenantListeCards">
-          <v-row align="center" v-if="allRestaurants.length>1" id="rechercheNom">
-            <v-text-field class="inputName" v-model="inputName" label="Entrer un nom ou un mot-clé"></v-text-field>
-            <v-btn depressed color="primary" v-on:click="rechercheParNom()">Rechercher</v-btn>
-          </v-row>
+          <DashboardSearch
+            v-if="allRestaurants.length > 1"
+            v-bind:allRestaurants="this.filteredRestaurants"
+            @searchRestaurants="rechercheParNom"
+          ></DashboardSearch>
+
           <div id="chargement" v-if="chargement" class="gif-center">
-            <img  src="@/assets/ravioli2.gif" alt="gif de ravioli qui marche" width="5%">
+            <img
+              src="@/assets/ravioli2.gif"
+              alt="gif de ravioli qui marche"
+              width="5%"
+            />
           </div>
           <v-list-item
             v-for="restaurant in filteredRestaurants"
@@ -141,12 +146,14 @@
 import axios from "axios";
 import DashboardCard from "./DashboardCard";
 import DashboardFilter from "@/components/DashboardFilter.vue";
+import DashboardSearch from "@/components/DashboardSearch.vue";
 
 export default {
   name: "Dashboard",
   components: {
     DashboardCard,
     DashboardFilter,
+    DashboardSearch,
   },
   data: () => ({
     inputCity: "", //adresse
@@ -163,7 +170,6 @@ export default {
     affichageFiltre: false,
     devise: "",
     chargement: false,
-    inputName:""
   }),
   methods: {
     onKeypressCity(e) {
@@ -174,7 +180,7 @@ export default {
           url = "https://api.ideal-postcodes.co.uk/v1/autocomplete/addresses?api_key=iddqd&limit=10&query=".concat(
             this.inputCity
           );
-        } else if ((this.PaysChoisit == "France")) {
+        } else if (this.PaysChoisit == "France") {
           url = "https://api-adresse.data.gouv.fr/search/?q="
             .concat(this.inputCity)
             .concat("&autocomplete=1&limit=10");
@@ -192,7 +198,7 @@ export default {
                   });
                   this.suggestionsHere = datas;
                 }
-              } else if ((this.PaysChoisit == "France")) {
+              } else if (this.PaysChoisit == "France") {
                 this.devise = "€";
                 if (result.features && result.features.length > 0) {
                   result.features.map(function (sug) {
@@ -201,7 +207,7 @@ export default {
                   this.suggestionsHere = datas;
                 }
               }
-              localStorage.setItem("devise",this.devise)
+              localStorage.setItem("devise", this.devise);
             },
             (error) => {
               console.error(error);
@@ -246,7 +252,7 @@ export default {
                 this.longitude = result.result.hits[0].longitude;
                 this.latitude = result.result.hits[0].latitude;
               }
-            } else if ((this.PaysChoisit == "France")) {
+            } else if (this.PaysChoisit == "France") {
               if (result.features && result.features.length > 0) {
                 this.longitude = result.features[0].geometry.coordinates[0];
                 this.latitude = result.features[0].geometry.coordinates[1];
@@ -274,7 +280,7 @@ export default {
     },
     regroupement(restaurants) {
       var allRestaurant = [];
-      while (restaurants.length!=1) {
+      while (restaurants.length != 1) {
         var restaurant = restaurants[0];
         var sameRestaurant = [];
         sameRestaurant.push(restaurant);
@@ -284,7 +290,7 @@ export default {
             restaurantNum2 != 0
           ) {
             sameRestaurant.push(restaurants[restaurantNum2]);
-            restaurants.splice(restaurantNum2, 1)
+            restaurants.splice(restaurantNum2, 1);
           }
         }
         restaurants.shift();
@@ -295,23 +301,23 @@ export default {
       this.affichageFiltre = true;
       this.chargement = false;
     },
-    async filterRestaurants(value){
-      this.filteredRestaurants = value
+    async filterRestaurants(value) {
+      this.filteredRestaurants = value;
     },
-    rechercheParNom(){
-      this.chargement = true
-      const path = "http://127.0.0.1:5000/restaurants/search"
+    rechercheParNom(inputName) {
+      this.chargement = true;
+      const path = "http://127.0.0.1:5000/restaurants/search";
       var params = {
         lat: this.latitude.toString(),
         lon: this.longitude.toString(),
         formattedAddress: this.inputCity,
-        searchTerm: this.inputName,
+        searchTerm: inputName,
       };
       axios.post(path, params).then((res) => {
         var restaurants = res["data"]["data"];
         this.regroupement(restaurants);
       });
-    }
+    },
   },
 };
 </script>
