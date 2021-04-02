@@ -124,11 +124,11 @@ export default {
       var url;
       if (this.inputCity != undefined && this.inputCity.length>2) {
         // Call API Suggestions de HERE pour réécupérer les informations
-        if (this.PaysChoisit == "Royaume-Unis") {
-          url = "https://api.ideal-postcodes.co.uk/v1/autocomplete/addresses?api_key=iddqd&limit=10&query=".concat(
+        if (this.PaysChoisit == "Royaume-Uni") {
+            url = "https://api.ideal-postcodes.co.uk/v1/autocomplete/addresses?api_key=iddqd&limit=10&query=".concat(
             this.inputCity
           );
-        } else if ((this.PaysChoisit = "France")) {
+        } else if ((this.PaysChoisit == "France")) {
           url = "https://api-adresse.data.gouv.fr/search/?q="
             .concat(this.inputCity)
             .concat("&autocomplete=1&limit=10");
@@ -138,16 +138,15 @@ export default {
           .then(
             (result) => {
               var datas = [];
-              if (this.PaysChoisit == "Royaume-Unis") {
+              if (this.PaysChoisit == "Royaume-Uni") {
                 this.devise="$"
                 if (result.result.hits && result.result.hits.length > 0) {
                   result.result.hits.map(function (sug) {
                     datas.push(sug.suggestion);
                   });
-                  console.log(datas);
                   this.suggestionsHere = datas;
                 }
-              } else if ((this.PaysChoisit = "France")) {
+              } else if ((this.PaysChoisit == "France")) {
                 this.devise="€"
                 if (result.features && result.features.length > 0) {
                   result.features.map(function (sug) {
@@ -181,9 +180,9 @@ export default {
     rechercheSansFiltre(){
      this.affichageFiltre=true;
      var url;
-     if (this.PaysChoisit == "Royaume-Unis") {
+     if (this.PaysChoisit == "Royaume-Uni") {
           url = "https://api.ideal-postcodes.co.uk/v1/addresses?api_key=iddqd&query=".concat(this.inputCity);
-        } else if ((this.PaysChoisit = "France")) {
+        } else if ((this.PaysChoisit == "France")) {
           url = "https://api-adresse.data.gouv.fr/search/?q="
             .concat(this.inputCity)
         }
@@ -192,7 +191,7 @@ export default {
           .then(
             (result) => {
               var datas = [];
-              if (this.PaysChoisit == "Royaume-Unis") {
+              if (this.PaysChoisit == "Royaume-Uni") {
                 if (result.result.hits && result.result.hits.length > 0) {
                   this.longitude=result.result.hits[0].longitude
                   this.latitude=result.result.hits[0].latitude
@@ -218,14 +217,14 @@ export default {
         });
       */
       var restaurants=[
-        {"Api":"deliveroo","Id": 1, "Name": "AAAA","UniqueName": "aaaa", "Rating": {"Count": "(150)","StarRating": 4.5},"Url": "urlaaa", "LogoUrl": "https://fac.img.pmdstatic.net/fit/http.3A.2F.2Fprd2-bone-image.2Es3-website-eu-west-1.2Eamazonaws.2Ecom.2Ffac.2F2018.2F07.2F30.2F509a5313-6545-4cb1-ad93-af5895dd35b6.2Ejpeg/850x478/quality/90/crop-from/center/pizza-royale.jpeg","DeliveryEtaMinutes": {"RangeLower": 15, "RangeUpper": 20}, "IsOpenNow": true,"DeliveryCost": 1.5,"Offers": [{"Description": "Offre", "OfferId": 15 }], "CuisineTypes": [{"Id": 5, "Name": "Pizza","SeoName": "pizza"}],"PriceCategory": 1,},
+        {"Api":"deliveroo","Id": 1, "Name": "AAAA","UniqueName": "aaaa", "Rating": {"Count": "(150)","StarRating": 4.5},"Url": "urlaaa", "LogoUrl": "https://fac.img.pmdstatic.net/fit/http.3A.2F.2Fprd2-bone-image.2Es3-website-eu-west-1.2Eamazonaws.2Ecom.2Ffac.2F2018.2F07.2F30.2F509a5313-6545-4cb1-ad93-af5895dd35b6.2Ejpeg/850x478/quality/90/crop-from/center/pizza-royale.jpeg","DeliveryEtaMinutes": {"RangeLower": 15, "RangeUpper": 20}, "IsOpenNow": true,"DeliveryCost": 1.5,"Offers": [], "CuisineTypes": [{"Id": 5, "Name": "Pizza","SeoName": "pizza"}],"PriceCategory": 1,},
         {"Api":"just-eat","Id": 2, "Name": "BBBB","UniqueName": "bbbb", "Rating": {"Count": "(300)","StarRating": 3.5},"Url": "urlbbb", "LogoUrl": "https://www.mycuisine.com/wp-content/uploads/2018/12/burger-rossini.jpg","DeliveryEtaMinutes": {"RangeLower": 20, "RangeUpper": 25}, "IsOpenNow": true,"DeliveryCost": 2.8,"Offers": [], "CuisineTypes": [{"Id": 8, "Name": "Burger","SeoName": "burger"}],"PriceCategory": 2,},
-        {"Api":"deliveroo","Id": 3, "Name": "CCCC","UniqueName": "cccc", "Rating": {"Count": "(800)","StarRating": 2.9},"Url": "urlccc", "LogoUrl": "https://img.grouponcdn.com/deal/2mEoAK1pYRLD99WymW3SpgkjPeVe/2m-960x576/v1/c700x420.jpg","DeliveryEtaMinutes": {"RangeLower": 20, "RangeUpper": 25}, "IsOpenNow": false,"DeliveryCost": 1.8,"Offers": [], "CuisineTypes": [{"Id": 5, "Name": "Pizza","SeoName": "pizza"},{"Id": 15, "Name": "Burger","SeoName": "burger"}],"PriceCategory": 2,},
-        {"Api":"deliveroo","Id": 4, "Name": "DDDD","UniqueName": "dddd", "Rating": {"Count": "(80)","StarRating": 5},"Url": "urlddd", "LogoUrl": "https://anoonce.fr/wp-content/uploads/2018/07/Nourriture-indienne.jpg","DeliveryEtaMinutes": {"RangeLower": 20, "RangeUpper": 25}, "IsOpenNow": true,"DeliveryCost": 0.0,"Offers": [{"Description": "Super Offre", "OfferId": 12 }], "CuisineTypes": [{"Id": 5, "Name": "Indien","SeoName": "indien"}],"PriceCategory": 1,},
+        {"Api":"deliveroo","Id": 3, "Name": "CCCC","UniqueName": "cccc", "Rating": {"Count": "(800)","StarRating": 2.9},"Url": "urlccc", "LogoUrl": "https://img.grouponcdn.com/deal/2mEoAK1pYRLD99WymW3SpgkjPeVe/2m-960x576/v1/c700x420.jpg","DeliveryEtaMinutes": {"RangeLower": 20, "RangeUpper": 25}, "IsOpenNow": false,"DeliveryCost": 1.8,"Offers": [{"Description": "Offre", "OfferId": 15 }], "CuisineTypes": [{"Id": 5, "Name": "Pizza","SeoName": "pizza"},{"Id": 15, "Name": "Burger","SeoName": "burger"}],"PriceCategory": 2,},
+        {"Api":"deliveroo","Id": 4, "Name": "DDDD","UniqueName": "dddd", "Rating": {"Count": "(80)","StarRating": 5},"Url": "urlddd", "LogoUrl": "https://anoonce.fr/wp-content/uploads/2018/07/Nourriture-indienne.jpg","DeliveryEtaMinutes": {"RangeLower": 20, "RangeUpper": 25}, "IsOpenNow": true,"DeliveryCost": 0.0,"Offers": [], "CuisineTypes": [{"Id": 5, "Name": "Indien","SeoName": "indien"}],"PriceCategory": 1,},
         {"Api":"uber-eats","Id": 5, "Name": "AAAA","UniqueName": "aaaa", "Rating": {"Count": "(300)","StarRating": 4.3},"Url": "urlaaa", "LogoUrl": "https://fac.img.pmdstatic.net/fit/http.3A.2F.2Fprd2-bone-image.2Es3-website-eu-west-1.2Eamazonaws.2Ecom.2Ffac.2F2018.2F07.2F30.2F509a5313-6545-4cb1-ad93-af5895dd35b6.2Ejpeg/850x478/quality/90/crop-from/center/pizza-royale.jpeg","DeliveryEtaMinutes": {"RangeLower": 20, "RangeUpper": 25}, "IsOpenNow": true,"DeliveryCost": 2,"Offers": [{"Description": "Offre", "OfferId": 15 }], "CuisineTypes": [{"Id": 5, "Name": "Pizza","SeoName": "pizza"},{"Id": 18, "Name": "Italie","SeoName": "italie"}],"PriceCategory": 3,},      
         ]
-      var allRestaurant=[];
-      for (var restaurantNum1 in restaurants){
+      var allRestaurant =[];
+      while (restaurants.length!=1){
         var restaurant= restaurants[0]
         var sameRestaurant=[]
         sameRestaurant.push(restaurant)
@@ -238,7 +237,7 @@ export default {
         allRestaurant.push(sameRestaurant)
       }
       this.allRestaurants=allRestaurant
-    },
+    }
   },
 };
 </script>

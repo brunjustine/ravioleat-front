@@ -1,42 +1,45 @@
 <template>
     <div>
-        <v-card class="listeCards">
-            <v-list-item-content class="contenuCards" >
-                <v-row  class="premiereLigne">
-                    <v-col cols="5">
-                        <v-list-item class="nomRestaurant"><h1>{{restaurant[0].Name}}</h1></v-list-item> 
-                    </v-col>
-                    <v-col cols="3" class="colCards">
-                        <v-list-item class="notes"><v-rating background-color="orange lighten-3" color="orange" :value="starAverage(restaurant)" half-icon="mdi-star-half" half-increments readonly ></v-rating></v-list-item>
-                    </v-col>
-                    <v-col cols="4" class="photo">
-                        <v-list-item ><v-img max-height="300" max-width="500" :src="restaurant[0].LogoUrl"></v-img></v-list-item> 
-                    </v-col>
-                </v-row>
-                <v-row>
-                    <v-col cols="3" class="colCards">
-                        <v-list-item class="nomTypes"><font v-for="type in calculTypes(restaurant,[])" :key="type" class="nomType" >{{type}}</font></v-list-item>
-                    </v-col>
-                    <v-col cols="5" class="colDifLivreurs">
-                        <v-row>
-                            <v-col>
-                                <v-card-title>Délais : </v-card-title>
-                                <v-card-text>
-                                    <v-chip class="tempsLivraison" v-for="resto in restaurant" :key="resto.id">{{resto.Api}} : {{resto.DeliveryEtaMinutes.RangeLower}} - {{resto.DeliveryEtaMinutes.RangeUpper}} min</v-chip>
-                                </v-card-text>
-                            </v-col>
-                            <v-col>
-                                <v-card-title>Frais de livraison : </v-card-title>
-                                <v-card-text>
-                                    <v-chip class="tempsLivraison" v-for="resto in restaurant" :key="resto.id">{{resto.Api}} : {{resto.DeliveryCost}}{{devise}} </v-chip>
-                                </v-card-text>
-                            </v-col>
-                        </v-row>
-                    </v-col>
-                    <v-col  cols="3">
-                    </v-col>
-                </v-row>
-            </v-list-item-content>
+        <v-card class="listeCards" >
+            <div v-bind:class="{ open: !restaurant[0].IsOpenNow}">
+                <v-list-item-content class="contenuCards" >
+                    <v-row  class="premiereLigne">
+                        <v-col cols="5">
+                            <v-list-item class="nomRestaurant"><h1>{{restaurant[0].Name}}</h1></v-list-item> 
+                        </v-col>
+                        <v-col cols="3" class="colCards">
+                            <v-list-item class="notes"><v-rating background-color="orange lighten-3" color="orange" :value="starAverage(restaurant)" half-icon="mdi-star-half" half-increments readonly ></v-rating></v-list-item>
+                        </v-col>
+                        <v-col cols="4" class="photo">
+                            <v-list-item ><v-img max-height="300" max-width="500" :src="restaurant[0].LogoUrl"></v-img></v-list-item> 
+                        </v-col>
+                    </v-row>
+                    <v-row>
+                        <v-col cols="3" class="colCards">
+                            <v-list-item class="nomTypes" > <h4>{{calculTypes(restaurant)}}</h4></v-list-item>
+                            <v-list-item  v-if="offresBoolean(restaurant)"><h5 class="offres">Il y a des offres ICI <v-icon color="green darken-2">mdi-piggy-bank</v-icon></h5></v-list-item>
+                        </v-col>
+                        <v-col cols="5" class="colDifLivreurs">
+                            <v-row>
+                                <v-col>
+                                    <v-card-title>Délais : </v-card-title>
+                                    <v-card-text>
+                                        <v-chip class="tempsLivraison"  v-for="resto in restaurant" :key="resto.id"  >{{resto.Api}} <font v-bind:class="{ best: resto.DeliveryEtaMinutes.RangeLower==bestTimeLivraison(restaurant)}" v-if="resto.DeliveryEtaMinutes!=null">: {{resto.DeliveryEtaMinutes.RangeLower}} - {{resto.DeliveryEtaMinutes.RangeUpper}} min  <v-icon v-if="resto.DeliveryEtaMinutes.RangeLower==bestTimeLivraison(restaurant)" color="red darken-2"> mdi-run-fast</v-icon>  </font> </v-chip>
+                                    </v-card-text>
+                                </v-col>
+                                <v-col>
+                                    <v-card-title>Frais de livraison : </v-card-title>
+                                    <v-card-text>
+                                        <v-chip class="tempsLivraison" v-for="resto in restaurant" :key="resto.id"> {{resto.Api}} : <font v-bind:class="{ best: resto.DeliveryCost==bestPriceLivraison(restaurant)}"> {{resto.DeliveryCost}}{{devise}} <v-icon v-if="resto.DeliveryCost==bestPriceLivraison(restaurant)" color="green darken-4"> mdi-cash-multiple</v-icon></font></v-chip>
+                                    </v-card-text>
+                                </v-col>
+                            </v-row>
+                        </v-col>
+                        <v-col  cols="3">
+                        </v-col>
+                    </v-row>
+                </v-list-item-content>
+            </div>
         </v-card>      
     </div>
 </template>
@@ -44,6 +47,8 @@
 <script>
     export default {
         name: "DashboardCard",
+        data: () => ({
+        }),
         props: {
             restaurant: Array, 
             devise: String
@@ -57,19 +62,47 @@
                 average=average/sameRestaurants.length
                 return average
             },
-            calculTypes(sameRestaurants,res){
+            calculTypes(sameRestaurants){
                 var typesSameRestaurant=[];
                 for(var restaurantNum in sameRestaurants){
                     for(var typeNum in sameRestaurants[restaurantNum].CuisineTypes){
                     typesSameRestaurant.push(sameRestaurants[restaurantNum].CuisineTypes[typeNum].Name)
                     }
                 }
-                res = typesSameRestaurant.filter(this.listeUnique)
+                var tabRes = typesSameRestaurant.filter(this.listeUnique)
+                var res =  tabRes.join(", ")
                 return res
             },
             listeUnique(value, index, self) {
                 return self.indexOf(value) === index;
             },
+            offresBoolean(restaurant){
+                var res= false
+                for(var i in restaurant){
+                    if(restaurant[i].Offers.length>0){
+                        res=true
+                    }
+                }
+                return res
+            },
+            bestTimeLivraison(restaurant){
+                var min = restaurant[0].DeliveryEtaMinutes.RangeLower
+                for( var i in restaurant){
+                    if(restaurant[i].DeliveryEtaMinutes.RangeLower<min){
+                        min=restaurant[i].DeliveryEtaMinutes.RangeLower
+                    }
+                }
+                return min
+            },
+            bestPriceLivraison(restaurant){
+                var min = restaurant[0].DeliveryCost
+                for( var i in restaurant){
+                    if(restaurant[i].DeliveryCost<min){
+                        min=restaurant[i].DeliveryCost
+                    }
+                }
+                return min
+            }
         }
     }
 </script>
@@ -122,4 +155,18 @@
     .tempsLivraison{
         margin:5px;
     }
+
+    .open{
+        filter: opacity(20%)
+    }
+
+    .offres{
+        color:green;
+        margin-left: 60px;
+    }
+
+    .best{
+        font-weight: bold;
+    }
+
 </style>
