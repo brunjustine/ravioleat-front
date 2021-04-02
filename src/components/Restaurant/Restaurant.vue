@@ -77,6 +77,12 @@
             "urlLink": restaurant['Url'],
             "rating": restaurant['Rating']});
       },
+      // priceSort() {
+      //   console.log(this.applications);
+      //   // this.applications.sort((application1, application2) => application2['DeliveryCost'] - application1['DeliveryCost']);
+      //   this.applications
+      //   console.log(this.applications)
+      // }
     },
   }
 
