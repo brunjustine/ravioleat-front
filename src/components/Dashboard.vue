@@ -61,7 +61,9 @@
             <v-text-field class="inputName" v-model="inputName" label="Entrer un nom ou un mot-clé"></v-text-field>
             <v-btn depressed color="primary" v-on:click="rechercheParNom()">Rechercher</v-btn>
           </v-row>
-          <p id="chargement" v-if="chargement"><v-progress-circular indeterminate></v-progress-circular></p>
+          <div id="chargement" v-if="chargement" class="gif-center">
+            <img  src="@/assets/ravioli2.gif" alt="gif de ravioli qui marche" width="5%">
+          </div>
           <v-list-item
             v-for="restaurant in filteredRestaurants"
             :key="restaurant[0].Name"
@@ -125,6 +127,11 @@
 
 .inputName {
   margin-right: 2rem;
+}
+
+.gif-center {
+  margin: 0 auto;
+  text-align: center;
 }
 </style>
 
