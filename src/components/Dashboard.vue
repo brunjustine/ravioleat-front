@@ -77,6 +77,7 @@
             <DashboardCard
               v-bind:restaurant="restaurant"
               v-bind:devise="devise"
+              v-bind:userQuery="inputName"
             ></DashboardCard>
           </v-list-item>
         </div>
@@ -172,6 +173,7 @@ export default {
     affichageFiltre: false,
     devise: "",
     chargement: false,
+    inputName : "",
   }),
   methods: {
     onKeypressCity(e) {
@@ -307,6 +309,7 @@ export default {
       this.filteredRestaurants = value;
     },
     rechercheParNom(inputName) {
+      this.inputName = inputName
       this.chargement = true;
       const path = "http://127.0.0.1:5000/restaurants/search";
       var params = {
