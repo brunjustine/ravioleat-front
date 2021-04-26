@@ -110,7 +110,6 @@
             setDetail(api,details,restaurant) {
                 details.restaurant_ids[api]= restaurant.Id
                 if (api==="uber_eat") {
-
                     details.formattedAddress = restaurant.Address.FirstLine
                     details.userQuery = this.userQuery
                 }
