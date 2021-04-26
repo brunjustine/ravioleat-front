@@ -70,14 +70,13 @@
     methods: {
       getRestaurant(restaurant_ids) {
         Object.keys(restaurant_ids).forEach(key => {
-          console.log(restaurant_ids[key])
           if (restaurant_ids[key] !== "") {
             axios.post('http://0.0.0.0:5000/restaurant/' + restaurant_ids[key],
               {
                 "lat": this.details.lat,
                 "lon": this.details.lon,
                 "formattedAddress": this.details.formattedAddress,
-                "userQuery": "",
+                "userQuery": this.details.userQuery,
                 "api": key,
               })
               .then(res => {

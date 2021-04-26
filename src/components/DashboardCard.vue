@@ -53,7 +53,9 @@
         props: {
             restaurant: Array, 
             devise: String,
-            userQuery: String
+            userQuery: String,
+            longitude: Number,
+            latitude: Number
         },
         methods : {
             starAverage(sameRestaurants){
@@ -107,8 +109,6 @@
             },
             setDetail(api,details,restaurant) {
                 details.restaurant_ids[api]= restaurant.Id
-                details.lat = restaurant.Address ? restaurant.Address.Latitude : ''
-                details.lon = restaurant.Address ? restaurant.Address.Longitude : ''
                 if (api=="uber_eat") {
                     details.formattedAddress = restaurant.Address.FirstLine
                     details.userQuery = this.userQuery
@@ -122,12 +122,13 @@
                         "deliveroo": '',
                         "just_eat": '',
                     },
-                    lat: '',
-                    lon: '',
+                    lat: this.latitude,
+                    lon: this.longitude,
                     formattedAddress: '',
                     userQuery: ''
                 }
                 this.restaurant.forEach(restaurant => details = this.setDetail(restaurant.Api,details,restaurant))
+                console.log(details)
                 this.$router.push({path: `/restaurant/4`, query: {detailsPass:details}})
             }
         }

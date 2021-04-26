@@ -78,6 +78,8 @@
               v-bind:restaurant="restaurant"
               v-bind:devise="devise"
               v-bind:userQuery="inputName"
+              v-bind:longitude="longitude"
+              v-bind:latitude="latitude"
             ></DashboardCard>
           </v-list-item>
         </div>
