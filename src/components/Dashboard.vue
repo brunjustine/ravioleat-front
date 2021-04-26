@@ -288,7 +288,6 @@ export default {
     regroupement(restaurants) {
       var allRestaurant = [];
       restaurants.forEach(function (restaurant) {
-        var restaurant = restaurants[0];
         var sameRestaurant = [];
         sameRestaurant.push(restaurant);
         for (var restaurantNum2 in restaurants) {
