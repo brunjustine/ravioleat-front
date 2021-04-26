@@ -303,22 +303,6 @@ export default {
         restaurants.shift();
         allRestaurant.push(sameRestaurant);
       })
-      // while (restaurants.length != 1) {
-      //   var restaurant = restaurants[0];
-      //   var sameRestaurant = [];
-      //   sameRestaurant.push(restaurant);
-      //   for (var restaurantNum2 in restaurants) {
-      //     if (
-      //       restaurant.Name == restaurants[restaurantNum2].Name &&
-      //       restaurantNum2 != 0
-      //     ) {
-      //       sameRestaurant.push(restaurants[restaurantNum2]);
-      //       restaurants.splice(restaurantNum2, 1);
-      //     }
-      //   }
-      //   restaurants.shift();
-      //   allRestaurant.push(sameRestaurant);
-      // }
       this.allRestaurants = allRestaurant;
       this.filteredRestaurants = this.allRestaurants;
       this.affichageFiltre = true;
