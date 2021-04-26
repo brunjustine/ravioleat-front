@@ -24,7 +24,7 @@
             ></v-text-field>
             <v-btn
               depressed
-              color="primary"
+              color="amber"
               v-on:click="rechercheSansFiltre()"
               v-if="affichageRecherche"
               >Rechercher</v-btn
@@ -32,7 +32,7 @@
           </v-row>
           <div class="listeAdresse">
             <v-list>
-              <v-list-item-group v-model="numAdresses" color="primary">
+              <v-list-item-group v-model="numAdresses" color="amber">
                 <v-list-item
                   v-for="suggestion in suggestionsHere"
                   :key="suggestion"
@@ -46,6 +46,15 @@
           </div>
         </v-container>
       </v-card>
+      <div id="chargement" v-if="chargement" class="gif-center">
+        <!--<div id="chargement" class="gif-center">-->
+          <img
+            src="@/assets/ravioli2.gif"
+            alt="gif de ravioli qui marche"
+            width="5%"
+          />
+      </div>
+
       <div class="filtre-CardsRestaurants">
         <!--FILTRAGE-->
         <DashboardFilter
@@ -53,6 +62,7 @@
           v-bind:allRestaurants="this.allRestaurants"
           @filterRestaurants="filterRestaurants"
         />
+
 
         <!--CARTES RESTAURANTS-->
         <div id="contenantListeCards">
@@ -62,13 +72,15 @@
             @searchRestaurants="rechercheParNom"
           ></DashboardSearch>
 
-          <div id="chargement" v-if="chargement" class="gif-center">
+          <div v-if="chargementSearch" class="gif-center">
+          <!--<div id="chargement" class="gif-center">-->
             <img
               src="@/assets/ravioli2.gif"
               alt="gif de ravioli qui marche"
               width="5%"
             />
           </div>
+
           <v-list-item
             v-for="restaurant in filteredRestaurants"
             :key="restaurant[0].Name"
@@ -140,9 +152,8 @@
 }
 
 .gif-center {
-  margin: 0 auto;
-  text-align: center;
 }
+
 </style>
 
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
@@ -175,6 +186,7 @@ export default {
     affichageFiltre: false,
     devise: "",
     chargement: false,
+    chargementSearch:false,
     inputName : "",
   }),
   methods: {
@@ -306,13 +318,14 @@ export default {
       this.filteredRestaurants = this.allRestaurants;
       this.affichageFiltre = true;
       this.chargement = false;
+      this.chargementSearch = false;
     },
     async filterRestaurants(value) {
       this.filteredRestaurants = value;
     },
     rechercheParNom(inputName) {
+      this.chargementSearch = true;
       this.inputName = inputName
-      this.chargement = true;
       const path = "http://127.0.0.1:5000/restaurants/search";
       var params = {
         lat: this.latitude.toString(),
