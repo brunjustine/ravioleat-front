@@ -1,13 +1,57 @@
 <template>
   <div id="app">
-    <!--<div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>-->
-    <router-view/>
+    <v-card class="overflow-hidden">
+      <v-app-bar
+          color="teal lighten-3"
+          elevate-on-scroll
+      >
+        <v-app-bar-nav-icon></v-app-bar-nav-icon>
+
+        <v-toolbar-title style="font-weight: bold; font-size: x-large">Ravioleat</v-toolbar-title>
+
+        <pre style="font-family: Avenir, Helvetica, Arial, sans-serif">   L'application qui vous dit OU commander !    </pre>
+
+        <v-btn style="margin: 10px" @click="goHome"
+               raised
+        >
+          <v-icon>mdi-home</v-icon>
+          Home
+        </v-btn>
+
+        <v-btn style="margin: 10px" @click="goBack"
+               raised
+        >
+          <v-icon>mdi-back</v-icon>
+          Back
+        </v-btn>
+
+        <v-spacer></v-spacer>
+
+      </v-app-bar>
+    </v-card>
+    <router-view></router-view>
   </div>
 </template>
 
+<script>
+  export default {
+    methods: {
+      goBack() {
+        if (this.$route.path !== '/') {
+          this.$router.go(-1);
+        }
+      },
+      goHome() {
+        if (this.$route.path === '/') {
+          this.$router.go(0);
+        }
+        else {
+          this.$router.push('/');
+        }
+      },
+    }
+  }
+</script>
 
 <style lang="scss">
 

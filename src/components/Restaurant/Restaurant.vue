@@ -6,6 +6,13 @@
       <v-btn class="button" @click="bestSort()">Le meilleur</v-btn>
     </div>
     <div>
+      <v-toolbar>
+        <v-spacer></v-spacer>
+        <v-toolbar-title>Applications</v-toolbar-title>
+        <v-spacer></v-spacer>
+      </v-toolbar>
+    </div>
+    <div>
       <application-card v-for="application in applications"
                         :key="application.name"
                         :appli-name="application.name"
