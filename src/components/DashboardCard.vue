@@ -117,6 +117,7 @@
                 return details
             },
             moveToDetail(){
+                localStorage.removeItem('current_restaurant_details')
                 var details = {
                     restaurant_ids: {
                         "uber_eat": '',
@@ -128,9 +129,11 @@
                     formattedAddress: '',
                     userQuery: ''
                 }
-                this.restaurant.forEach(restaurant => details = this.setDetail(restaurant.Api,details,restaurant))
-                console.log(details)
-                this.$router.push({path: `/restaurant/4`, query: {detailsPass:details}})
+                this.restaurant.forEach(restaurant => details = this.setDetail(restaurant.Api,details,restaurant));
+                console.log(details);
+                localStorage.setItem('current_restaurant_details', JSON.stringify(details));
+                console.log(localStorage.getItem('current_restaurant_details'))
+                this.$router.push({path: `/restaurant/details`})
             }
         }
     }

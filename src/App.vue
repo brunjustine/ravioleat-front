@@ -4,42 +4,37 @@
       <v-app-bar
           color="teal lighten-3"
           elevate-on-scroll
+          style="margin-bottom: 10px"
+          fixed
       >
         <v-app-bar-nav-icon></v-app-bar-nav-icon>
 
-        <v-toolbar-title style="font-weight: bold; font-size: x-large">Ravioleat</v-toolbar-title>
+        <v-toolbar-title style="font-weight: bold; font-size: x-large" @click="goHome">Ravioleat</v-toolbar-title>
 
-        <pre style="font-family: Avenir, Helvetica, Arial, sans-serif">   L'application qui vous dit OU commander !    </pre>
-
-        <v-btn style="margin: 10px" @click="goHome"
-               raised
-        >
-          <v-icon>mdi-home</v-icon>
-          Home
-        </v-btn>
-
-        <v-btn style="margin: 10px" @click="goBack"
-               raised
-        >
-          <v-icon>mdi-back</v-icon>
-          Back
-        </v-btn>
+        <pre style="font-family: Avenir, Helvetica, Arial, sans-serif">   L'application qui vous dit OU commander !</pre>
 
         <v-spacer></v-spacer>
 
+        <v-btn style="margin: 10px" @click="goUp"
+               raised
+        >
+          <v-icon>mdi-arrow-top-bold-circle-outline</v-icon>
+          Aller en haut
+        </v-btn>
+
       </v-app-bar>
     </v-card>
+    <br><br><br><br>
     <router-view></router-view>
   </div>
 </template>
 
 <script>
+
   export default {
     methods: {
-      goBack() {
-        if (this.$route.path !== '/') {
-          this.$router.go(-1);
-        }
+      goUp() {
+        window.scrollTo(0,0)
       },
       goHome() {
         if (this.$route.path === '/') {
