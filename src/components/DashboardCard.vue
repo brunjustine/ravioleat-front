@@ -109,14 +109,14 @@
                 details.restaurant_ids[api]= restaurant.Id
                 details.lat = restaurant.Address ? restaurant.Address.Latitude : ''
                 details.lon = restaurant.Address ? restaurant.Address.Longitude : ''
-                if (api=="uber_eat") {
+                if (api==="uber_eat") {
                     details.formattedAddress = restaurant.Address.FirstLine
                     details.userQuery = this.userQuery
                 }
                 return details
             },
             moveToDetail(){
-                let details = {
+                var details = {
                     restaurant_ids: {
                         "uber_eat": '',
                         "deliveroo": '',
