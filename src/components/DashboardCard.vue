@@ -3,7 +3,7 @@
         <v-card class="listeCards" >
             <div v-bind:class="{ open: !restaurant[0].IsOpenNow}">
                 <v-list-item-content class="contenuCards" >
-                    <v-row  class="premiereLigne">
+                    <v-row rows="2" class="premiereLigne">
                         <v-col cols="5">
                             <v-list-item class="nomRestaurant"><h1>{{restaurant[0].Name}}</h1></v-list-item> 
                         </v-col>
@@ -22,15 +22,15 @@
                         <v-col cols="5" class="colDifLivreurs">
                             <v-row>
                                 <v-col>
-                                    <v-card-title>Délais : </v-card-title>
+                                    <v-card-title>Délais  </v-card-title>
                                     <v-card-text>
-                                        <v-chip class="tempsLivraison"  v-for="resto in restaurant" :key="resto.id"  >{{resto.Api}} <font v-bind:class="{ best: resto.DeliveryEtaMinutes.RangeLower==bestTimeLivraison(restaurant)}" v-if="resto.DeliveryEtaMinutes!=null">: {{resto.DeliveryEtaMinutes.RangeLower}} - {{resto.DeliveryEtaMinutes.RangeUpper}} min  <v-icon v-if="resto.DeliveryEtaMinutes.RangeLower==bestTimeLivraison(restaurant)" color="red darken-2"> mdi-run-fast</v-icon>  </font> </v-chip>
+                                        <v-chip class="livraison"  v-for="resto in restaurant" :key="resto.id"><span><img width="30px" height="30px" :src="require('/src/assets/logos/'+resto.Api+'.png')"> </span>  <font v-bind:class="{ best: resto.DeliveryEtaMinutes.RangeLower==bestTimeLivraison(restaurant)}" v-if="resto.DeliveryEtaMinutes!=null"> {{resto.DeliveryEtaMinutes.RangeLower}} - {{resto.DeliveryEtaMinutes.RangeUpper}} min  <v-icon v-if="resto.DeliveryEtaMinutes.RangeLower==bestTimeLivraison(restaurant)" color="red darken-2"> mdi-run-fast</v-icon>  </font> </v-chip>
                                     </v-card-text>
                                 </v-col>
                                 <v-col>
-                                    <v-card-title>Frais de livraison : </v-card-title>
+                                    <v-card-title>Frais de livraison  </v-card-title>
                                     <v-card-text>
-                                        <v-chip class="tempsLivraison" v-for="resto in restaurant" :key="resto.id"> {{resto.Api}} : <font v-bind:class="{ best: resto.DeliveryCost==bestPriceLivraison(restaurant)}"> {{resto.DeliveryCost}}{{devise}} <v-icon v-if="resto.DeliveryCost==bestPriceLivraison(restaurant)" color="green darken-4"> mdi-cash-multiple</v-icon></font></v-chip>
+                                        <v-chip class="livraison" v-for="resto in restaurant" :key="resto.id"><span><img width="30px" height="30px"  :src="require('/src/assets/logos/'+resto.Api+'.png')"></span>  <font v-bind:class="{ best: resto.DeliveryCost==bestPriceLivraison(restaurant)}">  {{resto.DeliveryCost}}{{devise}} <v-icon v-if="resto.DeliveryCost==bestPriceLivraison(restaurant)" color="green darken-4"> mdi-cash-multiple</v-icon></font></v-chip>
                                     </v-card-text>
                                 </v-col>
                             </v-row>
@@ -40,7 +40,7 @@
                     </v-row>
                 </v-list-item-content>
             </div>
-        </v-card>      
+        </v-card> 
     </div>
 </template>
 
@@ -48,6 +48,7 @@
     export default {
         name: "DashboardCard",
         data: () => ({
+            chargement: true,
         }),
         props: {
             restaurant: Array, 
@@ -112,6 +113,7 @@
         text-align: left;
         margin:10px;
         width: 100%;
+        display: inline-block;
     }
 
     .nomRestaurant{
@@ -152,7 +154,8 @@
         margin-top:40px;
     }
 
-    .tempsLivraison{
+    .livraison{
+        padding:20px;
         margin:5px;
     }
 

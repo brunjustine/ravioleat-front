@@ -68,6 +68,7 @@
             v-for="restaurant in filteredRestaurants"
             :key="restaurant[0].Name"
           >
+          
             <DashboardCard
               v-bind:restaurant="restaurant"
               v-bind:devise="devise"
@@ -100,6 +101,7 @@
 }
 
 .listeAdresse {
+  background-color: white;
   padding-left: 20%;
   position: absolute;
 }
@@ -231,7 +233,7 @@ export default {
         url = "https://api.ideal-postcodes.co.uk/v1/addresses?api_key=iddqd&query=".concat(
           this.inputCity
         );
-      } else if ((this.PaysChoisit = "France")) {
+      } else if ((this.PaysChoisit == "France")) {
         url = "https://api-adresse.data.gouv.fr/search/?q=".concat(
           this.inputCity
         );
