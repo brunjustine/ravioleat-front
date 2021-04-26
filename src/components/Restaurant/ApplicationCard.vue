@@ -53,9 +53,6 @@
       urlLink: String,
       rating: Object,
     },
-    created() {
-      console.log(this.deliveryETA)
-    },
     methods: {
       beautyAppliName(appliName) {
         return (appliName.charAt(0).toUpperCase() + appliName.slice(1)).replace('_', ' ');
