@@ -5,7 +5,7 @@
           {{ itemName }}
       </v-card-title>
       <v-card-title class="justify-center" style="font-size: small; font-weight: bold; justify-content: center">
-        {{ itemPrice }}
+        {{ itemPrice }} {{ devise }}
       </v-card-title>
       <v-card-text class="amount darken-2" style="font-size: x-small; justify-content: center">
         {{ itemDescription }}
@@ -21,6 +21,7 @@
       itemName: String,
       itemDescription: String,
       itemPrice: String,
+      devise: String,
     },
   }
 </script>

@@ -13,6 +13,7 @@
                         :delivery-cost="application.deliveryCost"
                         :url-link="application.urlLink"
                         :rating="application.rating"
+                        :devise="devise"
                         style="margin: 20px">
       </application-card>
     </div>
@@ -29,6 +30,7 @@
                  :item-name="item.Name"
                  :item-description="item.Description"
                  :item-price="item.Price"
+                 :devise="devise"
                  style="margin: 5px; width: 31%">
       </item-card>
     </div>
@@ -56,12 +58,14 @@
         restaurant_id: '',
         restaurant: {},
         applications: [],
-        items: []
+        items: [],
+        devise: ''
       }
     },
     created() {
       this.restaurant_id = this.$route.params['restaurant_id'];
       this.getRestaurant(this.restaurant_ids);
+      this.devise = localStorage.getItem('devise') === undefined ? '' : localStorage.getItem('devise')
     },
     methods: {
       getRestaurant(restaurant_ids) {
@@ -128,7 +132,4 @@
     flex-wrap: wrap;
   }
 
-  .menus{
-    text-align:center;
-  }
 </style>

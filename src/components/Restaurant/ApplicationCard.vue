@@ -20,7 +20,7 @@
           <v-card-text class="amount darken-2">
             Coût de livraison :
             <v-chip>
-              {{ deliveryCost }} <!--{{ localStorage.getItem('devise') }}-->
+              {{ deliveryCost }} {{ this.devise }}
             </v-chip>
           </v-card-text>
         </v-col>
@@ -52,6 +52,7 @@
       deliveryCost: Number,
       urlLink: String,
       rating: Object,
+      devise: String,
     },
     methods: {
       beautyAppliName(appliName) {
@@ -60,7 +61,7 @@
       goToStore() {
         window.open(this.urlLink, '_blank')
       }
-    }
+    },
   }
 </script>
 

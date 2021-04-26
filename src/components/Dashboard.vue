@@ -235,7 +235,7 @@ export default {
     rechercheSansFiltre() {
       this.chargement = true;
       var url;
-      if (this.PaysChoisit == "Royaume-Unis") {
+      if (this.PaysChoisit == "Royaume-Uni") {
         url = "https://api.ideal-postcodes.co.uk/v1/addresses?api_key=iddqd&query=".concat(
           this.inputCity
         );
