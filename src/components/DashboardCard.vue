@@ -109,14 +109,15 @@
             },
             setDetail(api,details,restaurant) {
                 details.restaurant_ids[api]= restaurant.Id
-                if (api=="uber_eat") {
+                if (api==="uber_eat") {
+
                     details.formattedAddress = restaurant.Address.FirstLine
                     details.userQuery = this.userQuery
                 }
                 return details
             },
             moveToDetail(){
-                let details = {
+                var details = {
                     restaurant_ids: {
                         "uber_eat": '',
                         "deliveroo": '',

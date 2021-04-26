@@ -62,7 +62,7 @@
       }
     },
     created() {
-      this.restaurant_id = this.$route.params['restaurant_id'];
+      //this.restaurant_id = this.$route.params['restaurant_id'];
       this.details = this.$route.query['detailsPass'];
       this.getRestaurant(this.details.restaurant_ids);
       this.devise = localStorage.getItem('devise') === undefined ? '' : localStorage.getItem('devise')
@@ -77,7 +77,7 @@
                 "lon": this.details.lon,
                 "formattedAddress": this.details.formattedAddress,
                 "userQuery": this.details.userQuery,
-                "api": key,
+                "api": restaurant_ids[key],
               })
               .then(res => {
                 this.restaurant[key] = res.data.data;
