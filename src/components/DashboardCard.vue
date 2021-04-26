@@ -1,6 +1,6 @@
 <template>
     <div>
-        <v-card class="listeCards" >
+        <v-card class="listeCards" v-on:click="moveToDetail()">
             <div v-bind:class="{ open: !restaurant[0].IsOpenNow}">
                 <v-list-item-content class="contenuCards" >
                     <v-row  class="premiereLigne">
@@ -51,7 +51,8 @@
         }),
         props: {
             restaurant: Array, 
-            devise: String
+            devise: String,
+            userQuery: String
         },
         methods : {
             starAverage(sameRestaurants){
@@ -102,6 +103,31 @@
                     }
                 }
                 return min
+            },
+            setDetail(api,details,restaurant) {
+                details.restaurant_ids[api]= restaurant.Id
+                details.lat = restaurant.Address ? restaurant.Address.Latitude : ''
+                details.lon = restaurant.Address ? restaurant.Address.Longitude : ''
+                if (api=="uber_eat") {
+                    details.formattedAddress = restaurant.Address.FirstLine
+                    details.userQuery = this.userQuery
+                }
+                return details
+            },
+            moveToDetail(){
+                let details = {
+                    restaurant_ids: {
+                        "uber_eat": '',
+                        "deliveroo": '',
+                        "just_eat": '',
+                    },
+                    lat: '',
+                    lon: '',
+                    formattedAddress: '',
+                    userQuery: ''
+                }
+                this.restaurant.forEach(restaurant => details = this.setDetail(restaurant.Api,details,restaurant))
+                this.$router.push({path: `/restaurant/4`, query: {detailsPass:details}})
             }
         }
     }

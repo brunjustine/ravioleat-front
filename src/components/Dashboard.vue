@@ -76,6 +76,7 @@
             <DashboardCard
               v-bind:restaurant="restaurant"
               v-bind:devise="devise"
+              v-bind:userQuery="inputName"
             ></DashboardCard>
           </v-list-item>
         </div>
@@ -170,6 +171,7 @@ export default {
     affichageFiltre: false,
     devise: "",
     chargement: false,
+    inputName : "",
   }),
   methods: {
     onKeypressCity(e) {
@@ -233,11 +235,11 @@ export default {
     rechercheSansFiltre() {
       this.chargement = true;
       var url;
-      if (this.PaysChoisit == "Royaume-Unis") {
+      if (this.PaysChoisit == "Royaume-Uni") {
         url = "https://api.ideal-postcodes.co.uk/v1/addresses?api_key=iddqd&query=".concat(
           this.inputCity
         );
-      } else if ((this.PaysChoisit = "France")) {
+      } else if ((this.PaysChoisit == "France")) {
         url = "https://api-adresse.data.gouv.fr/search/?q=".concat(
           this.inputCity
         );
@@ -305,6 +307,7 @@ export default {
       this.filteredRestaurants = value;
     },
     rechercheParNom(inputName) {
+      this.inputName = inputName
       this.chargement = true;
       const path = "http://127.0.0.1:5000/restaurants/search";
       var params = {

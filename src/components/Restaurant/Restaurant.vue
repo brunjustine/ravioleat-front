@@ -27,15 +27,7 @@
     components: {ApplicationCard},
     data() {
       return {
-        restaurant_ids: {
-          "uber_eat": "9dc9b606-f271-4782-8466-6d08b56816fb",
-          "deliveroo": "68535",
-          "just_eat": "130953",
-        },
-        lat: '',
-        lon: '',
-        formattedAddress: '',
-        userQuery: '',
+        details: [],
         restaurant_id: '',
         restaurant: {},
         applications: [],
@@ -43,17 +35,19 @@
     },
     created() {
       this.restaurant_id = this.$route.params['restaurant_id'];
-      this.getRestaurant(this.restaurant_ids);
+      this.details = this.$route.query['detailsPass'];
+      this.getRestaurant(this.details.restaurant_ids);
     },
     methods: {
       getRestaurant(restaurant_ids) {
         Object.keys(restaurant_ids).forEach(key => {
+          console.log(restaurant_ids[key])
           if (restaurant_ids[key] !== "") {
             axios.post('http://0.0.0.0:5000/restaurant/' + restaurant_ids[key],
               {
-                "lat": 51.5237703,
-                "lon": -0.1607497,
-                "formattedAddress": "211 Baker Street, London",
+                "lat": this.details.lat,
+                "lon": this.details.lon,
+                "formattedAddress": this.details.formattedAddress,
                 "userQuery": "",
                 "api": key,
               })
