@@ -26,11 +26,12 @@
               depressed
               color="primary"
               v-on:click="rechercheSansFiltre()"
-              v-if="affichageRecherche"
+              v-if="inputCity.length>0"
               >Rechercher</v-btn
             >
           </v-row>
           <div class="listeAdresse">
+            <v-alert type="warning" v-if="erreurAdresse" class="alertAdresse">Votre adresse n'est pas correcte</v-alert>
             <v-list>
               <v-list-item-group v-model="numAdresses" color="primary">
                 <v-list-item
@@ -47,6 +48,7 @@
         </v-container>
       </v-card>
       <div class="filtre-CardsRestaurants">
+
         <!--FILTRAGE-->
         <DashboardFilter
           v-if="affichageFiltre"
@@ -56,24 +58,17 @@
 
         <!--CARTES RESTAURANTS-->
         <div id="contenantListeCards">
-          <DashboardSearch
-            v-if="allRestaurants.length > 1"
-            v-bind:allRestaurants="this.filteredRestaurants"
-            @searchRestaurants="rechercheParNom"
-          ></DashboardSearch>
-
-          <div id="chargement" v-if="chargement" class="gif-center">
-            <img
-              src="@/assets/ravioli2.gif"
-              alt="gif de ravioli qui marche"
-              width="5%"
-            />
+          <v-row align="center" v-if="allRestaurants.length>1" id="rechercheNom">
+            <v-text-field class="inputName" v-model="inputName" label="Entrer un nom ou un mot-clé"></v-text-field>
+            <v-btn depressed color="primary" v-on:click="rechercheParNom()">Rechercher</v-btn>
+          </v-row>
+          <div id="chargement" v-if="chargement" class="gif-center"> 
+            <img  src="@/assets/ravioli2.gif" alt="gif de ravioli qui marche" width="5%">
           </div>
           <v-list-item
             v-for="restaurant in filteredRestaurants"
             :key="restaurant[0].Name"
           >
-          
             <DashboardCard
               v-bind:restaurant="restaurant"
               v-bind:devise="devise"
@@ -106,7 +101,6 @@
 }
 
 .listeAdresse {
-  background-color: white;
   padding-left: 20%;
   position: absolute;
 }
@@ -140,6 +134,10 @@
   margin: 0 auto;
   text-align: center;
 }
+
+.alertAdresse{
+  margin-top:25px;
+}
 </style>
 
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
@@ -148,14 +146,12 @@
 import axios from "axios";
 import DashboardCard from "./DashboardCard";
 import DashboardFilter from "@/components/DashboardFilter.vue";
-import DashboardSearch from "@/components/DashboardSearch.vue";
 
 export default {
   name: "Dashboard",
   components: {
     DashboardCard,
     DashboardFilter,
-    DashboardSearch,
   },
   data: () => ({
     inputCity: "", //adresse
@@ -172,9 +168,12 @@ export default {
     affichageFiltre: false,
     devise: "",
     chargement: false,
+    inputName:"",
+    erreurAdresse: false,
   }),
   methods: {
     onKeypressCity(e) {
+      this.erreurAdresse =  false;
       var url;
       if (this.inputCity != undefined && this.inputCity.length > 2) {
         // Call API Suggestions de HERE pour réécupérer les informations
@@ -182,7 +181,7 @@ export default {
             url = "https://api.ideal-postcodes.co.uk/v1/autocomplete/addresses?api_key=iddqd&limit=10&query=".concat(
             this.inputCity
           );
-        } else if (this.PaysChoisit == "France") {
+        } else if ((this.PaysChoisit == "France")) {
           url = "https://api-adresse.data.gouv.fr/search/?q="
             .concat(this.inputCity)
             .concat("&autocomplete=1&limit=10");
@@ -200,7 +199,7 @@ export default {
                   });
                   this.suggestionsHere = datas;
                 }
-              } else if (this.PaysChoisit == "France") {
+              } else if ((this.PaysChoisit == "France")) {
                 this.devise = "€";
                 if (result.features && result.features.length > 0) {
                   result.features.map(function (sug) {
@@ -209,7 +208,7 @@ export default {
                   this.suggestionsHere = datas;
                 }
               }
-              localStorage.setItem("devise", this.devise);
+              localStorage.setItem("devise",this.devise)
             },
             (error) => {
               console.error(error);
@@ -233,13 +232,13 @@ export default {
       this.suggestionsHere = [];
     },
     rechercheSansFiltre() {
-      this.chargement = true;
+      this.suggestionsHere = [];
       var url;
-      if (this.PaysChoisit == "Royaume-Unis") {
+      if (this.PaysChoisit == "Royaume-Uni") {
         url = "https://api.ideal-postcodes.co.uk/v1/addresses?api_key=iddqd&query=".concat(
           this.inputCity
         );
-      } else if ((this.PaysChoisit == "France")) {
+      } else if ((this.PaysChoisit = "France")) {
         url = "https://api-adresse.data.gouv.fr/search/?q=".concat(
           this.inputCity
         );
@@ -250,17 +249,25 @@ export default {
           (result) => {
             var datas = [];
             if (this.PaysChoisit == "Royaume-Uni") {
-              if (result.result.hits && result.result.hits.length > 0) {
+              if (result.result.hits && result.result.hits.length == 1) {
                 this.longitude = result.result.hits[0].longitude;
                 this.latitude = result.result.hits[0].latitude;
+                this.chargement = true;
+                this.initRestaurants();
+              }else{
+              this.erreurAdresse =  true
               }
-            } else if (this.PaysChoisit == "France") {
-              if (result.features && result.features.length > 0) {
+            } else if ((this.PaysChoisit == "France")) {
+              if (result.features && result.features.length == 1) {
                 this.longitude = result.features[0].geometry.coordinates[0];
                 this.latitude = result.features[0].geometry.coordinates[1];
+                this.chargement = true;
+                this.initRestaurants();
+              }else{
+              this.erreurAdresse =  true
               }
             }
-            this.initRestaurants();
+            
           },
           (error) => {
             console.error(error);
@@ -282,7 +289,7 @@ export default {
     },
     regroupement(restaurants) {
       var allRestaurant = [];
-      while (restaurants.length != 1) {
+      while (restaurants.length!=1) {
         var restaurant = restaurants[0];
         var sameRestaurant = [];
         sameRestaurant.push(restaurant);
@@ -292,7 +299,7 @@ export default {
             restaurantNum2 != 0
           ) {
             sameRestaurant.push(restaurants[restaurantNum2]);
-            restaurants.splice(restaurantNum2, 1);
+            restaurants.splice(restaurantNum2, 1)
           }
         }
         restaurants.shift();
@@ -303,23 +310,23 @@ export default {
       this.affichageFiltre = true;
       this.chargement = false;
     },
-    async filterRestaurants(value) {
-      this.filteredRestaurants = value;
+    async filterRestaurants(value){
+      this.filteredRestaurants = value
     },
-    rechercheParNom(inputName) {
-      this.chargement = true;
-      const path = "http://127.0.0.1:5000/restaurants/search";
+    rechercheParNom(){
+      this.chargement = true
+      const path = "http://127.0.0.1:5000/restaurants/search"
       var params = {
         lat: this.latitude.toString(),
         lon: this.longitude.toString(),
         formattedAddress: this.inputCity,
-        searchTerm: inputName,
+        searchTerm: this.inputName,
       };
       axios.post(path, params).then((res) => {
         var restaurants = res["data"]["data"];
         this.regroupement(restaurants);
       });
-    },
+    }
   },
 };
 </script>
