@@ -177,6 +177,12 @@ export default {
     chargement: false,
     inputName : "",
   }),
+  created() {
+    if (localStorage.getItem('alreadySearch') === "true") {
+      this.rechercheSansFiltre()
+      //this.get$children(DashboardFilter).rechercheSansFiltre()
+    }
+  },
   methods: {
     onKeypressCity(e) {
       var url;
@@ -222,6 +228,7 @@ export default {
       } else {
         this.suggestionsHere = [];
       }
+      localStorage.setItem('inputCity', this.inputCity)
     },
     onClickSuggestHere(suggestion) {
       // On renseigne la ville sélectionner
@@ -237,6 +244,14 @@ export default {
       this.suggestionsHere = [];
     },
     rechercheSansFiltre() {
+      if (localStorage.getItem('alreadySearch') === "true" && this.inputCity === "" && this.PaysChoisit === "") {
+        this.inputCity = localStorage.getItem('inputCity');
+        this.PaysChoisit = localStorage.getItem('pays');
+      } else {
+        localStorage.setItem('inputCity', this.inputCity);
+        localStorage.setItem('pays', this.PaysChoisit);
+        localStorage.setItem('alreadySearch', true);
+      }
       this.chargement = true;
       var url;
       if (this.PaysChoisit == "Royaume-Uni") {
@@ -247,7 +262,10 @@ export default {
         url = "https://api-adresse.data.gouv.fr/search/?q=".concat(
           this.inputCity
         );
+      } else {
+        console.log('Pas de pays choisi ..')
       }
+      console.log(url)
       fetch(url)
         .then((result) => result.json())
         .then(

@@ -1,6 +1,15 @@
 <template>
   <div>
     <div>
+      <h1>
+        {{ name }}
+      </h1>
+      {{ address }} <br/>
+      <span v-for="categorie in categories" :key="categorie.Id" style="color: gray">
+        {{ categorie.Name }}
+      </span>
+    </div>
+    <div>
       <v-btn class="button" @click="priceSort()">Le moins cher</v-btn>
       <v-btn class="button" @click="fastSort()">Le plus rapide</v-btn>
       <v-btn class="button" @click="bestSort()">Le meilleur</v-btn>
@@ -24,12 +33,13 @@
                               :url-link="application.urlLink"
                               :rating="application.rating"
                               :devise="devise"
+                              :offers="application.offers"
                               style="margin: 20px">
             </application-card>
           </v-expansion-panel-content>
         </v-expansion-panel>
 
-        <v-expansion-panel>
+        <v-expansion-panel v-if="has_menus">
           <v-expansion-panel-header>
             <v-spacer></v-spacer>
             <h2>Menus</h2>
@@ -62,13 +72,17 @@
     components: {ItemCard, ApplicationCard},
     data() {
       return {
+        name: '',
+        address: '',
+        categories: [],
         details: [],
         restaurant_id: '',
         restaurant: {},
         applications: [],
         items: [],
         devise: '',
-        panel: [0,1]
+        panel: [0,1],
+        has_menus: false
       }
     },
     created() {
@@ -91,18 +105,21 @@
               })
               .then(res => {
                 this.restaurant[key] = res.data.data;
-                // console.log(res.data.data);
+                console.log(res.data.data);
                 this.getApplications(this.restaurant[key]);
-                if (this.restaurant[key]['Menus'] !== [] && this.items.length === 0 ) {
-                  this.items = this.restaurant[key]['Menus']
+                if (this.restaurant[key]['Menus'].length !== 0 && this.items.length === 0 ) {
+                  this.items = this.restaurant[key]['Menus'];
+                  this.has_menus = true;
                 }
-                console.log(this.items)
+                this.name = this.restaurant[key]['Name'];
+                this.address = this.restaurant[key]['Address']['FirstLine'];
+                this.categories = this.restaurant[key]['CuisineTypes'];
               })
               .catch(err => {
                 console.log(err);
               });
           }
-        })
+        });
       },
       getApplications(restaurant) {
         this.applications.push(
@@ -111,7 +128,8 @@
             "deliveryETA": restaurant['DeliveryEtaMinutes'],
             "deliveryCost": restaurant['DeliveryCost'],
             "urlLink": restaurant['Url'],
-            "rating": restaurant['Rating']});
+            "rating": restaurant['Rating'],
+            "offers": restaurant['Offers']});
       },
       priceSort() {
         return this.applications.sort((application1, application2) =>
@@ -124,8 +142,8 @@
       },
       bestSort() {
         return this.applications.sort((application1, application2) =>
-          (application1.deliveryCost + application1.deliveryETA.RangeLower) -
-          (application2.deliveryCost + application2.deliveryETA.RangeLower))
+          (application1.deliveryCost + application1.deliveryETA.RangeLower + application1.offers.length) -
+          (application2.deliveryCost + application2.deliveryETA.RangeLower + application2.offers.length))
       }
     },
   }
