@@ -281,20 +281,18 @@ export default {
       };
       axios.post(path, params).then((res) => {
         var restaurants = res["data"]["data"];
-        console.log(restaurants)
         this.regroupement(restaurants);
       });
     },
     regroupement(restaurants) {
       var allRestaurant = [];
       restaurants.forEach(function (restaurant) {
-        var restaurant = restaurants[0];
         var sameRestaurant = [];
         sameRestaurant.push(restaurant);
         for (var restaurantNum2 in restaurants) {
           if (
-            restaurant.Name == restaurants[restaurantNum2].Name &&
-            restaurantNum2 != 0
+            restaurant.Api != restaurants[restaurantNum2].Api &&
+            restaurant.Name == restaurants[restaurantNum2].Name 
           ) {
             sameRestaurant.push(restaurants[restaurantNum2]);
             restaurants.splice(restaurantNum2, 1);
