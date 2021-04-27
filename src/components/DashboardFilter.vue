@@ -156,7 +156,7 @@ export default {
 }
 
 .v-btn {
-  color: white!important;;
+  color: black!important;
 }
 </style>
 
