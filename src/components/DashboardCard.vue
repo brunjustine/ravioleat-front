@@ -24,13 +24,13 @@
                                 <v-col>
                                     <v-card-title>Délais  </v-card-title>
                                     <v-card-text>
-                                        <v-chip class="livraison"  v-for="resto in restaurant" :key="resto.id"><span><img width="30px" height="30px" :src="require('/src/assets/logos/'+resto.Api+'.png')"> </span>  <font v-bind:class="{ best: resto.DeliveryEtaMinutes.RangeLower==bestTimeLivraison(restaurant)}" v-if="resto.DeliveryEtaMinutes!=null"> {{resto.DeliveryEtaMinutes.RangeLower}} - {{resto.DeliveryEtaMinutes.RangeUpper}} min  <v-icon v-if="resto.DeliveryEtaMinutes.RangeLower==bestTimeLivraison(restaurant)" color="red darken-2"> mdi-run-fast</v-icon>  </font> </v-chip>
+                                        <v-chip class="livraison"  v-for="resto in restaurant" :key="resto.id"><span><img width="30px" height="30px" class="logo" :src="require('/src/assets/logos/'+resto.Api+'.png')"> </span>  <font v-bind:class="{ best: resto.DeliveryEtaMinutes.RangeLower==bestTimeLivraison(restaurant)}" v-if="resto.DeliveryEtaMinutes!=null"> {{resto.DeliveryEtaMinutes.RangeLower}} - {{resto.DeliveryEtaMinutes.RangeUpper}} min  <v-icon v-if="resto.DeliveryEtaMinutes.RangeLower==bestTimeLivraison(restaurant)" color="red darken-2"> mdi-run-fast</v-icon>  </font> </v-chip>
                                     </v-card-text>
                                 </v-col>
                                 <v-col>
                                     <v-card-title>Frais de livraison  </v-card-title>
                                     <v-card-text>
-                                        <v-chip class="livraison" v-for="resto in restaurant" :key="resto.id"><span><img width="30px" height="30px"  :src="require('/src/assets/logos/'+resto.Api+'.png')"></span>  <font v-bind:class="{ best: resto.DeliveryCost==bestPriceLivraison(restaurant)}">  {{resto.DeliveryCost}}{{devise}} <v-icon v-if="resto.DeliveryCost==bestPriceLivraison(restaurant)" color="green darken-4"> mdi-cash-multiple</v-icon></font></v-chip>
+                                        <v-chip class="livraison" v-for="resto in restaurant" :key="resto.id"><span><img width="30px" height="30px" class="logo"  :src="require('/src/assets/logos/'+resto.Api+'.png')"></span>  <font v-bind:class="{ best: resto.DeliveryCost==bestPriceLivraison(restaurant)}">  {{resto.DeliveryCost}}{{devise}} <v-icon v-if="resto.DeliveryCost==bestPriceLivraison(restaurant)" color="green darken-4"> mdi-cash-multiple</v-icon></font></v-chip>
                                     </v-card-text>
                                 </v-col>
                             </v-row>
@@ -200,6 +200,10 @@
 
     .best{
         font-weight: bold;
+    }
+
+    .logo{
+        margin-right: 8px;
     }
 
 </style>
