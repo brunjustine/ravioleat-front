@@ -1,6 +1,7 @@
 <template>
     <div>
         <v-card class="listeCards" v-on="restaurant[0].IsOpenNow ? {click: () => moveToDetail()} : {}">
+            <a v-bind:class="{ card1: restaurant[0].IsOpenNow}" href="#">
             <div v-bind:class="{ open: !restaurant[0].IsOpenNow}">
                 <v-list-item-content class="contenuCards" >
                     <v-row rows="2" class="premiereLigne">
@@ -8,7 +9,7 @@
                             <v-list-item class="nomRestaurant"><h1>{{restaurant[0].Name}}</h1></v-list-item> 
                         </v-col>
                         <v-col cols="3" class="colCards">
-                            <v-list-item class="notes"><v-rating background-color="orange lighten-3" color="orange" :value="starAverage(restaurant)" half-icon="mdi-star-half" half-increments readonly ></v-rating></v-list-item>
+                            <v-list-item class="notes"><v-rating background-color="#1785B3" color="#1785B3" :value="starAverage(restaurant)" half-icon="mdi-star-half" half-increments readonly ></v-rating></v-list-item>
                         </v-col>
                         <v-col cols="4" class="photo">
                             <v-list-item ><v-img max-height="300" max-width="500" :src="restaurant[0].LogoUrl"></v-img></v-list-item> 
@@ -23,14 +24,44 @@
                             <v-row>
                                 <v-col>
                                     <v-card-title>Délais  </v-card-title>
-                                    <v-card-text>
-                                        <v-chip class="livraison"  v-for="resto in restaurant" :key="resto.id"><span><img width="30px" height="30px" class="logo" :src="require('/src/assets/logos/'+resto.Api+'.png')"> </span>  <font v-bind:class="{ best: resto.DeliveryEtaMinutes.RangeLower==bestTimeLivraison(restaurant)}" v-if="resto.DeliveryEtaMinutes!=null"> {{resto.DeliveryEtaMinutes.RangeLower}} - {{resto.DeliveryEtaMinutes.RangeUpper}} min  <v-icon v-if="resto.DeliveryEtaMinutes.RangeLower==bestTimeLivraison(restaurant)" color="red darken-2"> mdi-run-fast</v-icon>  </font> </v-chip>
+                                    <v-card-text v-for="resto in restaurant" :key="resto.id">
+                                         <v-container>
+                                            <v-row>
+                                                <v-col cols="2">
+                                                    <span>
+                                                        <img width="30px" height="30px" :src="require('/src/assets/logos/'+resto.Api+'.png')"> 
+                                                    </span>
+                                                </v-col>
+                                                <v-col cols="8">
+                                                    <v-chip >  
+                                                        <font v-bind:class="{ best: resto.DeliveryEtaMinutes.RangeLower==bestTimeLivraison(restaurant)}" v-if="resto.DeliveryEtaMinutes!=null"> {{resto.DeliveryEtaMinutes.RangeLower}} - {{resto.DeliveryEtaMinutes.RangeUpper}} min  
+                                                            <v-icon v-if="resto.DeliveryEtaMinutes.RangeLower==bestTimeLivraison(restaurant)" color="red darken-2"> mdi-run-fast</v-icon>  
+                                                        </font> 
+                                                    </v-chip>
+                                                </v-col>
+                                            </v-row>
+                                         </v-container>
                                     </v-card-text>
                                 </v-col>
                                 <v-col>
                                     <v-card-title>Frais de livraison  </v-card-title>
-                                    <v-card-text>
-                                        <v-chip class="livraison" v-for="resto in restaurant" :key="resto.id"><span><img width="30px" height="30px" class="logo"  :src="require('/src/assets/logos/'+resto.Api+'.png')"></span>  <font v-bind:class="{ best: resto.DeliveryCost==bestPriceLivraison(restaurant)}">  {{resto.DeliveryCost}}{{devise}} <v-icon v-if="resto.DeliveryCost==bestPriceLivraison(restaurant)" color="green darken-4"> mdi-cash-multiple</v-icon></font></v-chip>
+                                    <v-card-text  v-for="resto in restaurant" :key="resto.id" class="delivery-fees">
+                                        <v-container>
+                                            <v-row>
+                                                <v-col cols="2">
+                                                    <span>
+                                                        <img width="30px" height="30px"  :src="require('/src/assets/logos/'+resto.Api+'.png')">
+                                                    </span>
+                                                </v-col>
+                                                <v-col cols="10">
+                                                    <v-chip> 
+                                                        <font v-bind:class="{ best: resto.DeliveryCost==bestPriceLivraison(restaurant)}">  {{resto.DeliveryCost}}{{devise}} 
+                                                            <v-icon v-if="resto.DeliveryCost==bestPriceLivraison(restaurant)" color="green darken-4"> mdi-cash-multiple</v-icon>
+                                                        </font>
+                                                    </v-chip>
+                                                </v-col>
+                                            </v-row>
+                                        </v-container>
                                     </v-card-text>
                                 </v-col>
                             </v-row>
@@ -40,7 +71,14 @@
                     </v-row>
                 </v-list-item-content>
             </div>
+            <div class="go-corner" href="#">
+                <div class="go-arrow">
+                    →
+                </div>
+            </div>
+        </a>
         </v-card> 
+        
     </div>
 </template>
 
@@ -149,10 +187,11 @@
         margin-left: 40px;
     }
 
-    .nomTypes{
+    .nomTypes h4{
         margin-top:20%;
         margin-left: 60px;
-        color:gray;
+        font-weight:normal;
+        color:#969a9c;
     }
 
     .nomType{
@@ -182,6 +221,11 @@
         margin-top:40px;
     }
 
+    
+    .v-card__title {
+        color:#1785B3;
+    }
+
     .livraison{
         padding:20px;
         margin:5px;
@@ -200,8 +244,87 @@
         font-weight: bold;
     }
 
-    .logo{
-        margin-right: 8px;
-    }
+.listeCards a {
+    text-decoration: none;
+    color: black; 
+}
 
+.go-corner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  width: 32px;
+  height: 32px;
+  overflow: hidden;
+  top: 0;
+  right: 0;
+  background-color: #FFC107;
+  border-radius: 0 4px 0 32px;
+}
+
+.go-arrow {
+  margin-top: -4px;
+  margin-right: -4px;
+  color: black;
+  font-family: courier, sans;
+}
+
+.card1 {
+  display: block;
+  position: relative;
+  border-radius: 4px;
+  text-decoration: none;
+  z-index: 0;
+  overflow: hidden;
+  text-decoration: none;
+}
+  .card1:before {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    top: -16px;
+    right: -16px;
+    background: #FFC107;
+    height: 32px;
+    width: 32px;
+    border-radius: 32px;
+    transform: scale(1);
+    transform-origin: 50% 50%;
+    transition: transform 0.5s ease-out;
+  }
+
+  .card1:hover:before {
+    transform: scale(100);
+  }
+
+.card1:hover{
+    transition: all 0.5s ease-out;
+    color: #ffffff;
+}
+.card1:hover  h4{
+    color:white;
+    transition: all 0.5s ease-out;
+}
+
+ .card1:hover h1, .card1:hover .v-card__title {
+    color:#1785B3;
+    transition: all 0.5s ease-out;
+}
+
+.card1:hover .v-image {
+    filter: opacity(20%);
+}
+
+.card1:hover .theme--light.v-chip:not(.v-chip--active) {
+    background-color:#f8d878;
+}
+
+.theme--light.v-chip:not(.v-chip--active) {
+    background-color:#daf1fb;
+}
+
+.delivery-fees .v-card__text{
+    padding:0;
+}
 </style>
