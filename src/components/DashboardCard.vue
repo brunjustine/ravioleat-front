@@ -1,6 +1,6 @@
 <template>
     <div>
-        <v-card class="listeCards" v-on:click="moveToDetail()">
+        <v-card class="listeCards" v-on="restaurant[0].IsOpenNow ? {click: () => moveToDetail()} : {}">
             <div v-bind:class="{ open: !restaurant[0].IsOpenNow}">
                 <v-list-item-content class="contenuCards" >
                     <v-row rows="2" class="premiereLigne">
@@ -19,7 +19,7 @@
                             <v-list-item class="nomTypes" > <h4>{{calculTypes(restaurant)}}</h4></v-list-item>
                             <v-list-item  v-if="offresBoolean(restaurant)"><h5 class="offres">Il y a des offres ICI <v-icon color="green darken-2">mdi-piggy-bank</v-icon></h5></v-list-item>
                         </v-col>
-                        <v-col cols="5" class="colDifLivreurs">
+                        <v-col v-if="restaurant[0].IsOpenNow" cols="5" class="colDifLivreurs">
                             <v-row>
                                 <v-col>
                                     <v-card-title>Délais  </v-card-title>
@@ -129,9 +129,7 @@
                     userQuery: ''
                 }
                 this.restaurant.forEach(restaurant => details = this.setDetail(restaurant.Api,details,restaurant));
-                console.log(details);
                 localStorage.setItem('current_restaurant_details', JSON.stringify(details));
-                console.log(localStorage.getItem('current_restaurant_details'))
                 this.$router.push({path: `/restaurant/details`})
             }
         }

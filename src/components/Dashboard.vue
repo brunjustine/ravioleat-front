@@ -179,6 +179,7 @@ export default {
   }),
   created() {
     if (localStorage.getItem('alreadySearch') === "true") {
+      this.devise = localStorage.getItem('devise')
       this.rechercheSansFiltre()
       //this.get$children(DashboardFilter).rechercheSansFiltre()
       console.log(this.$refs.input)

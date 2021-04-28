@@ -9,7 +9,7 @@
         {{ categorie.Name }}
       </span>
     </div>
-    <div>
+    <div v-if="applications.length > 1">
       <v-btn class="button" @click="priceSort()">Le moins cher</v-btn>
       <v-btn class="button" @click="fastSort()">Le plus rapide</v-btn>
       <v-btn class="button" @click="bestSort()">Le meilleur</v-btn>
@@ -93,9 +93,10 @@
     },
     methods: {
       getRestaurant(restaurant_ids) {
-        var first_key = Object.keys(restaurant_ids)[0];
+        var first_key;
         Object.keys(restaurant_ids).forEach(key => {
           if (restaurant_ids[key] !== "") {
+            if (first_key === undefined) { first_key = key }
             axios.post('http://0.0.0.0:5000/restaurant/' + restaurant_ids[key],
               {
                 "lat": this.details.lat,
@@ -112,6 +113,7 @@
                   this.items = this.restaurant[key]['Menus'];
                   this.has_menus = true;
                 }
+                console.log(first_key)
                 this.name = this.restaurant[first_key]['Name'];
                 this.address = this.restaurant[first_key]['Address']['FirstLine'];
                 this.categories = this.restaurant[first_key]['CuisineTypes'];
