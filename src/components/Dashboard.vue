@@ -181,6 +181,7 @@ export default {
     if (localStorage.getItem('alreadySearch') === "true") {
       this.rechercheSansFiltre()
       //this.get$children(DashboardFilter).rechercheSansFiltre()
+      console.log(this.$refs.input)
     }
   },
   methods: {

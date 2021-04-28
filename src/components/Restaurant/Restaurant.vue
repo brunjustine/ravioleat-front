@@ -93,6 +93,7 @@
     },
     methods: {
       getRestaurant(restaurant_ids) {
+        var first_key = Object.keys(restaurant_ids)[0];
         Object.keys(restaurant_ids).forEach(key => {
           if (restaurant_ids[key] !== "") {
             axios.post('http://0.0.0.0:5000/restaurant/' + restaurant_ids[key],
@@ -105,15 +106,15 @@
               })
               .then(res => {
                 this.restaurant[key] = res.data.data;
-                console.log(res.data.data);
+                //console.log(res.data.data);
                 this.getApplications(this.restaurant[key]);
                 if (this.restaurant[key]['Menus'].length !== 0 && this.items.length === 0 ) {
                   this.items = this.restaurant[key]['Menus'];
                   this.has_menus = true;
                 }
-                this.name = this.restaurant[key]['Name'];
-                this.address = this.restaurant[key]['Address']['FirstLine'];
-                this.categories = this.restaurant[key]['CuisineTypes'];
+                this.name = this.restaurant[first_key]['Name'];
+                this.address = this.restaurant[first_key]['Address']['FirstLine'];
+                this.categories = this.restaurant[first_key]['CuisineTypes'];
               })
               .catch(err => {
                 console.log(err);
