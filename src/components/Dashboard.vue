@@ -68,7 +68,7 @@
           </div>
           <v-list-item
             v-for="restaurant in filteredRestaurants"
-            :key="restaurant[0].Name"
+            :key="restaurant[0].Id"
           >
             <DashboardCard
               v-bind:restaurant="restaurant"
@@ -279,24 +279,27 @@ export default {
         .then((result) => result.json())
         .then(
           (result) => {
+            console.log(result)
             var datas = [];
             if (this.PaysChoisit == "Royaume-Uni") {
-              if (result.result.hits && result.result.hits.length == 1) {
+              if (result.result.hits && result.result.hits.length==1) {
                 this.longitude = result.result.hits[0].longitude;
                 this.latitude = result.result.hits[0].latitude;
                 this.chargement = true;
                 this.initRestaurants();
               }else{
-              this.erreurAdresse =  true
+                this.erreurAdresse =  true
+                this.chargement = false;
               }
             } else if ((this.PaysChoisit == "France")) {
-              if (result.features && result.features.length == 1) {
+              if (result.features && result.features.length >0  && result.features[0].properties.score>0.9) {
                 this.longitude = result.features[0].geometry.coordinates[0];
                 this.latitude = result.features[0].geometry.coordinates[1];
                 this.chargement = true;
                 this.initRestaurants();
               }else{
-              this.erreurAdresse =  true
+                this.erreurAdresse =  true;
+                this.chargement = false;
               }
             }
             
