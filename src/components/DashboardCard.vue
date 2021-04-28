@@ -1,6 +1,7 @@
 <template>
     <div>
         <v-card class="listeCards" v-on:click="moveToDetail()">
+            <a class="card1" href="#">
             <div v-bind:class="{ open: !restaurant[0].IsOpenNow}">
                 <v-list-item-content class="contenuCards" >
                     <v-row rows="2" class="premiereLigne">
@@ -40,7 +41,14 @@
                     </v-row>
                 </v-list-item-content>
             </div>
+            <div class="go-corner" href="#">
+                <div class="go-arrow">
+                    →
+                </div>
+            </div>
+        </a>
         </v-card> 
+        
     </div>
 </template>
 
@@ -199,4 +207,68 @@
         font-weight: bold;
     }
 
+
+.go-corner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  width: 32px;
+  height: 32px;
+  overflow: hidden;
+  top: 0;
+  right: 0;
+  background-color: #FFC107;
+  border-radius: 0 4px 0 32px;
+}
+
+.go-arrow {
+  margin-top: -4px;
+  margin-right: -4px;
+  color: white;
+  font-family: courier, sans;
+}
+
+.card1 {
+  display: block;
+  position: relative;
+  border-radius: 4px;
+  text-decoration: none;
+  z-index: 0;
+  overflow: hidden;
+  text-decoration: none;
+  color: black; 
+}
+  .card1:before {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    top: -16px;
+    right: -16px;
+    background: #FFC107;
+    height: 32px;
+    width: 32px;
+    border-radius: 32px;
+    transform: scale(1);
+    transform-origin: 50% 50%;
+    transition: transform 0.5s ease-out;
+  }
+
+  .card1:hover:before {
+    transform: scale(100);
+  }
+
+.card1:hover{
+    transition: all 0.5s ease-out;
+    color: #ffffff;
+}
+
+.card1:hover h1, .card1:hover h4, .card1:hover .v-card__title {
+    color:white;
+    transition: all 0.5s ease-out;
+}
+
+.card1:hover .v-image {
+    filter: opacity(20%);
+}
 </style>

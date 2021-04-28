@@ -1,6 +1,7 @@
 <template>
   <v-row align="center" id="rechercheNom">
     <v-text-field
+      color="black"
       class="inputName"
       v-model="inputName"
       label="Entrer un nom ou un mot-clé"

@@ -9,6 +9,8 @@
             v-model="PaysChoisit"
             :items="pays"
             label="Votre Pays"
+            item-color="warning"
+            color ="#FFA000"
           ></v-select>
         </div>
         <!--Localisation-->
@@ -19,6 +21,7 @@
           label="Inscrire votre adresse"
           v-on:keyup.native="onKeypressCity($event)"
           v-on:keydown.native="onKeypressCity($event)"
+          color="#FFA000"
         ></v-text-field>
         <v-btn
           depressed
@@ -149,4 +152,5 @@ export default {
 .inputAdresse {
   margin-right: 20px;
 }
+
 </style>
