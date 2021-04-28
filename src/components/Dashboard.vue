@@ -112,6 +112,7 @@
   background-color: white;
   padding-left: 20%;
   position: absolute;
+  z-index: 5;
 }
 
 .filtre-CardsRestaurants {
@@ -149,6 +150,7 @@
 
 <script>
 import axios from "axios";
+import { partial_ratio } from "fuzzball";
 import DashboardCard from "./DashboardCard";
 import DashboardFilter from "@/components/DashboardFilter.vue";
 import DashboardSearch from "@/components/DashboardSearch.vue";
@@ -270,6 +272,7 @@ export default {
             console.error(error);
           }
         );
+
     },
     initRestaurants() {
       const path = "http://127.0.0.1:5000/restaurants";
@@ -279,28 +282,27 @@ export default {
         formattedAddress: this.inputCity,
         userQuery: "",
       };
+      console.log(params)
       axios.post(path, params).then((res) => {
         var restaurants = res["data"]["data"];
-        console.log(restaurants)
         this.regroupement(restaurants);
       });
     },
     regroupement(restaurants) {
       var allRestaurant = [];
-      restaurants.forEach(function (restaurant) {
-        var restaurant = restaurants[0];
+      restaurants.forEach(restaurant => {
         var sameRestaurant = [];
         sameRestaurant.push(restaurant);
         for (var restaurantNum2 in restaurants) {
           if (
-            restaurant.Name == restaurants[restaurantNum2].Name &&
-            restaurantNum2 != 0
+            restaurant.Api != restaurants[restaurantNum2].Api &&
+            partial_ratio(restaurant.UniqueName,restaurants[restaurantNum2].Name, {full_process: true})>90 &&
+            partial_ratio(restaurant.Address.FirstLine.toLowerCase(),restaurants[restaurantNum2].Address.FirstLine.toLowerCase(), {full_process: true})>90
           ) {
             sameRestaurant.push(restaurants[restaurantNum2]);
             restaurants.splice(restaurantNum2, 1);
           }
         }
-        restaurants.shift();
         allRestaurant.push(sameRestaurant);
       })
       this.allRestaurants = allRestaurant;
@@ -325,6 +327,37 @@ export default {
         var restaurants = res["data"]["data"];
         this.regroupement(restaurants);
       });
+    },
+    compareTwoStrings(first, second) {
+      first = first.replace(/\s+/g, '')
+      second = second.replace(/\s+/g, '')
+
+      if (first === second) return 1; // identical or empty
+      if (first.length < 2 || second.length < 2) return 0; // if either is a 0-letter or 1-letter string
+
+      let firstBigrams = new Map();
+      for (let i = 0; i < first.length - 1; i++) {
+        const bigram = first.substring(i, i + 2);
+        const count = firstBigrams.has(bigram)
+          ? firstBigrams.get(bigram) + 1
+          : 1;
+
+        firstBigrams.set(bigram, count);
+      };
+
+      let intersectionSize = 0;
+      for (let i = 0; i < second.length - 1; i++) {
+        const bigram = second.substring(i, i + 2);
+        const count = firstBigrams.has(bigram)
+          ? firstBigrams.get(bigram)
+          : 0;
+
+        if (count > 0) {
+          firstBigrams.set(bigram, count - 1);
+          intersectionSize++;
+        }
+      }
+      return (2.0 * intersectionSize) / (first.length + second.length - 2);
     },
   },
 };
