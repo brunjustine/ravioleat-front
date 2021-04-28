@@ -186,7 +186,6 @@ export default {
       this.devise = localStorage.getItem('devise')
       this.rechercheSansFiltre()
       //this.get$children(DashboardFilter).rechercheSansFiltre()
-      console.log(this.$refs.input)
     }
   },
   methods: {
@@ -216,6 +215,7 @@ export default {
                   result.result.hits.map(function (sug) {
                     datas.push(sug.suggestion);
                   });
+                  datas=Array.from(new Set(datas));
                   this.suggestionsHere = datas;
                 }
               } else if ((this.PaysChoisit == "France")) {
@@ -224,6 +224,7 @@ export default {
                   result.features.map(function (sug) {
                     datas.push(sug.properties.label);
                   });
+                  datas=Array.from(new Set(datas));
                   this.suggestionsHere = datas;
                 }
               }
@@ -274,12 +275,10 @@ export default {
       } else {
         console.log('Pas de pays choisi ..')
       }
-      console.log(url)
       fetch(url)
         .then((result) => result.json())
         .then(
           (result) => {
-            console.log(result)
             var datas = [];
             if (this.PaysChoisit == "Royaume-Uni") {
               if (result.result.hits && result.result.hits.length==1) {
