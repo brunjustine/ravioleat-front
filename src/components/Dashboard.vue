@@ -337,7 +337,7 @@ export default {
         }
         allRestaurant.push(sameRestaurant);
       })
-      //allRestaurant.filter()
+      allRestaurant.sort(restaurant => { return restaurant[0].IsOpenNow ? -1 : 1 })
       this.allRestaurants = allRestaurant;
       this.filteredRestaurants = this.allRestaurants;
       this.affichageFiltre = true;
