@@ -338,7 +338,6 @@ export default {
       });
     },
     deleteProposition(){
-      console.log("salut")
       this.showProposition=false
     }
   },
