@@ -150,6 +150,7 @@
 
 <script>
 import axios from "axios";
+import { partial_ratio } from "fuzzball";
 import DashboardCard from "./DashboardCard";
 import DashboardFilter from "@/components/DashboardFilter.vue";
 
@@ -283,6 +284,7 @@ export default {
             console.error(error);
           }
         );
+
     },
     initRestaurants() {
       const path = "http://127.0.0.1:5000/restaurants";
@@ -299,19 +301,19 @@ export default {
     },
     regroupement(restaurants) {
       var allRestaurant = [];
-      restaurants.forEach(function (restaurant) {
+      restaurants.forEach(restaurant => {
         var sameRestaurant = [];
         sameRestaurant.push(restaurant);
         for (var restaurantNum2 in restaurants) {
           if (
             restaurant.Api != restaurants[restaurantNum2].Api &&
-            restaurant.Name == restaurants[restaurantNum2].Name 
+            partial_ratio(restaurant.UniqueName,restaurants[restaurantNum2].Name, {full_process: true})>90 &&
+            partial_ratio(restaurant.Address.FirstLine.toLowerCase(),restaurants[restaurantNum2].Address.FirstLine.toLowerCase(), {full_process: true})>90
           ) {
             sameRestaurant.push(restaurants[restaurantNum2]);
             restaurants.splice(restaurantNum2, 1)
           }
         }
-        restaurants.shift();
         allRestaurant.push(sameRestaurant);
       })
       this.allRestaurants = allRestaurant;
@@ -338,7 +340,6 @@ export default {
       });
     },
     deleteProposition(){
-      console.log("salut")
       this.showProposition=false
     }
   },
