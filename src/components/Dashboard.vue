@@ -337,6 +337,7 @@ export default {
         }
         allRestaurant.push(sameRestaurant);
       })
+      //allRestaurant.filter()
       this.allRestaurants = allRestaurant;
       this.filteredRestaurants = this.allRestaurants;
       this.affichageFiltre = true;
