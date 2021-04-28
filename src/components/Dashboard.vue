@@ -11,6 +11,7 @@
                 v-model="PaysChoisit"
                 :items="pays"
                 label="Votre Pays"
+
               ></v-select>
             </div>
             <!--Localisation-->
@@ -18,6 +19,7 @@
             <v-text-field
               class="inputAdresse"
               v-model="inputCity"
+              id = "adresse"
               label="Inscrire votre adresse"
               v-on:keyup.native="onKeypressCity($event)"
               v-on:keydown.native="onKeypressCity($event)"
@@ -32,7 +34,7 @@
           </v-row>
           <div class="listeAdresse">
             <v-alert type="warning" v-if="erreurAdresse" class="alertAdresse">Votre adresse n'est pas correcte</v-alert>
-            <v-list>
+            <v-list v-if="showProposition">
               <v-list-item-group v-model="numAdresses" color="primary">
                 <v-list-item
                   v-for="suggestion in suggestionsHere"
@@ -47,7 +49,7 @@
           </div>
         </v-container>
       </v-card>
-      <div class="filtre-CardsRestaurants">
+      <div class="filtre-CardsRestaurants" v-on:click="deleteProposition()">
 
         <!--FILTRAGE-->
         <DashboardFilter
@@ -55,7 +57,6 @@
           v-bind:allRestaurants="this.allRestaurants"
           @filterRestaurants="filterRestaurants"
         />
-
         <!--CARTES RESTAURANTS-->
         <div id="contenantListeCards">
           <v-row align="center" v-if="allRestaurants.length>1" id="rechercheNom">
@@ -104,14 +105,16 @@
 }
 
 .listeAdresse {
-  padding-left: 20%;
   position: absolute;
+  left:310px;
+  z-index: 5;
 }
 
 .filtre-CardsRestaurants {
   margin: 0;
   display: flex;
   flex-wrap: wrap;
+  height: 100%;
 }
 
 #contenantListeCards {
@@ -150,6 +153,8 @@ import axios from "axios";
 import DashboardCard from "./DashboardCard";
 import DashboardFilter from "@/components/DashboardFilter.vue";
 
+
+
 export default {
   name: "Dashboard",
   components: {
@@ -173,9 +178,11 @@ export default {
     chargement: false,
     inputName:"",
     erreurAdresse: false,
+    showProposition: false
   }),
   methods: {
     onKeypressCity(e) {
+      this.showProposition=true;
       this.erreurAdresse =  false;
       var url;
       if (this.inputCity != undefined && this.inputCity.length > 2) {
@@ -329,6 +336,10 @@ export default {
         var restaurants = res["data"]["data"];
         this.regroupement(restaurants);
       });
+    },
+    deleteProposition(){
+      console.log("salut")
+      this.showProposition=false
     }
   },
 };
