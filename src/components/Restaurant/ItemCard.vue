@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="itemPrice != 0">
     <v-card elevation="4" class="text-center" style="margin: 5px">
       <v-card-title class="justify-center" style="font-size: small; font-weight: bold; justify-content: center">
           {{ itemName }}

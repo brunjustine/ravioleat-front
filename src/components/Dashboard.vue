@@ -181,6 +181,14 @@ export default {
     erreurAdresse: false,
     showProposition: false
   }),
+  created() {
+    if (localStorage.getItem('alreadySearch') === "true") {
+      this.devise = localStorage.getItem('devise')
+      this.rechercheSansFiltre()
+      //this.get$children(DashboardFilter).rechercheSansFiltre()
+      console.log(this.$refs.input)
+    }
+  },
   methods: {
     onKeypressCity(e) {
       this.showProposition=true;
@@ -228,6 +236,7 @@ export default {
       } else {
         this.suggestionsHere = [];
       }
+      localStorage.setItem('inputCity', this.inputCity)
     },
     onClickSuggestHere(suggestion) {
       // On renseigne la ville sélectionner
@@ -243,7 +252,16 @@ export default {
       this.suggestionsHere = [];
     },
     rechercheSansFiltre() {
+      if (localStorage.getItem('alreadySearch') === "true" && this.inputCity === "" && this.PaysChoisit === "") {
+        this.inputCity = localStorage.getItem('inputCity');
+        this.PaysChoisit = localStorage.getItem('pays');
+      } else {
+        localStorage.setItem('inputCity', this.inputCity);
+        localStorage.setItem('pays', this.PaysChoisit);
+        localStorage.setItem('alreadySearch', true);
+      }
       this.suggestionsHere = [];
+      this.chargement = true;
       var url;
       if (this.PaysChoisit == "Royaume-Uni") {
         url = "https://api.ideal-postcodes.co.uk/v1/addresses?api_key=iddqd&query=".concat(
@@ -253,7 +271,10 @@ export default {
         url = "https://api-adresse.data.gouv.fr/search/?q=".concat(
           this.inputCity
         );
+      } else {
+        console.log('Pas de pays choisi ..')
       }
+      console.log(url)
       fetch(url)
         .then((result) => result.json())
         .then(
