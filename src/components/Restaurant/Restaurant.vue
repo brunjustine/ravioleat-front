@@ -51,7 +51,7 @@
                          :key="item.Id"
                          :item-name="item.Name"
                          :item-description="item.Description"
-                         :item-price="item.Price"
+                         :item-price="Number(item.Price)"
                          :devise="devise"
                          style="margin: 5px; width: 31%">
               </item-card>
@@ -129,7 +129,7 @@
           {
             "name": restaurant['Api'],
             "deliveryETA": restaurant['DeliveryEtaMinutes'],
-            "deliveryCost": restaurant['DeliveryCost'],
+            "deliveryCost": Number(restaurant['DeliveryCost']),
             "urlLink": restaurant['Url'],
             "rating": restaurant['Rating'],
             "offers": restaurant['Offers']});

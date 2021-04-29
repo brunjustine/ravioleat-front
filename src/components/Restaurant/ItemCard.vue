@@ -20,7 +20,7 @@
     props: {
       itemName: String,
       itemDescription: String,
-      itemPrice: String,
+      itemPrice: Number,
       devise: String,
     },
   }
