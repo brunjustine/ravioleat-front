@@ -89,7 +89,7 @@
             chargement: true,
         }),
         props: {
-            restaurant: Array, 
+            restaurant: Array,
             devise: String,
             userQuery: String,
             longitude: Number,

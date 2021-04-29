@@ -29,7 +29,6 @@
           @filterRestaurants="filterRestaurants"
         />
 
-
         <!--CARTES RESTAURANTS-->
         <div id="contenantListeCards">
           <DashboardSearch
@@ -46,19 +45,24 @@
               width="5%"
             />
           </div>
-
+          <div>
+            <jw-pagination :pageSize="50" :items="filteredRestaurants" @changePage="onChangePage"></jw-pagination>
+          </div>
           <v-list-item
-            v-for="restaurant in filteredRestaurants"
-            :key="restaurant[0].Id"
+              v-for="restaurant in pageOfRestaurants"
+              :key="restaurant[0].Id"
           >
             <DashboardCard
-              v-bind:restaurant="restaurant"
-              v-bind:devise="devise"
-              v-bind:userQuery="inputName"
-              v-bind:longitude="longitude"
-              v-bind:latitude="latitude"
+                v-bind:restaurant="restaurant"
+                v-bind:devise="devise"
+                v-bind:userQuery="inputName"
+                v-bind:longitude="longitude"
+                v-bind:latitude="latitude"
             ></DashboardCard>
           </v-list-item>
+          <div>
+            <jw-pagination :pageSize="50" :items="filteredRestaurants" @changePage="onChangePage"></jw-pagination>
+          </div>
         </div>
       </div>
     </v-app>
@@ -133,16 +137,19 @@ export default {
     chargementSearch:false,
     inputName : "",
     showProposition: false,
-    erreurAdresse : false
-  }),
+    erreurAdresse : false,
+    pageOfRestaurants: []
+    }),
   created() {
     if (localStorage.getItem('alreadySearch') === "true") {
       this.devise = localStorage.getItem('devise')
-      //this.rechercheSansFiltre()
-      //this.get$children(DashboardFilter).rechercheSansFiltre()
     }
   },
   methods: {
+    onChangePage(pageOfRestaurants) {
+      this.pageOfRestaurants = pageOfRestaurants;
+      document.getElementById('contenantListeCards').scrollIntoView()
+    },
     SetInputCity(value) {
       this.inputCity = value;
     },
