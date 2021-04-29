@@ -34,8 +34,8 @@
                                                 </v-col>
                                                 <v-col cols="8">
                                                     <v-chip >  
-                                                        <font v-bind:class="{ best: resto.DeliveryEtaMinutes.RangeLower==bestTimeLivraison(restaurant)}" v-if="resto.DeliveryEtaMinutes!=null"> {{resto.DeliveryEtaMinutes.RangeLower}} - {{resto.DeliveryEtaMinutes.RangeUpper}} min  
-                                                            <v-icon v-if="resto.DeliveryEtaMinutes.RangeLower==bestTimeLivraison(restaurant)" color="red darken-2"> mdi-run-fast</v-icon>  
+                                                        <font v-bind:class="{ best: resto.Id==bestTimeLivraison(restaurant).Id}" v-if="resto.DeliveryEtaMinutes!=null"> {{resto.DeliveryEtaMinutes.RangeLower}} - {{resto.DeliveryEtaMinutes.RangeUpper}} min  
+                                                            <v-icon v-if="resto.Id==bestTimeLivraison(restaurant).Id" color="red darken-2"> mdi-run-fast</v-icon>  
                                                         </font> 
                                                     </v-chip>
                                                 </v-col>
@@ -71,7 +71,7 @@
                     </v-row>
                 </v-list-item-content>
             </div>
-            <div class="go-corner" href="#">
+            <div v-if="restaurant[0].IsOpenNow" class="go-corner" href="#">
                 <div class="go-arrow">
                     →
                 </div>
@@ -128,10 +128,16 @@
                 return res
             },
             bestTimeLivraison(restaurant){
-                var min = restaurant[0].DeliveryEtaMinutes.RangeLower
+                var min = restaurant[0]
                 for( var i in restaurant){
-                    if(restaurant[i].DeliveryEtaMinutes.RangeLower<min){
-                        min=restaurant[i].DeliveryEtaMinutes.RangeLower
+                    if(parseInt(restaurant[i].DeliveryEtaMinutes.RangeLower)<parseInt(min.DeliveryEtaMinutes.RangeLower)){
+                        min=restaurant[i]
+                    }else if(parseInt(restaurant[i].DeliveryEtaMinutes.RangeLower)==parseInt(min.DeliveryEtaMinutes.RangeLower)){
+                        if(parseInt(restaurant[i].DeliveryEtaMinutes.RangeUpper)<parseInt(min.DeliveryEtaMinutes.RangeUpper)){
+                            min=restaurant[i]
+                        } /*else if(parseInt(restaurant[i].DeliveryEtaMinutes.RangeUpper)==parseInt(min.DeliveryEtaMinutes.RangeUpper)){
+                            tabMin.push()
+                        }*/
                     }
                 }
                 return min

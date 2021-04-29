@@ -32,7 +32,7 @@
         >
       </v-row>
       <div class="listeAdresse">
-        <v-alert type="warning" v-if="erreurAdresse" class="alertAdresse">Votre adresse n'est pas correcte</v-alert>
+        <v-alert type="warning" v-if="erreur" class="alertAdresse">Votre adresse n'est pas correcte</v-alert>
         <v-list v-if="show">
           <v-list-item-group v-model="numAdresses" color="amber">
             <v-list-item
@@ -55,6 +55,7 @@ export default {
   name: "DashboardLocation",
   props: {
       show:Boolean,
+      erreur:Boolean
     },
   data: function () {
     return {
@@ -65,8 +66,7 @@ export default {
       suggestionsHere: [], // Tableau qui contiendra les suggestions Here
       suggestionSelected: "", // Adresse selectionnées
       longitude: 0,
-      latitude: 0,
-      erreurAdresse: false,
+      latitude: 0
     };
   },
   created(){
@@ -84,7 +84,7 @@ export default {
   methods: {
     onKeypressCity(e) {
       this.$emit('show');
-      this.erreurAdresse =  false;
+      this.$emit('showErreur');
       var url;
       if (this.inputCity != undefined && this.inputCity.length > 2) {
         // Call API Suggestions de HERE pour réécupérer les informations
@@ -109,6 +109,7 @@ export default {
                   result.result.hits.map(function (sug) {
                     datas.push(sug.suggestion);
                   });
+                  datas=Array.from(new Set(datas));
                   this.suggestionsHere = datas;
                 }
               } else if (this.PaysChoisit == "France") {
@@ -116,7 +117,8 @@ export default {
                 if (result.features && result.features.length > 0) {
                   result.features.map(function (sug) {
                     datas.push(sug.properties.label);
-                  });
+                  });false
+                  datas=Array.from(new Set(datas));
                   this.suggestionsHere = datas;
                 }
               }
