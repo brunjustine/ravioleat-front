@@ -42,7 +42,8 @@ export default {
         deliveryCost: ["0","3","5","7","7+"],
         deliveryCostFilter:100,
         foodFilter:[],
-        foodTypes: ['Fast Food','Burgers','Pizza','Asiatique','Sushis','Healthy', 'Halal', 'Indien','Petit déjeuner'],
+        foodFilterEnglish:[],
+        foodTypes: ['Fast Food','Burgers','Pizza','Asiatique','Sushi','Healthy', 'Halal', 'Indien','Petit déjeuner'],
         grade:0,
         maxDelay: 120,
         minDelay: 0,
@@ -53,7 +54,9 @@ export default {
     },
     methods: {
         filterRestaurants() {
+          localStorage.setItem('expiration', Date.now())
           let tmpRestaurants = this.allRestaurants
+          this.traductionFoodFilter()
           this.filteredRestaurants = tmpRestaurants.filter(restaurant =>
           {
             let plateformes = this.filterByOffer(restaurant)
@@ -67,7 +70,7 @@ export default {
         },
         filterByFoodTypes(restaurant){
           if (this.foodFilter.length>0) {
-            return restaurant.filter(plateforme => plateforme.CuisineTypes.find(type => this.foodFilter.includes(type.Name)))
+            return restaurant.filter(plateforme => plateforme.CuisineTypes.find(type => this.foodFilterEnglish.includes(type.Name)))
           } else {
             return restaurant
           }
@@ -129,13 +132,39 @@ export default {
           }
         },
         resetFilter(){
+          localStorage.setItem('expiration', Date.now())
           this.$emit('filterRestaurants', this.allRestaurants)
           this.offer = false
           this.foodFilter = []
           this.grade = 0
           this.delay = this.maxDelay
           this.cost = 100
-        }
+        },
+        traductionFoodFilter(){
+          this.foodFilterEnglish = []
+          for (var food in this.foodFilter) {
+            switch (this.foodFilter[food]) {
+              case 'Asiatique': {
+                this.foodFilterEnglish.push('Asian')
+                this.foodFilterEnglish.push('AsianFusion')
+                break
+              }
+              case 'Indien': {
+                this.foodFilterEnglish.push('Indian')
+                break
+              }
+              case 'Petit déjeuner': {
+                this.foodFilterEnglish.push('Breakfast')
+                this.foodFilterEnglish.push('Breakfast and Brunch')
+                break
+              }
+              default: {
+                this.foodFilterEnglish.push(this.foodFilter[food])
+                break
+              }
+            }
+          }
+        },
     },
     beforeMount() {
       this.getSlidersRange()
@@ -156,7 +185,7 @@ export default {
 }
 
 .v-btn {
-  color: black!important;
+  color: white!important;;
 }
 </style>
 
