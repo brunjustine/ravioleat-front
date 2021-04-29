@@ -24,7 +24,7 @@
                                 <v-col>
                                     <v-card-title>Délais  </v-card-title>
                                     <v-card-text>
-                                        <v-chip class="livraison"  v-for="resto in restaurant" :key="resto.id"><span><img width="30px" height="30px" class="logo" :src="require('/src/assets/logos/'+resto.Api+'.png')"> </span>  <font v-bind:class="{ best: resto.DeliveryEtaMinutes.RangeLower==bestTimeLivraison(restaurant)}" v-if="resto.DeliveryEtaMinutes!=null"> {{resto.DeliveryEtaMinutes.RangeLower}} - {{resto.DeliveryEtaMinutes.RangeUpper}} min  <v-icon v-if="resto.DeliveryEtaMinutes.RangeLower==bestTimeLivraison(restaurant)" color="red darken-2"> mdi-run-fast</v-icon>  </font> </v-chip>
+                                        <v-chip class="livraison"  v-for="resto in restaurant" :key="resto.id"><span><img width="30px" height="30px" class="logo" :src="require('/src/assets/logos/'+resto.Api+'.png')"> </span>  <font v-bind:class="{ best: resto.Id==bestTimeLivraison(restaurant).Id}" v-if="resto.DeliveryEtaMinutes!=null"> {{resto.DeliveryEtaMinutes.RangeLower}} - {{resto.DeliveryEtaMinutes.RangeUpper}} min  <v-icon v-if="resto.DeliveryEtaMinutes.RangeLower==bestTimeLivraison(restaurant)" color="red darken-2"> mdi-run-fast</v-icon>  </font> </v-chip>
                                     </v-card-text>
                                 </v-col>
                                 <v-col>
@@ -90,19 +90,26 @@
                 return res
             },
             bestTimeLivraison(restaurant){
-                var min = restaurant[0].DeliveryEtaMinutes.RangeLower
+                var min = restaurant[0]
                 for( var i in restaurant){
-                    if(restaurant[i].DeliveryEtaMinutes.RangeLower<min){
-                        min=restaurant[i].DeliveryEtaMinutes.RangeLower
+                    if(parseInt(restaurant[i].DeliveryEtaMinutes.RangeLower)<parseInt(min.DeliveryEtaMinutes.RangeLower)){
+                        min=restaurant[i]
+                    }else if(parseInt(restaurant[i].DeliveryEtaMinutes.RangeLower)==parseInt(min.DeliveryEtaMinutes.RangeLower)){
+                        if(parseInt(restaurant[i].DeliveryEtaMinutes.RangeUpper)<parseInt(min.DeliveryEtaMinutes.RangeUpper)){
+                            min=restaurant[i]
+                        } /*else if(parseInt(restaurant[i].DeliveryEtaMinutes.RangeUpper)==parseInt(min.DeliveryEtaMinutes.RangeUpper)){
+                            tabMin.push()
+                        }*/
                     }
                 }
                 return min
             },
             bestPriceLivraison(restaurant){
                 var min = restaurant[0].DeliveryCost
+                min = parseInt(min)
                 for( var i in restaurant){
-                    if(restaurant[i].DeliveryCost<min){
-                        min=restaurant[i].DeliveryCost
+                    if(parseInt(restaurant[i].DeliveryCost)<min){
+                        min=parseInt(restaurant[i].DeliveryCost)
                     }
                 }
                 return min
