@@ -55,7 +55,7 @@
             devise: String,
             userQuery: String,
             longitude: Number,
-            latitude: Number
+            latitude: Number,
         },
         methods : {
             starAverage(sameRestaurants){

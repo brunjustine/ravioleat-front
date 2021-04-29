@@ -68,7 +68,7 @@
           </div>
           <v-list-item
             v-for="restaurant in filteredRestaurants"
-            :key="restaurant[0].Name"
+            :key="restaurant[0].Id"
           >
             <DashboardCard
               v-bind:restaurant="restaurant"
@@ -321,6 +321,7 @@ export default {
       });
     },
     regroupement(restaurants) {
+      console.log('begin')
       var allRestaurant = [];
       restaurants.forEach(restaurant => {
         var sameRestaurant = [];
@@ -342,6 +343,7 @@ export default {
       this.filteredRestaurants = this.allRestaurants;
       this.affichageFiltre = true;
       this.chargement = false;
+      console.log('end')
     },
     async filterRestaurants(value){
       this.filteredRestaurants = value
