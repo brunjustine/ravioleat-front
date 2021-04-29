@@ -148,7 +148,7 @@ export default {
   methods: {
     onChangePage(pageOfRestaurants) {
       this.pageOfRestaurants = pageOfRestaurants;
-      document.getElementById('contenantListeCards').scrollIntoView()
+      document.getElementById('contenantListeCards') ? document.getElementById('contenantListeCards').scrollIntoView() : {}
     },
     SetInputCity(value) {
       this.inputCity = value;
