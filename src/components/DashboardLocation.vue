@@ -22,6 +22,8 @@
           v-on:keyup.native="onKeypressCity($event)"
           v-on:keydown.native="onKeypressCity($event)"
           color="#FFA000"
+          :append-icon="inputCity.length>0 ? 'mdi-close-circle' : ''"
+          @click:append="clearAdresse"
         ></v-text-field>
         <v-btn
           depressed
@@ -147,6 +149,9 @@ export default {
         localStorage.setItem('alreadySearch', true);
         this.$emit('filter')
     },
+    clearAdresse(){
+      this.inputCity=""
+    }
   },
 };
 </script>
