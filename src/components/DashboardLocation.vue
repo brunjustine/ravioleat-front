@@ -135,20 +135,12 @@ export default {
       this.$emit('PaysChoisit', this.PaysChoisit);
       
     },
-    onClickSuggestHere(suggestion) {
-      // On renseigne la ville sélectionner
-      this.suggestionSelected = suggestion.lib;
-
-      // On reset la recherche
-      this.inputCity = "";
-      this.suggestionsHere = [];
-      localStorage.setItem('pays', this.PaysChoisit);
-      this.$emit('inputCity', this.inputCity)
-    },
     changeAdresse(suggestion) {
       this.inputCity = suggestion;
       this.suggestionsHere = [];
+      localStorage.setItem('pays', this.PaysChoisit);
       localStorage.setItem('inputCity', this.inputCity);
+      this.$emit('inputCity', this.inputCity)
       this.$emit('inputCity', this.inputCity)
     },
     rechercheSansFiltre(){
