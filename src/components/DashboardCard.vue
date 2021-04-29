@@ -138,12 +138,10 @@
                         tabMin.push(min)
                     }else if(parseInt(restaurant[i].DeliveryEtaMinutes.RangeLower)==parseInt(min.DeliveryEtaMinutes.RangeLower )){
                         if(parseInt(restaurant[i].DeliveryEtaMinutes.RangeUpper)<parseInt(min.DeliveryEtaMinutes.RangeUpper)){
-                            console.log("LA")
                             min=restaurant[i]
                             tabMin=[]
                             tabMin.push(restaurant[i])
                         } else if(parseInt(restaurant[i].DeliveryEtaMinutes.RangeUpper)==parseInt(min.DeliveryEtaMinutes.RangeUpper)){
-                            console.log("ICI")
                             tabMin.push(restaurant[i])
                         }
                     }
