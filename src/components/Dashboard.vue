@@ -139,8 +139,16 @@ export default {
     showProposition: false,
     erreurAdresse : false,
     pageOfRestaurants: []
-    }),
+  }),
   created() {
+    if (localStorage.getItem('expiration')==null || localStorage.getItem('expiration')<Date.now()-1*60000) {
+      localStorage.setItem('alreadySearch', "false")
+      localStorage.removeItem('devise')
+      localStorage.removeItem('inputCity')
+      localStorage.removeItem('pays')
+      localStorage.removeItem('current_restaurant_details')
+    }
+    localStorage.setItem('expiration', Date.now())
     if (localStorage.getItem('alreadySearch') === "true") {
       this.devise = localStorage.getItem('devise')
     }
@@ -157,6 +165,7 @@ export default {
       this.PaysChoisit =value;
     },
     rechercheSansFiltre() {
+      localStorage.setItem('expiration', Date.now())
       this.suggestionsHere = [];
       this.chargement = true;
       var url;

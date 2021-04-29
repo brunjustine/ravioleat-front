@@ -86,6 +86,7 @@
       }
     },
     created() {
+      localStorage.setItem('expiration', Date.now())
       console.log(JSON.parse(localStorage.getItem('current_restaurant_details')))
       this.details = JSON.parse(localStorage.getItem('current_restaurant_details'))
       this.getRestaurant(this.details.restaurant_ids);
