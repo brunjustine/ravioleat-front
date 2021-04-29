@@ -1,11 +1,12 @@
 <template>
   <v-row align="center" id="rechercheNom">
     <v-text-field
+      color="black"
       class="inputName"
       v-model="inputName"
       label="Entrer un nom ou un mot-clé"
     ></v-text-field>
-    <v-btn depressed color="primary" v-on:click="sendInput()">Rechercher</v-btn>
+    <v-btn depressed color="amber" v-on:click="sendInput()">Rechercher</v-btn>
   <!--<v-select v-model="sortBy" :items="items" label="Trier par"></v-select>-->
   </v-row>
 </template>
