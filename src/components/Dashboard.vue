@@ -146,10 +146,10 @@ export default {
     showProposition: false,
     erreurAdresse : false,
     pageOfRestaurants: [],
-    customLabels
+    customLabels,
     }),
   created() {
-    if (localStorage.getItem('expiration')==null || localStorage.getItem('expiration')<Date.now()-1*60000) {
+    if (localStorage.getItem('expiration')==null || localStorage.getItem('expiration')<Date.now()-30*60000) {
       localStorage.setItem('alreadySearch', "false")
       localStorage.removeItem('devise')
       localStorage.removeItem('inputCity')
