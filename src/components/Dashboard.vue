@@ -165,7 +165,6 @@ export default {
       this.devise = localStorage.getItem('devise')
       this.pays = localStorage.getItem('pays')
       this.inputCity = localStorage.getItem('inputCity')
-      this.rechercheSansFiltre()
     }
   },
   methods: {
@@ -230,7 +229,6 @@ export default {
 
     },
     initRestaurants() {
-      console.log("je suis une initialisation !")
       const path = "http://127.0.0.1:5000/restaurants";
       var params = {
         lat: this.latitude.toString(),
@@ -240,7 +238,6 @@ export default {
       };
       axios.post(path, params).then((res) => {
         var restaurants = res["data"]["data"];
-        console.log("Je suis un appel API")
         this.regroupement(restaurants);
       });
     },
@@ -267,7 +264,6 @@ export default {
       this.affichageFiltre = true;
       this.chargement = false;
       this.chargementSearch = false;
-      console.log("Je suis un regroupement !")
     },
     async filterRestaurants(value){
       this.filteredRestaurants = value
