@@ -16,12 +16,9 @@
             </div>
           </v-col>
 
-          <v-col>
-            <v-btn style="margin: 10px" @click="goUp" raised>
-              <v-icon>mdi-back</v-icon>
-              Aller en haut
-            </v-btn>
-          </v-col>
+          <v-spacer>
+            
+          </v-spacer>
 
         </v-row>
       </v-app-bar>
@@ -35,9 +32,6 @@
 
   export default {
     methods: {
-      goUp() {
-        window.scrollTo(0,0)
-      },
       goHome() {
         if (this.$route.path === '/') {
           this.$router.go(0);

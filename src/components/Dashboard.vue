@@ -1,6 +1,20 @@
 <template>
   <div>
     <v-app>
+      <v-btn
+        class="mx-2"
+        fab
+        dark
+        color="amber"
+        id="buttonGoTop" 
+        title="Go to top"
+        @click="goUp"
+      >
+      <v-icon dark>
+        mdi-apple-keyboard-caps 
+      </v-icon>
+    </v-btn>
+
       <DashboardLocation
       @inputCity="SetInputCity"
       @PaysChoisit="SetPaysChoisit"
@@ -98,6 +112,15 @@
 }
 
 .gif-center {
+}
+
+#buttonGoTop {
+  position: fixed;
+  bottom: 20px;
+  right: 30px;
+  z-index: 99;
+  padding: 15px;
+  color:white;
 }
 
 </style>
@@ -261,6 +284,9 @@ export default {
     },
     turnErreurOff() {
       this.erreurAdresse =false;
+    },
+    goUp() {
+        window.scrollTo(0,0)
     }
   },
 };

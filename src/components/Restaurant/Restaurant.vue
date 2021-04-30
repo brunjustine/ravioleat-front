@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div id="restaurant-details">
     <div>
       <h1>
         {{ name }}
@@ -10,9 +10,9 @@
       </span>
     </div>
     <div v-if="applications.length > 1">
-      <v-btn class="button" @click="priceSort()">Le moins cher</v-btn>
-      <v-btn class="button" @click="fastSort()">Le plus rapide</v-btn>
-      <v-btn class="button" @click="bestSort()">Le meilleur</v-btn>
+      <v-btn class="button" color="amber" @click="priceSort()">Le moins cher</v-btn>
+      <v-btn class="button" color="amber" @click="fastSort()">Le plus rapide</v-btn>
+      <v-btn class="button"  color="amber" @click="bestSort()">Le meilleur</v-btn>
     </div>
     <div>
       <v-expansion-panels
@@ -21,12 +21,14 @@
         <v-expansion-panel>
           <v-expansion-panel-header>
             <v-spacer></v-spacer>
-              <h2>Applications</h2>
+              <h2>Livreurs</h2>
             <v-spacer></v-spacer>
           </v-expansion-panel-header>
           <v-expansion-panel-content>
-            <application-card v-for="application in applications"
-                              :key="application.name"
+            <v-container>
+              <v-row>
+                <v-col v-for="(application,index) in applications" :key="application.name">
+                  <application-card 
                               :appli-name="application.name"
                               :delivery-e-t-a="application.deliveryETA"
                               :delivery-cost="application.deliveryCost"
@@ -35,7 +37,18 @@
                               :devise="devise"
                               :offers="application.offers"
                               style="margin: 20px">
-            </application-card>
+                  </application-card>
+                  <div v-if="(index == 0)" v-bind:class="[(index == Object.keys(applications).length - 1) ? activeClass : hideClass]" class="gif-center">
+                      <!--<div id="chargement" class="gif-center">-->
+                        <img 
+                          src="@/assets/ravioli2.gif"
+                          alt="gif de ravioli qui marche"
+                          width="5%"
+                        />
+                  </div>
+                </v-col>
+              </v-row>
+            </v-container>
           </v-expansion-panel-content>
         </v-expansion-panel>
 
@@ -53,7 +66,7 @@
                          :item-description="item.Description"
                          :item-price="Number(item.Price)"
                          :devise="devise"
-                         style="margin: 5px; width: 31%">
+                         style="margin: 5px auto;">
               </item-card>
             </div>
           </v-expansion-panel-content>
@@ -82,7 +95,9 @@
         items: [],
         devise: '',
         panel: [0,1],
-        has_menus: false
+        has_menus: false,
+        activeClass: 'show-gif',
+        hideClass: 'hide-gif'        
       }
     },
     created() {
@@ -113,7 +128,6 @@
                   this.items = this.restaurant[key]['Menus'];
                   this.has_menus = true;
                 }
-                console.log(first_key)
                 this.name = this.restaurant[first_key]['Name'];
                 this.address = this.restaurant[first_key]['Address']['FirstLine'];
                 this.categories = this.restaurant[first_key]['CuisineTypes'];
@@ -157,10 +171,47 @@
   .button {
     margin: 10px;
   }
-
+  
   .item {
     display: flex;
     flex-wrap: wrap;
   }
+
+  #restaurant-details {
+    margin-top: 50px;
+  }
+
+  .v-expansion-panel-header {
+  }
+
+  .gif-center {
+    width: 100%;
+    height: 100%;
+    left: 0px;
+    top: 0px;
+    z-index: 9999;
+    position: fixed;
+  }
+
+  .gif-center img{
+    margin-top: 50vh; 
+    transform: translateY(-50%); 
+  }
+
+  .show-gif {
+    display: initial;
+    position: fixed;
+    
+    
+  }
+
+  .hide-gif {
+    display:none;
+  }
+
+  .theme--light.v-btn.v-btn--has-bg {
+    background-color:#FFC107;
+  }
+  
 
 </style>

@@ -1,51 +1,68 @@
 <template>
-  <div>
-    <v-card elevation="4" class="text-center" style="margin: 5px">
+  <div id="application-cards">
+    <v-card elevation="4" class="text-center" style="margin: 5px" @click="goToStore()" :disabled="urlLink === null">
       <v-card-title class="justify-center" style="font-size: xx-large; font-weight: bold">
-        <span class="title">
-          <img width="6%" height="6%" :alt="appliName" :src="require('/src/assets/logos/'+appliName+'.png')">
-        </span>
+        <v-flex justify-center>
+          <span class="title">
+            <img width="100px" height="100px" :alt="appliName" :src="require('/src/assets/logos/'+appliName+'.png')">
+          </span>
+        </v-flex>
       </v-card-title>
-      <v-row>
-        <v-col>
-          <v-card-text class="amount darken-2">
-            Temps de livraison :
-            <v-chip>
-              {{ deliveryETA['RangeLower'] }} - {{ deliveryETA['RangeUpper'] }} min
-            </v-chip>
-          </v-card-text>
-        </v-col>
-        <v-col>
-          <v-card-text class="amount darken-2">
-            Coût de livraison :
-            <v-chip>
-              {{ deliveryCost }} {{ this.devise }}
-            </v-chip>
-          </v-card-text>
-        </v-col>
-        <v-col>
-          <v-card-text>
-            <div>
-              <v-rating v-model="rating['StarRating']" background-color="orange lighten-3" color="orange" half-icon="mdi-star-half" half-increments large readonly></v-rating>
-              {{ Math.round(rating['StarRating'] * 100) / 100}}
-            </div>
-            {{ rating['Count'] }}
-          </v-card-text>
-        </v-col>
-        <v-col v-if="offers.length !== 0">
-          <v-card-text class="amount darken-2">
-            Offres du moment :
-            <v-chip v-for="offer in offers" :key="offer.OfferId">
-              {{ offer.Description }}
-            </v-chip>
-          </v-card-text>
-        </v-col>
-        <v-col>
-          <v-card-actions>
-            <v-btn @click="goToStore()" :disabled="urlLink === null">Voir le restaurant</v-btn>
-          </v-card-actions>
-        </v-col>
-      </v-row>
+      <v-container>
+        <v-row>
+          <v-col>
+            <v-card-text class="amount darken-2">
+              <v-row>
+                <v-col>
+                  Temps de livraison :
+                </v-col>
+              </v-row>
+              <v-row>
+                <v-col>
+                  <v-chip>
+                    {{ deliveryETA['RangeLower'] }} - {{ deliveryETA['RangeUpper'] }} min
+                  </v-chip>
+                </v-col>
+              </v-row>
+            </v-card-text>
+          </v-col>
+          <v-col>
+            <v-card-text class="amount darken-2">
+              <v-row>
+                <v-col>
+                  Coût de livraison :
+                </v-col>
+              </v-row>
+              <v-row>
+                <v-col>
+                  <v-chip>
+                    {{ deliveryCost }} {{ this.devise }}
+                  </v-chip>
+                </v-col>
+              </v-row>
+            </v-card-text>
+          </v-col>
+        </v-row>
+        <v-row>
+            <v-col>
+              <v-card-text class="rating">
+                <div>
+                  <v-rating v-model="rating['StarRating']" background-color="#1785B3" color="#1785B3" half-icon="mdi-star-half" half-increments large readonly></v-rating>
+                  {{ Math.round(rating['StarRating'] * 100) / 100}}
+                </div>
+                Avis {{ rating['Count'] }}
+              </v-card-text>
+            </v-col>
+            <v-col v-if="offers.length !== 0">
+              <v-card-text class="amount darken-2">
+                Offres du moment :
+                <v-chip v-for="offer in offers" :key="offer.OfferId">
+                  {{ offer.Description }}
+                </v-chip>
+              </v-card-text>
+            </v-col>
+        </v-row>
+      </v-container>
     </v-card>
   </div>
 </template>
@@ -71,5 +88,24 @@
 </script>
 
 <style scoped>
+.theme--light.v-btn.v-btn--has-bg {
+  background-color:#FFC107;
+}
 
+.theme--light.v-chip:not(.v-chip--active) {
+    background-color:#daf1fb;
+}
+
+img {
+  margin:0 auto;
+  text-align:center;
+}
+
+.v-card__text.rating{
+  color:#1785B3!important;
+}
+/*
+.v-card {
+  max-width: 80%;
+}*/
 </style>
