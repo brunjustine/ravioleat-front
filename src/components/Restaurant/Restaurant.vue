@@ -47,7 +47,7 @@
           </v-expansion-panel-header>
           <v-expansion-panel-content>
             <div class="item">
-              <item-card v-for="item in items"
+              <item-card v-for="item in filteredItems(items)"
                          :key="item.Id"
                          :item-name="item.Name"
                          :item-description="item.Description"
@@ -134,6 +134,9 @@
             "urlLink": restaurant['Url'],
             "rating": restaurant['Rating'],
             "offers": restaurant['Offers']});
+      },
+      filteredItems(items){
+        return items.filter((v,i,a)=> a.findIndex(t=>(t.Id === v.Id))===i)
       },
       priceSort() {
         return this.applications.sort((application1, application2) =>

@@ -46,7 +46,7 @@
             />
           </div>
           <div>
-            <jw-pagination :pageSize="50" :items="filteredRestaurants" @changePage="onChangePage"></jw-pagination>
+            <jw-pagination :pageSize="50" :items="filteredRestaurants" @changePage="onChangePage" :labels="customLabels"></jw-pagination>
           </div>
           <v-list-item
               v-for="restaurant in pageOfRestaurants"
@@ -61,7 +61,7 @@
             ></DashboardCard>
           </v-list-item>
           <div>
-            <jw-pagination :pageSize="50" :items="filteredRestaurants" @changePage="onChangePage"></jw-pagination>
+            <jw-pagination :pageSize="50" :items="filteredRestaurants" @changePage="onChangePage" :labels="customLabels"></jw-pagination>
           </div>
         </div>
       </div>
@@ -116,6 +116,13 @@ import DashboardFilter from "@/components/DashboardFilter.vue";
 import DashboardSearch from "@/components/DashboardSearch.vue";
 import DashboardLocation from "@/components/DashboardLocation.vue";
 
+const customLabels = {
+  first: '<<',
+  last: '>>',
+  previous: '<',
+  next: '>'
+};
+
 export default {
   name: "Dashboard",
   components: {
@@ -138,8 +145,9 @@ export default {
     inputName : "",
     showProposition: false,
     erreurAdresse : false,
-    pageOfRestaurants: []
-  }),
+    pageOfRestaurants: [],
+    customLabels
+    }),
   created() {
     if (localStorage.getItem('expiration')==null || localStorage.getItem('expiration')<Date.now()-1*60000) {
       localStorage.setItem('alreadySearch', "false")
@@ -156,7 +164,7 @@ export default {
   methods: {
     onChangePage(pageOfRestaurants) {
       this.pageOfRestaurants = pageOfRestaurants;
-      document.getElementById('contenantListeCards').scrollIntoView()
+      document.getElementById('contenantListeCards') ? document.getElementById('contenantListeCards').scrollIntoView() : {}
     },
     SetInputCity(value) {
       this.inputCity = value;
