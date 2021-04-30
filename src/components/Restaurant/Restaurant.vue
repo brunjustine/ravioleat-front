@@ -149,8 +149,8 @@
       },
       bestSort() {
         return this.applications.sort((application1, application2) =>
-          (application1.deliveryCost + application1.deliveryETA.RangeLower + application1.offers.length) -
-          (application2.deliveryCost + application2.deliveryETA.RangeLower + application2.offers.length))
+          (application1.deliveryCost + application1.deliveryETA.RangeLower/10 - application1.offers.length - application1.rating.StarRating) -
+          (application2.deliveryCost + application2.deliveryETA.RangeLower/10 - application2.offers.length - application2.rating.StarRating))
       }
     },
   }
