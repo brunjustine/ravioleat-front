@@ -9,7 +9,14 @@
         {{ categorie.Name }}
       </span>
     </div>
-
+    <div v-if="isLoading" class="gif-center">
+      <!--<div id="chargement" class="gif-center">-->
+      <img 
+        src="@/assets/ravioli2.gif"
+        alt="gif de ravioli qui marche"
+        width="5%"
+      />
+    </div>
 
     <div v-if="applications.length > 1">
       <v-toolbar>
@@ -56,16 +63,10 @@
                               :devise="devise"
                               :offers="application.offers"
                               :isBest="index==0"
+                              :isLoading="!(index == Object.keys(applications).length - 1)"
+                              @isLoading="getIsLoading"
                               style="margin: 20px">
                   </application-card>
-                  <div v-if="(index == 0)" v-bind:class="[(index == Object.keys(applications).length - 1) ? activeClass : hideClass]" class="gif-center">
-                      <!--<div id="chargement" class="gif-center">-->
-                        <img 
-                          src="@/assets/ravioli2.gif"
-                          alt="gif de ravioli qui marche"
-                          width="5%"
-                        />
-                  </div>
                 </v-col>
               </v-row>
             </v-container>
@@ -118,7 +119,8 @@
         has_menus: false,
         activeClass: 'show-gif',
         hideClass: 'hide-gif',
-        isBest: false       
+        isBest: false,
+        isLoading:true       
       }
     },
     created() {
@@ -182,6 +184,9 @@
         return this.applications.sort((application1, application2) =>
           (application1.deliveryCost + application1.deliveryETA.RangeLower + application1.offers.length) -
           (application2.deliveryCost + application2.deliveryETA.RangeLower + application2.offers.length))
+      },
+      getIsLoading(value) {
+        this.isLoading =value;
       }
     },
   }
@@ -217,15 +222,6 @@
   .gif-center img{
     margin-top: 50vh; 
     transform: translateY(-50%); 
-  }
-
-  .show-gif {
-    display: initial;
-    position: fixed;  
-  }
-
-  .hide-gif {
-    display:none;
   }
 
   .theme--light.v-btn.v-btn--has-bg {

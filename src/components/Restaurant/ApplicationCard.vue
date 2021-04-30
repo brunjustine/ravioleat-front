@@ -87,6 +87,9 @@
       offers: Array,
       isBest:Boolean
     },
+    created() { 
+      this.$emit('isLoading', this.isLoading)
+    },
     methods: {
       goToStore() {
         window.open(this.urlLink, '_blank')
