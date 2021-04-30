@@ -155,10 +155,16 @@ export default {
       localStorage.removeItem('inputCity')
       localStorage.removeItem('pays')
       localStorage.removeItem('current_restaurant_details')
+      localStorage.removeItem('foodFilter', this.foodFilter)
+      localStorage.removeItem('delay', this.delay)
+      localStorage.removeItem('deliveryCostFilter', this.deliveryCostFilter)
+      localStorage.removeItem('grade', this.grade)
     }
     localStorage.setItem('expiration', Date.now())
     if (localStorage.getItem('alreadySearch') === "true") {
       this.devise = localStorage.getItem('devise')
+      this.pays = localStorage.getItem('pays')
+      this.inputCity = localStorage.getItem('inputCity')
     }
   },
   methods: {
@@ -170,7 +176,7 @@ export default {
       this.inputCity = value;
     },
     SetPaysChoisit(value) {
-      this.PaysChoisit =value;
+      this.PaysChoisit = value;
     },
     rechercheSansFiltre() {
       localStorage.setItem('expiration', Date.now())
