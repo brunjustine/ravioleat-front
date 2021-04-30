@@ -135,21 +135,24 @@ export default {
     showProposition: false,
     erreurAdresse : false
   }),
-  beforeCreate() {
-  },
   created() {
-    if (localStorage.getItem('expiration')==null || localStorage.getItem('expiration')<Date.now()-1*60000) {
+    if (localStorage.getItem('expiration')==null || localStorage.getItem('expiration')<Date.now()-30*60000) {
       localStorage.setItem('alreadySearch', "false")
       localStorage.removeItem('devise')
       localStorage.removeItem('inputCity')
       localStorage.removeItem('pays')
       localStorage.removeItem('current_restaurant_details')
+      localStorage.removeItem('foodFilter', this.foodFilter)
+      localStorage.removeItem('delay', this.delay)
+      localStorage.removeItem('deliveryCostFilter', this.deliveryCostFilter)
+      localStorage.removeItem('grade', this.grade)
     }
     localStorage.setItem('expiration', Date.now())
     if (localStorage.getItem('alreadySearch') === "true") {
       this.devise = localStorage.getItem('devise')
-      //this.rechercheSansFiltre()
-      //this.get$children(DashboardFilter).rechercheSansFiltre()
+      this.pays = localStorage.getItem('pays')
+      this.inputCity = localStorage.getItem('inputCity')
+      this.rechercheSansFiltre()
     }
   },
   methods: {
@@ -157,7 +160,7 @@ export default {
       this.inputCity = value;
     },
     SetPaysChoisit(value) {
-      this.PaysChoisit =value;
+      this.PaysChoisit = value;
     },
     rechercheSansFiltre() {
       localStorage.setItem('expiration', Date.now())
@@ -217,7 +220,6 @@ export default {
         formattedAddress: this.inputCity,
         userQuery: "",
       };
-      console.log(params);
       axios.post(path, params).then((res) => {
         var restaurants = res["data"]["data"];
         this.regroupement(restaurants);
