@@ -9,10 +9,29 @@
         {{ categorie.Name }}
       </span>
     </div>
+
+
     <div v-if="applications.length > 1">
-      <v-btn class="button" color="amber" @click="priceSort()">Le moins cher</v-btn>
-      <v-btn class="button" color="amber" @click="fastSort()">Le plus rapide</v-btn>
-      <v-btn class="button"  color="amber" @click="bestSort()">Le meilleur</v-btn>
+      <v-toolbar>
+        <v-tabs
+          dark
+          background-color="#000000"
+          grow
+        >
+        <v-tabs-slider color="#FFC107"></v-tabs-slider>
+          <v-tab @click="priceSort()">
+              Le moins cher
+          </v-tab>
+
+          <v-tab @click="fastSort()">
+              Le plus rapide
+          </v-tab>
+
+          <v-tab @click="bestSort()">
+              Le meilleur
+          </v-tab>
+        </v-tabs>
+      </v-toolbar>
     </div>
     <div>
       <v-expansion-panels
@@ -36,6 +55,7 @@
                               :rating="application.rating"
                               :devise="devise"
                               :offers="application.offers"
+                              :isBest="index==0"
                               style="margin: 20px">
                   </application-card>
                   <div v-if="(index == 0)" v-bind:class="[(index == Object.keys(applications).length - 1) ? activeClass : hideClass]" class="gif-center">
@@ -97,7 +117,8 @@
         panel: [0,1],
         has_menus: false,
         activeClass: 'show-gif',
-        hideClass: 'hide-gif'        
+        hideClass: 'hide-gif',
+        isBest: false       
       }
     },
     created() {
@@ -200,9 +221,7 @@
 
   .show-gif {
     display: initial;
-    position: fixed;
-    
-    
+    position: fixed;  
   }
 
   .hide-gif {
@@ -211,6 +230,10 @@
 
   .theme--light.v-btn.v-btn--has-bg {
     background-color:#FFC107;
+  }
+
+  .v-tabs--grow>.v-tabs-bar .v-tab {
+    color:white    
   }
   
 

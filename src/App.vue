@@ -80,7 +80,7 @@
   font-family: "Snowyy Night",sans-serif;
   background-color:white!important;
   border-radius:40px;
-  color : #1785B3!important;
+  color : black!important;
   font-size: x-large;
 }
 
