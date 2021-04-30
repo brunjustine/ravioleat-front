@@ -1,7 +1,7 @@
 <template>
     <div>
-        <v-card class="listeCards" v-on="restaurant[0].IsOpenNow ? {click: () => moveToDetail()} : {}">
-            <a v-bind:class="{ card1: restaurant[0].IsOpenNow}" href="#">
+        <v-card class="listeCards">
+            <a v-bind:class="{ card1: restaurant[0].IsOpenNow, isDisabled: !restaurant[0].IsOpenNow}" v-on="restaurant[0].IsOpenNow ? {click: () => moveToDetail()} : false" href="#">
             <div v-bind:class="{ open: !restaurant[0].IsOpenNow}">
                 <v-list-item-content class="contenuCards" >
                     <v-row rows="2" class="premiereLigne">
@@ -263,6 +263,11 @@
 
     .best{
         font-weight: bold;
+    }
+
+    .isDisabled {
+        pointer-events: none;
+        cursor: default;
     }
 
 .listeCards a {
