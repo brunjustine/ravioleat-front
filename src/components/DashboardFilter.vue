@@ -139,7 +139,7 @@ export default {
           this.foodFilter = []
           this.grade = 0
           this.delay = this.maxDelay
-          this.cost = 100
+          this.deliveryCostFilter = this.maxCost
           this.initStorage()
         },
         traductionFoodFilter(){
