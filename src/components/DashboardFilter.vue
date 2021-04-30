@@ -54,6 +54,7 @@ export default {
     },
     methods: {
         filterRestaurants() {
+          console.log("couocu")
           localStorage.setItem('expiration', Date.now())
           let tmpRestaurants = this.allRestaurants
           this.traductionFoodFilter()
@@ -67,6 +68,7 @@ export default {
             return plateformes.length > 0
           })
           this.$emit('filterRestaurants', this.filteredRestaurants)
+          this.initStorage()
         },
         filterByFoodTypes(restaurant){
           if (this.foodFilter.length>0) {
@@ -114,7 +116,7 @@ export default {
         getSlidersRange(){
           let rangeDelay =[]
           let rangeCost = []
-          if (this.filteredRestaurants.length > 0) {
+          if (this.filteredRestaurants.length > 0 && this.filteredRestaurants.filter(resto => resto[0].IsOpenNow).length > 0) {
             this.filteredRestaurants.forEach(restaurant => 
               restaurant.forEach(e => {
                 rangeDelay = this.getDelays(e,rangeDelay)
@@ -139,6 +141,7 @@ export default {
           this.grade = 0
           this.delay = this.maxDelay
           this.cost = 100
+          this.initStorage()
         },
         traductionFoodFilter(){
           this.foodFilterEnglish = []
@@ -165,9 +168,29 @@ export default {
             }
           }
         },
+        initStorage() {
+          this.offer ? localStorage.setItem('offer',1) : localStorage.setItem('offer',0)
+          localStorage.setItem('foodFilter', this.foodFilter)
+          localStorage.setItem('delay', this.delay)
+          localStorage.setItem('deliveryCostFilter', this.deliveryCostFilter)
+          localStorage.setItem('grade', this.grade)
+        },
+        rechercheFiltresStockés(){
+          this.offer = (localStorage.getItem('offer')=="1")
+          this.foodFilter = localStorage.getItem('foodFilter')=="" ? [] : localStorage.getItem('foodFilter').split(",")
+          this.delay = localStorage.getItem('delay')
+          this.deliveryCostFilter = localStorage.getItem('deliveryCostFilter')
+          this.grade = +localStorage.getItem('grade')
+          this.filterRestaurants()
+        }
     },
     beforeMount() {
       this.getSlidersRange()
+    }, 
+    mounted() {
+      if (localStorage.getItem('alreadySearch') === "true") {
+        this.rechercheFiltresStockés()
+      }
     }
 }
 </script>

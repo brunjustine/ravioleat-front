@@ -149,16 +149,23 @@ export default {
     customLabels
     }),
   created() {
-    if (localStorage.getItem('expiration')==null || localStorage.getItem('expiration')<Date.now()-1*60000) {
+    if (localStorage.getItem('expiration')==null || localStorage.getItem('expiration')<Date.now()-30*60000) {
       localStorage.setItem('alreadySearch', "false")
       localStorage.removeItem('devise')
       localStorage.removeItem('inputCity')
       localStorage.removeItem('pays')
       localStorage.removeItem('current_restaurant_details')
+      localStorage.removeItem('foodFilter', this.foodFilter)
+      localStorage.removeItem('delay', this.delay)
+      localStorage.removeItem('deliveryCostFilter', this.deliveryCostFilter)
+      localStorage.removeItem('grade', this.grade)
     }
     localStorage.setItem('expiration', Date.now())
     if (localStorage.getItem('alreadySearch') === "true") {
       this.devise = localStorage.getItem('devise')
+      this.pays = localStorage.getItem('pays')
+      this.inputCity = localStorage.getItem('inputCity')
+      this.rechercheSansFiltre()
     }
   },
   methods: {
@@ -170,7 +177,7 @@ export default {
       this.inputCity = value;
     },
     SetPaysChoisit(value) {
-      this.PaysChoisit =value;
+      this.PaysChoisit = value;
     },
     rechercheSansFiltre() {
       localStorage.setItem('expiration', Date.now())
@@ -223,6 +230,7 @@ export default {
 
     },
     initRestaurants() {
+      console.log("je suis une initialisation !")
       const path = "http://127.0.0.1:5000/restaurants";
       var params = {
         lat: this.latitude.toString(),
@@ -232,6 +240,7 @@ export default {
       };
       axios.post(path, params).then((res) => {
         var restaurants = res["data"]["data"];
+        console.log("Je suis un appel API")
         this.regroupement(restaurants);
       });
     },
@@ -258,6 +267,7 @@ export default {
       this.affichageFiltre = true;
       this.chargement = false;
       this.chargementSearch = false;
+      console.log("Je suis un regroupement !")
     },
     async filterRestaurants(value){
       this.filteredRestaurants = value
