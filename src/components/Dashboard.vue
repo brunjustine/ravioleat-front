@@ -21,7 +21,6 @@
             width="5%"
           />
       </div>
-
       <div class="filtre-CardsRestaurants" v-on:click="deleteProposition()">
         <!--FILTRAGE-->
         <DashboardFilter
@@ -33,12 +32,14 @@
 
         <!--CARTES RESTAURANTS-->
         <div id="contenantListeCards">
+          <div v-if="allRestaurants.length > 1" class="divBoutonRestoMap">
+            <v-btn class="boutonRestoMap" v-bind:class="{ boutonOn: !showMapBool}" text v-on:click="showRestaurants()">Restaurants</v-btn> <v-btn class="boutonRestoMap" v-bind:class="{ boutonOn: showMapBool}" text v-on:click="showMap()">Map</v-btn>
+          </div>
           <DashboardSearch
             v-if="allRestaurants.length > 1"
             v-bind:allRestaurants="this.filteredRestaurants"
             @searchRestaurants="rechercheParNom"
           ></DashboardSearch>
-
           <div v-if="chargementSearch" class="gif-center">
           <!--<div id="chargement" class="gif-center">-->
             <img
@@ -47,6 +48,17 @@
               width="5%"
             />
           </div>
+          
+          <Map 
+          v-if="this.allRestaurants.length > 1 & showMapBool"
+          v-bind:userQuery="inputName"
+          v-bind:longitude="this.longitude"
+          v-bind:latitude="this.latitude"
+          v-bind:devise="this.devise"
+          v-bind:allRestaurants="this.filteredRestaurants">
+          
+        </Map>
+        <div v-if="showRestaurantsBool">
           <div>
             <jw-pagination :pageSize="50" :items="filteredRestaurants" @changePage="onChangePage" :labels="customLabels"></jw-pagination>
           </div>
@@ -65,6 +77,7 @@
           <div>
             <jw-pagination :pageSize="50" :items="filteredRestaurants" @changePage="onChangePage" :labels="customLabels"></jw-pagination>
           </div>
+        </div>
         </div>
       </div>
     </v-app>
@@ -103,9 +116,14 @@
   margin-right: 2rem;
 }
 
-.gif-center {
+.boutonRestoMap{
+  border-bottom: solid 2px #FFC107;
+  margin: 8px;
 }
 
+.boutonOn{
+  background-color: #ffc1073d;
+}
 </style>
 
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
@@ -117,6 +135,7 @@ import DashboardCard from "./DashboardCard";
 import DashboardFilter from "@/components/DashboardFilter.vue";
 import DashboardSearch from "@/components/DashboardSearch.vue";
 import DashboardLocation from "@/components/DashboardLocation.vue";
+import Map from "@/components/Map.vue";
 
 const customLabels = {
   first: '<<',
@@ -132,6 +151,7 @@ export default {
     DashboardFilter,
     DashboardSearch,
     DashboardLocation,
+    Map
   },
   data: () => ({
     inputCity: "", //adresse
@@ -149,7 +169,9 @@ export default {
     erreurAdresse : false,
     pageOfRestaurants: [],
     customLabels,
-    }),
+    showRestaurantsBool:true,
+    showMapBool:false
+  }),
   created() {
     if (localStorage.getItem('expiration')==null || localStorage.getItem('expiration')<Date.now()-30*60000) {
       localStorage.setItem('alreadySearch', "false")
@@ -299,6 +321,14 @@ export default {
     },
     turnErreurOff() {
       this.erreurAdresse =false;
+    },
+    showRestaurants(){
+      this.showRestaurantsBool = true;
+      this.showMapBool = false;
+    },
+    showMap(){
+      this.showMapBool = true;
+      this.showRestaurantsBool = false;
     }
   },
 };
