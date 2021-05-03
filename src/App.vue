@@ -2,25 +2,28 @@
   <div id="app">
     <v-card class="overflow-hidden">
       <v-app-bar elevate-on-scroll fixed>
-
+        <v-container fill-height fluid>
         <v-row>
-          <v-col>
-            <v-toolbar-title>
-              <v-btn @click="goHome" plain class="title-ravioleat"> Ravioleat</v-btn>
-            </v-toolbar-title>
+          <v-col justify="center" align="left">
+            <v-btn @click="goHome"  text class="title-ravioleat" color="black">
+              <v-toolbar-title>
+                Ravioleat
+              </v-toolbar-title>
+            </v-btn>
           </v-col>
-          
-          <v-col class="slogan-ravioleat">
-            <div class="container">
+          <div class="arrow-right-right"></div>
+          <v-col justify="center" align="center" class="slogan-ravioleat">
+            
                 <span>Vos bons plans au plus vite</span> 
-            </div>
+        
           </v-col>
-
+          <div class="arrow-right"></div>
           <v-spacer>
             
           </v-spacer>
 
         </v-row>
+        </v-container>
       </v-app-bar>
     </v-card>
     <v-spacer></v-spacer>
@@ -64,31 +67,50 @@
 
 .v-app-bar {
   background-color : #FFC107!important;
-  vertical-align:middle;
   .v-col {
     margin:0 auto;
   }
 }
 
-.title-ravioleat span{
+.v-toolbar__content{
+  padding:0px!important;
+}
+
+.v-toolbar__title {
   font-weight: bold; 
   font-size: x-large;
   color :black!important;
 }
 
 .slogan-ravioleat {
-  font-family: "Snowyy Night",sans-serif;
+  font-family: 'Amatic SC', cursive;
   background-color:white!important;
-  border-radius:40px;
+  /*border-radius:40px;*/
   color : black!important;
-  font-size: x-large;
+  font-size: xx-large;
+  overflow:hidden;
 }
 
-
-@font-face {
- font-family: "Snowy Night";
- src: url("/assets/fonts/snowy_night/Snowy-Night.tff") format("truetype");
+.arrow-right {
+    width: 0;
+    height: 0;
+    padding:0;
+    border-top: 40px solid transparent;
+    border-bottom: 40px solid transparent;
+    border-left: 40px solid #ffffff;
 }
+
+.arrow-right-right{
+    width: 0;
+    height: 0;
+    padding:0;
+    border-top: 40px solid #ffffff;
+    border-bottom: 40px solid #ffffff;
+    border-left: 40px solid transparent;
+    border-right: 40px solid #ffffff;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Amatic+SC:wght@700&display=swap');
 
 
 </style>
