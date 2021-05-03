@@ -1,14 +1,28 @@
 <template>
   <div id="restaurant-details">
-    <div>
-      <h1>
-        {{ name }}
-      </h1>
-      {{ address }} <br/>
-      <span v-for="categorie in categories" :key="categorie.Id" style="color: gray">
-        {{ categorie.Name }}
-      </span>
-    </div>
+    <v-container>
+      <v-row>
+        <v-col>
+          <h1>
+            {{ name }}
+          </h1>
+          <h4>
+            <v-icon dark>
+              mdi-map-marker
+            </v-icon>{{ address }}
+          </h4>
+        </v-col>
+        <v-col>
+          <v-chip
+            v-for="categorie in categories" :key="categorie.Id" style="color: gray"
+            link
+            outlined
+          >
+            {{ categorie.Name }}
+          </v-chip>
+        </v-col>
+      </v-row>     
+    </v-container>
     <div v-if="isLoading" class="gif-center">
       <!--<div id="chargement" class="gif-center">-->
       <img 
@@ -231,6 +245,17 @@
   .v-tabs--grow>.v-tabs-bar .v-tab {
     color:white    
   }
+
+  #restaurant-details h1, #restaurant-details h4 {
+    text-align: left;
+  }
+
+   #restaurant-details .v-ship {
+     text-align:right;
+   }
+   .mdi-map-marker::before {
+     color:#FFC107;
+   }
   
 
 </style>
