@@ -189,7 +189,7 @@ export default {
       this.chargement = true;
       var url;
       if (this.PaysChoisit == "Royaume-Uni") {
-        url = "https://api.ideal-postcodes.co.uk/v1/addresses?api_key=iddqd&query=".concat(
+        url = "https://api.ideal-postcodes.co.uk/v1/addresses?api_key=ak_ko8p40mbn6kPWLwf6aBjIZzUg8Ghm&query=".concat(
           this.inputCity
         );
       } else if ((this.PaysChoisit = "France")) {
@@ -247,6 +247,7 @@ export default {
       });
     },
     regroupement(restaurants) {
+      console.log("begin regroup")
       var allRestaurant = [];
       restaurants.forEach(restaurant => {
         var sameRestaurant = [];
@@ -269,6 +270,7 @@ export default {
       this.affichageFiltre = true;
       this.chargement = false;
       this.chargementSearch = false;
+      console.log("end regroup")
     },
     async filterRestaurants(value){
       this.filteredRestaurants = value

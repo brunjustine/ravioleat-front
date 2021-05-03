@@ -98,7 +98,7 @@
         Object.keys(restaurant_ids).forEach(key => {
           if (restaurant_ids[key] !== "") {
             if (first_key === undefined) { first_key = key }
-            axios.post('http://0.0.0.0:5000/restaurant/' + restaurant_ids[key],
+            axios.post('http://0.0.0.0:5000/restaurant/' + restaurant_ids[key].toString(),
               {
                 "lat": this.details.lat,
                 "lon": this.details.lon,
@@ -114,10 +114,11 @@
                   this.items = this.restaurant[key]['Menus'];
                   this.has_menus = true;
                 }
-                console.log(first_key)
-                this.name = this.restaurant[first_key]['Name'];
-                this.address = this.restaurant[first_key]['Address']['FirstLine'];
-                this.categories = this.restaurant[first_key]['CuisineTypes'];
+                if (this.restaurant[first_key] !== undefined) {
+                  this.name = this.restaurant[first_key]['Name'];
+                  this.address = this.restaurant[first_key]['Address']['FirstLine'];
+                  this.categories = this.restaurant[first_key]['CuisineTypes'];
+                }
               })
               .catch(err => {
                 console.log(err);
