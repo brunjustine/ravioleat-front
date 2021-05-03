@@ -85,18 +85,18 @@ export default {
         },
         filterByDeliveryDelay(restaurant){
           return restaurant.filter(plateforme => 
-            (plateforme.DeliveryEtaMinutes !== null) ? (parseInt(plateforme.DeliveryEtaMinutes.RangeUpper) <= this.delay) : false
+            this.delay == this.maxDelay || ((plateforme.DeliveryEtaMinutes !== null) ? (parseInt(plateforme.DeliveryEtaMinutes.RangeUpper) <= this.delay) : false)
           )
           
         },
         filterByDeliveryCost(restaurant){
           return restaurant.filter(plateforme => 
-            (plateforme.DeliveryCost !== null) ? (parseFloat(plateforme.DeliveryCost) <= this.deliveryCostFilter) : false
+            this.deliveryCostFilter == this.maxCost || ((plateforme.DeliveryCost !== null) ? (parseFloat(plateforme.DeliveryCost) <= this.deliveryCostFilter) : false)
           )
         },
         filterByGrade(restaurant){
            return restaurant.filter(plateforme => 
-            (plateforme.Rating !== null) ? (parseFloat(plateforme.Rating.StarRating) >= this.grade) : false
+            this.grade == 0 || ((plateforme.Rating !== null) ? (parseFloat(plateforme.Rating.StarRating) >= this.grade) : false)
           )
         },
         getDelays(e, range){
@@ -124,7 +124,7 @@ export default {
             this.minDelay = Math.min.apply(Math, rangeDelay)
             this.maxDelay = Math.max.apply(Math, rangeDelay)
             this.minCost = Math.min.apply(Math, rangeCost)
-            this.maxCost = Math.max.apply(Math, rangeCost)
+            this.maxCost = Math.round(Math.max.apply(Math, rangeCost))
           } else {
             this.minDelay = 0
             this.maxDelay = 120
