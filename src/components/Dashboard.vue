@@ -25,6 +25,7 @@
       <div class="filtre-CardsRestaurants" v-on:click="deleteProposition()">
         <!--FILTRAGE-->
         <DashboardFilter
+          ref="composantFiltres"
           v-if="affichageFiltre"
           v-bind:allRestaurants="this.allRestaurants"
           @filterRestaurants="filterRestaurants"
@@ -150,7 +151,7 @@ export default {
     customLabels
     }),
   created() {
-    if (localStorage.getItem('expiration')==null || localStorage.getItem('expiration')<Date.now()-1*60000) {
+    if (localStorage.getItem('expiration')==null || localStorage.getItem('expiration')<Date.now()-30*60000) {
       localStorage.setItem('alreadySearch', "false")
       localStorage.removeItem('devise')
       localStorage.removeItem('inputCity')
@@ -285,6 +286,7 @@ export default {
       axios.post(path, params).then((res) => {
         var restaurants = res["data"]["data"];
         this.regroupement(restaurants);
+        this.$refs.composantFiltres.filterRestaurants()
       });
     },
     deleteProposition(){
