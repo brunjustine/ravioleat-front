@@ -187,7 +187,7 @@ export default {
       this.getSlidersRange()
     }, 
     mounted() {
-      if (localStorage.getItem('alreadySearch') === "true") {
+      if (localStorage.getItem('alreadySearch') === "true") { 
         this.rechercheFiltresStockés()
       }
     }

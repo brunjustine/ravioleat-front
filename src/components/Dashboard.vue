@@ -4,6 +4,7 @@
       <DashboardLocation
       @inputCity="SetInputCity"
       @PaysChoisit="SetPaysChoisit"
+      @devise="SetDevise"
       v-on:filter="rechercheSansFiltre"
       v-bind:erreur="erreurAdresse"
       v-on:show="turnToShowProposition"
@@ -149,16 +150,16 @@ export default {
     customLabels
     }),
   created() {
-    if (localStorage.getItem('expiration')==null || localStorage.getItem('expiration')<Date.now()-30*60000) {
+    if (localStorage.getItem('expiration')==null || localStorage.getItem('expiration')<Date.now()-1*60000) {
       localStorage.setItem('alreadySearch', "false")
       localStorage.removeItem('devise')
       localStorage.removeItem('inputCity')
       localStorage.removeItem('pays')
       localStorage.removeItem('current_restaurant_details')
-      localStorage.removeItem('foodFilter', this.foodFilter)
-      localStorage.removeItem('delay', this.delay)
-      localStorage.removeItem('deliveryCostFilter', this.deliveryCostFilter)
-      localStorage.removeItem('grade', this.grade)
+      localStorage.setItem('foodFilter', "")
+      localStorage.setItem('delay', 120)
+      localStorage.setItem('deliveryCostFilter',100)
+      localStorage.setItem('grade', 0)
     }
     localStorage.setItem('expiration', Date.now())
     if (localStorage.getItem('alreadySearch') === "true") {
@@ -177,6 +178,9 @@ export default {
     },
     SetPaysChoisit(value) {
       this.PaysChoisit = value;
+    },
+    SetDevise(value) {
+      this.devise = value;
     },
     rechercheSansFiltre() {
       localStorage.setItem('expiration', Date.now())
