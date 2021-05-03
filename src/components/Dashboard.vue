@@ -114,9 +114,6 @@
   margin-right: 2rem;
 }
 
-.gif-center {
-}
-
 .boutonRestoMap{
   border-bottom: solid 2px #FFC107;
   margin: 8px;
@@ -166,7 +163,7 @@ export default {
     showMapBool:false
   }),
   created() {
-    if (localStorage.getItem('expiration')==null || localStorage.getItem('expiration')<Date.now()-10*60000) {/* remplacer 1 par 30 */
+    if (localStorage.getItem('expiration')==null || localStorage.getItem('expiration')<Date.now()-30*60000) {
       localStorage.setItem('alreadySearch', "false")
       localStorage.removeItem('devise')
       localStorage.removeItem('inputCity')
