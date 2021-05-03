@@ -7,7 +7,7 @@
             {{ name }}
           </h1>
           <h4>
-            <v-icon dark>
+            <v-icon dark v-if="!isLoading">
               mdi-map-marker
             </v-icon>{{ address }}
           </h4>
