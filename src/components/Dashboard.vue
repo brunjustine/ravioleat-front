@@ -4,6 +4,7 @@
       <DashboardLocation
       @inputCity="SetInputCity"
       @PaysChoisit="SetPaysChoisit"
+      @devise="SetDevise"
       v-on:filter="rechercheSansFiltre"
       v-bind:erreur="erreurAdresse"
       v-on:show="turnToShowProposition"
@@ -24,6 +25,7 @@
       <div class="filtre-CardsRestaurants" v-on:click="deleteProposition()">
         <!--FILTRAGE-->
         <DashboardFilter
+          ref="composantFiltres"
           v-if="affichageFiltre"
           v-bind:allRestaurants="this.allRestaurants"
           @filterRestaurants="filterRestaurants"
@@ -155,10 +157,10 @@ export default {
       localStorage.removeItem('inputCity')
       localStorage.removeItem('pays')
       localStorage.removeItem('current_restaurant_details')
-      localStorage.removeItem('foodFilter', this.foodFilter)
-      localStorage.removeItem('delay', this.delay)
-      localStorage.removeItem('deliveryCostFilter', this.deliveryCostFilter)
-      localStorage.removeItem('grade', this.grade)
+      localStorage.setItem('foodFilter', "")
+      localStorage.setItem('delay', 120)
+      localStorage.setItem('deliveryCostFilter',100)
+      localStorage.setItem('grade', 0)
     }
     localStorage.setItem('expiration', Date.now())
     if (localStorage.getItem('alreadySearch') === "true") {
@@ -177,6 +179,9 @@ export default {
     },
     SetPaysChoisit(value) {
       this.PaysChoisit = value;
+    },
+    SetDevise(value) {
+      this.devise = value;
     },
     rechercheSansFiltre() {
       localStorage.setItem('expiration', Date.now())
@@ -281,6 +286,7 @@ export default {
       axios.post(path, params).then((res) => {
         var restaurants = res["data"]["data"];
         this.regroupement(restaurants);
+        this.$refs.composantFiltres.filterRestaurants()
       });
     },
     deleteProposition(){

@@ -124,6 +124,7 @@ export default {
                   this.suggestionsHere = datas;
                 }
               }
+              this.$emit('devise', devise);
               localStorage.setItem("devise", devise);
             },
             (error) => {
