@@ -257,7 +257,7 @@ export default {
 
     },
     initRestaurants() {
-      const path = "http://127.0.0.1:5000/restaurants";
+      const path = `http://${process.env.VUE_APP_API_IP}:${process.env.VUE_APP_API_PORT}restaurants`;
       var params = {
         lat: this.latitude.toString(),
         lon: this.longitude.toString(),
@@ -270,6 +270,10 @@ export default {
       });
     },
     regroupement(restaurants) {
+      if (this.inputCity !== localStorage.getItem("inputCity")) {
+        this.chargement = false;
+        return false;
+      }
       var allRestaurant = [];
       restaurants.forEach(restaurant => {
         var sameRestaurant = [];
@@ -301,7 +305,7 @@ export default {
     rechercheParNom(inputName) {
       this.chargementSearch = true;
       this.inputName = inputName
-      const path = "http://127.0.0.1:5000/restaurants/search";
+      const path = `http://${process.env.VUE_APP_API_IP}:${process.env.VUE_APP_API_PORT}/restaurants/search`;
       var params = {
         lat: this.latitude.toString(),
         lon: this.longitude.toString(),

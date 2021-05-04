@@ -98,7 +98,7 @@
         Object.keys(restaurant_ids).forEach(key => {
           if (restaurant_ids[key] !== "") {
             if (first_key === undefined) { first_key = key }
-            axios.post('http://0.0.0.0:5000/restaurant/' + restaurant_ids[key].toString(),
+            axios.post(`http://${process.env.VUE_APP_API_IP}:${process.env.VUE_APP_API_PORT}/restaurant/` + restaurant_ids[key].toString(),
               {
                 "lat": this.details.lat,
                 "lon": this.details.lon,
