@@ -269,6 +269,10 @@ export default {
       });
     },
     regroupement(restaurants) {
+      if (this.inputCity !== localStorage.getItem("inputCity")) {
+        this.chargement = false;
+        return false;
+      }
       console.log("begin regroup")
       var allRestaurant = [];
       restaurants.forEach(restaurant => {
