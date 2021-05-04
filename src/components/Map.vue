@@ -4,7 +4,7 @@
         <gmap-marker :position="{lat:latitude, lng:longitude, label:'moi'}" style="width:50px;" :icon="require('/src/assets/mapMaison.png')"></gmap-marker>
         <gmap-marker 
             :key="restaurant[0].Id" 
-            v-for="restaurant in allRestaurantsOuverts" 
+            v-for="restaurant in restaurants" 
                 :position="{lat:restaurant[0].Address.Latitude, lng:restaurant[0].Address.Longitude, label:restaurant[0].Name}" 
                 @click="moveToDetail(restaurant)" 
                 @mouseover="previewRestaurant(restaurant)"></gmap-marker>
@@ -34,7 +34,7 @@ export default {
       latitude: Number,
       longitude: Number,
       userQuery: String,
-      allRestaurants: Array,
+      restaurants: Array,
       devise:String,
       
   },
@@ -52,11 +52,6 @@ export default {
       showRestaurant: false,
   }),
   created() {
-      for(var i in this.allRestaurants){
-          if(this.allRestaurants[i][0].IsOpenNow==true){
-              this.allRestaurantsOuverts.push(this.allRestaurants[i])
-          }
-      }
       this.showRestaurant=true
   },
   methods: {
@@ -92,7 +87,6 @@ export default {
       },
       getInfoWindowContent(restaurant) {
           var logoUrl= restaurant[0].LogoUrl
-          console.log(logoUrl)
           var res =  `
             <div>
                 <div>
@@ -110,7 +104,6 @@ export default {
                             `
 
             for(var i in restaurant){
-                console.log(restaurant[i])
                 res= res + ` <v-col cols="2">
                                 <span>
                                     <img width="30px" height="30px"  src="`+require('/src/assets/logos/'+restaurant[i].Api+'.png')+`">

@@ -144,7 +144,6 @@ export default {
       localStorage.setItem('pays', this.PaysChoisit);
       localStorage.setItem('inputCity', this.inputCity);
       this.$emit('inputCity', this.inputCity)
-      this.$emit('inputCity', this.inputCity)
     },
     rechercheSansFiltre(){
         localStorage.setItem('alreadySearch', true);

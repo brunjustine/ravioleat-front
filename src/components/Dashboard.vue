@@ -50,12 +50,12 @@
           </div>
           
           <Map 
-          v-if="this.allRestaurants.length > 1 & showMapBool"
+          v-if="this.allRestaurants.length > 1 && showMapBool"
           v-bind:userQuery="inputName"
           v-bind:longitude="this.longitude"
           v-bind:latitude="this.latitude"
           v-bind:devise="this.devise"
-          v-bind:allRestaurants="this.filteredRestaurants">
+          v-bind:restaurants="this.mapRestaurants">
           
         </Map>
         <div v-if="showRestaurantsBool">
@@ -170,7 +170,8 @@ export default {
     pageOfRestaurants: [],
     customLabels,
     showRestaurantsBool:true,
-    showMapBool:false
+    showMapBool:false,
+    mapRestaurants : []
   }),
   created() {
     if (localStorage.getItem('expiration')==null || localStorage.getItem('expiration')<Date.now()-30*60000) {
@@ -269,7 +270,6 @@ export default {
       });
     },
     regroupement(restaurants) {
-      console.log("begin regroup")
       var allRestaurant = [];
       restaurants.forEach(restaurant => {
         var sameRestaurant = [];
@@ -289,13 +289,14 @@ export default {
       allRestaurant.sort(restaurant => { return restaurant[0].IsOpenNow ? -1 : 1 })
       this.allRestaurants = allRestaurant;
       this.filteredRestaurants = this.allRestaurants;
+      this.mapRestaurants = this.openRestaurant(allRestaurant)
       this.affichageFiltre = true;
       this.chargement = false;
       this.chargementSearch = false;
-      console.log("end regroup")
     },
     async filterRestaurants(value){
       this.filteredRestaurants = value
+      this.mapRestaurants = this.openRestaurant(value)
     },
     rechercheParNom(inputName) {
       this.chargementSearch = true;
@@ -329,6 +330,15 @@ export default {
     showMap(){
       this.showMapBool = true;
       this.showRestaurantsBool = false;
+    },
+    openRestaurant(restaurants){
+      var allRestaurantsOuverts = []
+      for(var i in restaurants){
+          if(restaurants[i][0].IsOpenNow==true){
+              allRestaurantsOuverts.push(restaurants[i])
+          }
+      }
+      return allRestaurantsOuverts
     }
   },
 };
