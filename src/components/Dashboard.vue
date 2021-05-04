@@ -316,6 +316,7 @@ export default {
       axios.post(path, params).then((res) => {
         var restaurants = res["data"]["data"];
         this.regroupement(restaurants);
+        this.mapRestaurants = this.openRestaurant(restaurants)
         this.$refs.composantFiltres.filterRestaurants()
       });
     },
