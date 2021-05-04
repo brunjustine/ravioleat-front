@@ -74,9 +74,9 @@
                 v-bind:latitude="latitude"
             ></DashboardCard>
           </v-list-item>
-          <div>
+          <!--<div>
             <jw-pagination :pageSize="50" :items="filteredRestaurants" @changePage="onChangePage" :labels="customLabels"></jw-pagination>
-          </div>
+          </div>-->
         </div>
         </div>
       </div>
@@ -195,7 +195,8 @@ export default {
   methods: {
     onChangePage(pageOfRestaurants) {
       this.pageOfRestaurants = pageOfRestaurants;
-      document.getElementById('contenantListeCards') ? document.getElementById('contenantListeCards').scrollIntoView() : {}
+      //document.getElementById('contenantListeCards') ? document.getElementById('contenantListeCards').scrollIntoView() : {}
+      document.getElementById('contenantListeCards') ? window.scrollTo(0,0) : {}
     },
     SetInputCity(value) {
       this.inputCity = value;
