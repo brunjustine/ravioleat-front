@@ -68,7 +68,7 @@ export default {
       suggestionsHere: [], // Tableau qui contiendra les suggestions Here
       suggestionSelected: "", // Adresse selectionnées
       longitude: 0,
-      latitude: 0
+      latitude: 0,
     };
   },
   created(){
@@ -136,7 +136,6 @@ export default {
       }
       this.$emit('inputCity', this.inputCity);
       this.$emit('PaysChoisit', this.PaysChoisit);
-      
     },
     changeAdresse(suggestion) {
       this.inputCity = suggestion;
@@ -150,7 +149,9 @@ export default {
         this.$emit('filter')
     },
     clearAdresse(){
-      this.inputCity=""
+      this.inputCity="";
+      this.$emit('inputCity', this.inputCity);
+
     }
   },
 };
