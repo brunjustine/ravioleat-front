@@ -132,17 +132,19 @@
                 var tabMin =[min]
                 var i =1
                 for( i in restaurant){
-                    if(parseInt(restaurant[i].DeliveryEtaMinutes.RangeLower)<parseInt(min.DeliveryEtaMinutes.RangeLower)){
-                        min=restaurant[i]
-                        tabMin=[]
-                        tabMin.push(min)
-                    }else if(parseInt(restaurant[i].DeliveryEtaMinutes.RangeLower)==parseInt(min.DeliveryEtaMinutes.RangeLower )){
-                        if(parseInt(restaurant[i].DeliveryEtaMinutes.RangeUpper)<parseInt(min.DeliveryEtaMinutes.RangeUpper)){
+                    if(restaurant[i].DeliveryEtaMinutes.RangeLower!=null){
+                        if(parseInt(restaurant[i].DeliveryEtaMinutes.RangeLower)<parseInt(min.DeliveryEtaMinutes.RangeLower)){
                             min=restaurant[i]
                             tabMin=[]
-                            tabMin.push(restaurant[i])
-                        } else if(parseInt(restaurant[i].DeliveryEtaMinutes.RangeUpper)==parseInt(min.DeliveryEtaMinutes.RangeUpper)){
-                            tabMin.push(restaurant[i])
+                            tabMin.push(min)
+                        }else if(parseInt(restaurant[i].DeliveryEtaMinutes.RangeLower)==parseInt(min.DeliveryEtaMinutes.RangeLower )){
+                            if(parseInt(restaurant[i].DeliveryEtaMinutes.RangeUpper)<parseInt(min.DeliveryEtaMinutes.RangeUpper)){
+                                min=restaurant[i]
+                                tabMin=[]
+                                tabMin.push(restaurant[i])
+                            } else if(parseInt(restaurant[i].DeliveryEtaMinutes.RangeUpper)==parseInt(min.DeliveryEtaMinutes.RangeUpper)){
+                                tabMin.push(restaurant[i])
+                            }
                         }
                     }
                 }
