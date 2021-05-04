@@ -13,9 +13,7 @@
           </v-col>
           <div class="arrow-right-right"></div>
           <v-col justify="center" align="center" class="slogan-ravioleat">
-            
-                <span>Vos bons plans au plus vite</span> 
-        
+            <h4>Vos bons plans au plus vite</h4> 
           </v-col>
           <div class="arrow-right"></div>
           <v-spacer>
@@ -83,31 +81,33 @@
 }
 
 .slogan-ravioleat {
-  font-family: 'Amatic SC', cursive;
+  
   background-color:white!important;
   /*border-radius:40px;*/
-  color : black!important;
-  font-size: xx-large;
-  overflow:hidden;
+  h4 {
+    font-family: 'Amatic SC', cursive;
+    color : black!important;
+    font-size: xx-large;
+  }
 }
 
 .arrow-right {
     width: 0;
     height: 0;
     padding:0;
-    border-top: 40px solid transparent;
-    border-bottom: 40px solid transparent;
-    border-left: 40px solid #ffffff;
+    border-top: 32px solid transparent;
+    border-bottom: 32px solid transparent;
+    border-left: 32px solid #ffffff;
 }
 
 .arrow-right-right{
     width: 0;
     height: 0;
     padding:0;
-    border-top: 40px solid #ffffff;
-    border-bottom: 40px solid #ffffff;
-    border-left: 40px solid transparent;
-    border-right: 40px solid #ffffff;
+    border-top: 32px solid #ffffff;
+    border-bottom: 32px solid #ffffff;
+    border-left: 32px solid transparent;
+    border-right: 32px solid #ffffff;
 }
 
 @import url('https://fonts.googleapis.com/css2?family=Amatic+SC:wght@700&display=swap');
