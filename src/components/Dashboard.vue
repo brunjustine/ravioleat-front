@@ -257,7 +257,7 @@ export default {
 
     },
     initRestaurants() {
-      const path = `http://${process.env.VUE_APP_API_IP}:${process.env.VUE_APP_API_PORT}restaurants`;
+      const path = `http://${process.env.VUE_APP_API_IP}:${process.env.VUE_APP_API_PORT}/restaurants`;
       var params = {
         lat: this.latitude.toString(),
         lon: this.longitude.toString(),
