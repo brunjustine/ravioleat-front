@@ -18,8 +18,8 @@
 			return Runner.instance_;
 		}
 		Runner.instance_ = this;
-
 		this.outerContainerEl = document.querySelector(outerContainerId);
+		console.log(this.outerContainerEl)
 		this.containerEl = null;
 		this.snackbarEl = null;
 		this.detailsButton = this.outerContainerEl.querySelector('#details-button');

@@ -12,7 +12,7 @@
           
           <v-col class="slogan-ravioleat">
             <div class="container">
-                <span>Vos bons plans au plus vite</span> 
+                <span @click="easterEgg">Vos bons plans au plus vite</span> 
             </div>
           </v-col>
 
@@ -32,8 +32,7 @@
 </template>
 
 <script>
-
-  export default {
+export default {
     methods: {
       goUp() {
         window.scrollTo(0,0)
@@ -46,6 +45,14 @@
           this.$router.push('/');
         }
       },
+      easterEgg(){
+        if (this.$route.path === '/easterEgg') {
+          this.$router.go(0);
+        }
+        else {
+          this.$router.push('/easterEgg');
+        }
+      }
     }
   }
 </script>

@@ -39,18 +39,18 @@
 </template>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
 <script>
-import * as jeu from "./jeu";
+import "./jeu";
 export default {
   name: "Jeu",
-  created() {
-    document.addEventListener("DOMContentLoaded", this.onDocumentLoad);
+  mounted() {
     document.onkeydown = function (evt) {
       evt = evt || window.event;
       if (evt.keyCode == 32) {
         var box = document.getElementById("messageBox");
         box.style.visibility = "hidden";
       }
-    };
+    }
+    this.onDocumentLoad()
   },
   methods: {
     onDocumentLoad() {
@@ -62,7 +62,7 @@ export default {
 <style scoped>
 #t {
   padding: 0;
-  margin: 100px;
+  margin-top: 100px;
   width: 100%;
   height: 100%;
 }
@@ -92,7 +92,6 @@ export default {
   line-height: 1.55;
   margin: 0 auto;
   max-width: 600px;
-  padding-top: 100px;
   width: 100%;
 }
 
@@ -193,5 +192,9 @@ export default {
     overflow: inherit;
     padding: 0 8px;
   }
+}
+
+.runner-canvas {
+  border: 1px solid
 }
 </style>
