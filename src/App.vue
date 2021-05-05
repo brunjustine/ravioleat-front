@@ -1,7 +1,7 @@
 <template>
   <div id="app">
-    <v-card class="overflow-hidden">
-      <v-app-bar elevate-on-scroll fixed>
+    <v-card >
+      <v-app-bar elevate-on-scroll fixed class="overflow-hidden">
         <v-container fill-height fluid>
         <v-row>
           <v-col justify="center" align="left">

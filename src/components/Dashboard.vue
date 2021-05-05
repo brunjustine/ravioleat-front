@@ -46,14 +46,20 @@
 
         <!--CARTES RESTAURANTS-->
         <div id="contenantListeCards">
-          <div v-if="allRestaurants.length > 1" class="divBoutonRestoMap">
-            <v-btn class="boutonRestoMap" v-bind:class="{ boutonOn: !showMapBool}" text v-on:click="showRestaurants()">Restaurants</v-btn> <v-btn class="boutonRestoMap" v-bind:class="{ boutonOn: showMapBool}" text v-on:click="showMap()">Map</v-btn>
-          </div>
-          <DashboardSearch
-            v-if="allRestaurants.length > 1"
-            v-bind:allRestaurants="this.filteredRestaurants"
-            @searchRestaurants="rechercheParNom"
-          ></DashboardSearch>
+          <v-row>
+            <v-col cols="9">
+              <DashboardSearch
+                v-if="allRestaurants.length > 1"
+                v-bind:allRestaurants="this.filteredRestaurants"
+                @searchRestaurants="rechercheParNom"
+              ></DashboardSearch>
+            </v-col>
+            <v-col cols="3">
+              <div v-if="allRestaurants.length > 1" class="divBoutonRestoMap">
+                <v-btn class="boutonRestoMap" v-bind:class="{ boutonOn: !showMapBool}" text v-on:click="showRestaurants()">Liste</v-btn> <v-btn class="boutonRestoMap" v-bind:class="{ boutonOn: showMapBool}" text v-on:click="showMap()">Plan</v-btn>
+              </div>
+            </v-col>
+          </v-row>
           <div v-if="chargementSearch" class="gif-center">
           <!--<div id="chargement" class="gif-center">-->
             <img
@@ -74,7 +80,12 @@
         </Map>
         <div v-if="showRestaurantsBool">
           <div>
-            <jw-pagination :pageSize="50" :items="filteredRestaurants" @changePage="onChangePage" :labels="customLabels"></jw-pagination>
+            <Pagination 
+              v-bind:items="this.filteredRestaurants"
+              v-on:changePage="onChangePage"
+              v-bind:pageSize="50"
+              v-bind:labels="this.customLabels">
+            </Pagination>
           </div>
           <v-list-item
               v-for="restaurant in pageOfRestaurants"
@@ -88,9 +99,6 @@
                 v-bind:latitude="latitude"
             ></DashboardCard>
           </v-list-item>
-          <!--<div>
-            <jw-pagination :pageSize="50" :items="filteredRestaurants" @changePage="onChangePage" :labels="customLabels"></jw-pagination>
-          </div>-->
         </div>
         </div>
       </div>
@@ -147,6 +155,7 @@
 .boutonOn{
   background-color: #ffc1073d;
 }
+
 </style>
 
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
@@ -159,6 +168,7 @@ import DashboardFilter from "@/components/DashboardFilter.vue";
 import DashboardSearch from "@/components/DashboardSearch.vue";
 import DashboardLocation from "@/components/DashboardLocation.vue";
 import Map from "@/components/Map.vue";
+import Pagination from "@/components/Pagination.vue"
 
 const customLabels = {
   first: '<<',
@@ -167,6 +177,7 @@ const customLabels = {
   next: '>'
 };
 
+
 export default {
   name: "Dashboard",
   components: {
@@ -174,7 +185,8 @@ export default {
     DashboardFilter,
     DashboardSearch,
     DashboardLocation,
-    Map
+    Map,
+    Pagination
   },
   data: () => ({
     inputCity: "", //adresse
