@@ -6,34 +6,31 @@
         fab
         dark
         color="amber"
-        id="buttonGoTop" 
+        id="buttonGoTop"
         title="Go to top"
         @click="goUp"
       >
-      <v-icon dark>
-        mdi-apple-keyboard-caps 
-      </v-icon>
-    </v-btn>
+        <v-icon dark> mdi-apple-keyboard-caps </v-icon>
+      </v-btn>
 
       <DashboardLocation
-      @inputCity="SetInputCity"
-      @PaysChoisit="SetPaysChoisit"
-      @devise="SetDevise"
-      v-on:filter="rechercheSansFiltre"
-      v-bind:erreur="erreurAdresse"
-      v-on:show="turnToShowProposition"
-      v-on:showErreur="turnErreurOff"
-      v-bind:show="showProposition"
-
+        @inputCity="SetInputCity"
+        @PaysChoisit="SetPaysChoisit"
+        @devise="SetDevise"
+        v-on:filter="rechercheSansFiltre"
+        v-bind:erreur="erreurAdresse"
+        v-on:show="turnToShowProposition"
+        v-on:showErreur="turnErreurOff"
+        v-bind:show="showProposition"
       ></DashboardLocation>
 
       <div id="chargement" v-if="chargement" class="gif-center">
         <!--<div id="chargement" class="gif-center">-->
-          <img
-            src="@/assets/ravioli2.gif"
-            alt="gif de ravioli qui marche"
-            width="5%"
-          />
+        <img
+          src="@/assets/ravioli2.gif"
+          alt="gif de ravioli qui marche"
+          width="5%"
+        />
       </div>
       <div class="filtre-CardsRestaurants" v-on:click="deleteProposition()">
         <!--FILTRAGE-->
@@ -46,52 +43,70 @@
 
         <!--CARTES RESTAURANTS-->
         <div id="contenantListeCards">
-          <div v-if="allRestaurants.length > 1" class="divBoutonRestoMap">
-            <v-btn class="boutonRestoMap" v-bind:class="{ boutonOn: !showMapBool}" text v-on:click="showRestaurants()">Restaurants</v-btn> <v-btn class="boutonRestoMap" v-bind:class="{ boutonOn: showMapBool}" text v-on:click="showMap()">Map</v-btn>
+          <div v-if="allRestaurants.length >= 1" class="divBoutonRestoMap">
+            <v-btn
+              class="boutonRestoMap"
+              v-bind:class="{ boutonOn: !showMapBool }"
+              text
+              v-on:click="showRestaurants()"
+              >Restaurants</v-btn
+            >
+            <v-btn
+              class="boutonRestoMap"
+              v-bind:class="{ boutonOn: showMapBool }"
+              text
+              v-on:click="showMap()"
+              >Map</v-btn
+            >
           </div>
           <DashboardSearch
-            v-if="allRestaurants.length > 1"
+            v-if="allRestaurants.length >=1"
             v-bind:allRestaurants="this.filteredRestaurants"
             @searchRestaurants="rechercheParNom"
           ></DashboardSearch>
           <div v-if="chargementSearch" class="gif-center">
-          <!--<div id="chargement" class="gif-center">-->
+            <!--<div id="chargement" class="gif-center">-->
             <img
               src="@/assets/ravioli2.gif"
               alt="gif de ravioli qui marche"
               width="5%"
             />
           </div>
-          
-          <Map 
-          v-if="this.allRestaurants.length > 1 && showMapBool"
-          v-bind:userQuery="inputName"
-          v-bind:longitude="this.longitude"
-          v-bind:latitude="this.latitude"
-          v-bind:devise="this.devise"
-          v-bind:restaurants="this.mapRestaurants">
-          
-        </Map>
-        <div v-if="showRestaurantsBool">
-          <div>
-            <jw-pagination :pageSize="50" :items="filteredRestaurants" @changePage="onChangePage" :labels="customLabels"></jw-pagination>
-          </div>
-          <v-list-item
+
+          <Map
+            v-if="this.allRestaurants.length >= 1 && showMapBool"
+            v-bind:userQuery="inputName"
+            v-bind:longitude="this.longitude"
+            v-bind:latitude="this.latitude"
+            v-bind:devise="this.devise"
+            v-bind:restaurants="this.mapRestaurants"
+          >
+          </Map>
+          <div v-if="showRestaurantsBool">
+            <div>
+              <jw-pagination
+                :pageSize="50"
+                :items="filteredRestaurants"
+                @changePage="onChangePage"
+                :labels="customLabels"
+              ></jw-pagination>
+            </div>
+            <v-list-item
               v-for="restaurant in pageOfRestaurants"
               :key="restaurant[0].Id"
-          >
-            <DashboardCard
+            >
+              <DashboardCard
                 v-bind:restaurant="restaurant"
                 v-bind:devise="devise"
                 v-bind:userQuery="inputName"
                 v-bind:longitude="longitude"
                 v-bind:latitude="latitude"
-            ></DashboardCard>
-          </v-list-item>
-          <!--<div>
+              ></DashboardCard>
+            </v-list-item>
+            <!--<div>
             <jw-pagination :pageSize="50" :items="filteredRestaurants" @changePage="onChangePage" :labels="customLabels"></jw-pagination>
           </div>-->
-        </div>
+          </div>
         </div>
       </div>
     </v-app>
@@ -99,7 +114,6 @@
 </template>
 
 <style scoped>
-
 .prixAffichage {
   width: 60px;
 }
@@ -130,8 +144,8 @@
   margin-right: 2rem;
 }
 
-.boutonRestoMap{
-  border-bottom: solid 2px #FFC107;
+.boutonRestoMap {
+  border-bottom: solid 2px #ffc107;
   margin: 8px;
 }
 
@@ -141,10 +155,10 @@
   right: 30px;
   z-index: 99;
   padding: 15px;
-  color:white;
+  color: white;
 }
 
-.boutonOn{
+.boutonOn {
   background-color: #ffc1073d;
 }
 </style>
@@ -160,10 +174,10 @@ import DashboardSearch from "@/components/DashboardSearch.vue";
 import DashboardLocation from "@/components/DashboardLocation.vue";
 import Map from "@/components/Map.vue";
 const customLabels = {
-  first: '<<',
-  last: '>>',
-  previous: '<',
-  next: '>'
+  first: "<<",
+  last: ">>",
+  previous: "<",
+  next: ">",
 };
 
 export default {
@@ -173,7 +187,7 @@ export default {
     DashboardFilter,
     DashboardSearch,
     DashboardLocation,
-    Map
+    Map,
   },
   data: () => ({
     inputCity: "", //adresse
@@ -185,40 +199,45 @@ export default {
     affichageFiltre: false,
     devise: "",
     chargement: false,
-    chargementSearch:false,
-    inputName : "",
+    chargementSearch: false,
+    inputName: "",
     showProposition: false,
-    erreurAdresse : false,
+    erreurAdresse: false,
     pageOfRestaurants: [],
     customLabels,
-    showRestaurantsBool:true,
-    showMapBool:false,
-    mapRestaurants : []
+    showRestaurantsBool: true,
+    showMapBool: false,
+    mapRestaurants: [],
   }),
   created() {
-    if (localStorage.getItem('expiration')==null || localStorage.getItem('expiration')<Date.now()-30*60000) {
-      localStorage.setItem('alreadySearch', "false")
-      localStorage.removeItem('devise')
-      localStorage.removeItem('inputCity')
-      localStorage.removeItem('pays')
-      localStorage.removeItem('current_restaurant_details')
-      localStorage.setItem('foodFilter', "")
-      localStorage.setItem('delay', 120)
-      localStorage.setItem('deliveryCostFilter',100)
-      localStorage.setItem('grade', 0)
+    if (
+      localStorage.getItem("expiration") == null ||
+      localStorage.getItem("expiration") < Date.now() - 30 * 60000
+    ) {
+      localStorage.setItem("alreadySearch", "false");
+      localStorage.removeItem("devise");
+      localStorage.removeItem("inputCity");
+      localStorage.removeItem("pays");
+      localStorage.removeItem("current_restaurant_details");
+      localStorage.setItem("foodFilter", "");
+      localStorage.setItem("delay", 120);
+      localStorage.setItem("deliveryCostFilter", 100);
+      localStorage.setItem("grade", 0);
     }
-    localStorage.setItem('expiration', Date.now())
-    if (localStorage.getItem('alreadySearch') === "true") {
-      this.devise = localStorage.getItem('devise')
-      this.pays = localStorage.getItem('pays')
-      this.inputCity = localStorage.getItem('inputCity')
+    localStorage.setItem("expiration", Date.now());
+    if (localStorage.getItem("alreadySearch") === "true") {
+      this.devise = localStorage.getItem("devise");
+      this.pays = localStorage.getItem("pays");
+      this.inputCity = localStorage.getItem("inputCity");
     }
   },
   methods: {
     onChangePage(pageOfRestaurants) {
       this.pageOfRestaurants = pageOfRestaurants;
       //document.getElementById('contenantListeCards') ? document.getElementById('contenantListeCards').scrollIntoView() : {}
-      document.getElementById('contenantListeCards') ? window.scrollTo(0,0) : {}
+      document.getElementById("contenantListeCards")
+        ? window.scrollTo(0, 0)
+        : {};
     },
     SetInputCity(value) {
       this.inputCity = value;
@@ -230,7 +249,7 @@ export default {
       this.devise = value;
     },
     rechercheSansFiltre() {
-      localStorage.setItem('expiration', Date.now())
+      localStorage.setItem("expiration", Date.now());
       this.suggestionsHere = [];
       this.chargement = true;
       var url;
@@ -243,7 +262,7 @@ export default {
           this.inputCity
         );
       } else {
-        console.log('Pas de pays choisi ..')
+        console.log("Pas de pays choisi ..");
       }
       fetch(url)
         .then((result) => result.json())
@@ -251,33 +270,35 @@ export default {
           (result) => {
             var datas = [];
             if (this.PaysChoisit == "Royaume-Uni") {
-              if (result.result.hits && result.result.hits.length==1) {
+              if (result.result.hits && result.result.hits.length == 1) {
                 this.longitude = result.result.hits[0].longitude;
                 this.latitude = result.result.hits[0].latitude;
                 this.chargement = true;
                 this.initRestaurants();
-              }else{
-                this.erreurAdresse =  true
+              } else {
+                this.erreurAdresse = true;
                 this.chargement = false;
               }
-            } else if ((this.PaysChoisit == "France")) {
-              if (result.features && result.features.length >0  && result.features[0].properties.score>0.9) {
+            } else if (this.PaysChoisit == "France") {
+              if (
+                result.features &&
+                result.features.length > 0 &&
+                result.features[0].properties.score > 0.9
+              ) {
                 this.longitude = result.features[0].geometry.coordinates[0];
                 this.latitude = result.features[0].geometry.coordinates[1];
                 this.chargement = true;
                 this.initRestaurants();
-              }else{
-                this.erreurAdresse =  true;
+              } else {
+                this.erreurAdresse = true;
                 this.chargement = false;
               }
             }
-            
           },
           (error) => {
             console.error(error);
           }
         );
-
     },
     initRestaurants() {
       const path = `http://${process.env.VUE_APP_API_IP}:${process.env.VUE_APP_API_PORT}/restaurants`;
@@ -298,36 +319,46 @@ export default {
         return false;
       }
       var allRestaurant = [];
-      restaurants.forEach(restaurant => {
+      restaurants.forEach((restaurant) => {
         var sameRestaurant = [];
         sameRestaurant.push(restaurant);
         for (var restaurantNum2 in restaurants) {
           if (
             restaurant.Api != restaurants[restaurantNum2].Api &&
-            partial_ratio(restaurant.UniqueName,restaurants[restaurantNum2].Name, {full_process: true})>90 &&
-            partial_ratio(restaurant.Address.FirstLine.toLowerCase(),restaurants[restaurantNum2].Address.FirstLine.toLowerCase(), {full_process: true})>90
+            partial_ratio(
+              restaurant.UniqueName,
+              restaurants[restaurantNum2].Name,
+              { full_process: true }
+            ) > 90 &&
+            partial_ratio(
+              restaurant.Address.FirstLine.toLowerCase(),
+              restaurants[restaurantNum2].Address.FirstLine.toLowerCase(),
+              { full_process: true }
+            ) > 90
           ) {
             sameRestaurant.push(restaurants[restaurantNum2]);
-            restaurants.splice(restaurantNum2, 1)
+            restaurants.splice(restaurantNum2, 1);
           }
         }
         allRestaurant.push(sameRestaurant);
-      })
-      allRestaurant.sort(restaurant => { return restaurant[0].IsOpenNow ? -1 : 1 })
+      });
+      allRestaurant.sort((restaurant) => {
+        return restaurant[0].IsOpenNow ? -1 : 1;
+      });
       this.allRestaurants = allRestaurant;
       this.filteredRestaurants = this.allRestaurants;
-      this.mapRestaurants = this.openRestaurant(allRestaurant)
+      // this.mapRestaurants = this.openRestaurant(allRestaurant);
       this.affichageFiltre = true;
       this.chargement = false;
       this.chargementSearch = false;
     },
-    async filterRestaurants(value){
-      this.filteredRestaurants = value
-      this.mapRestaurants = this.openRestaurant(value)
+    async filterRestaurants(value) {
+      this.filteredRestaurants = value;
+      this.mapRestaurants = this.openRestaurant(value);
     },
     rechercheParNom(inputName) {
       this.chargementSearch = true;
-      this.inputName = inputName
+      this.inputName = inputName;
       const path = `http://${process.env.VUE_APP_API_IP}:${process.env.VUE_APP_API_PORT}/restaurants/search`;
       var params = {
         lat: this.latitude.toString(),
@@ -338,39 +369,45 @@ export default {
       axios.post(path, params).then((res) => {
         var restaurants = res["data"]["data"];
         this.regroupement(restaurants);
-        this.mapRestaurants = this.openRestaurant(restaurants)
-        this.$refs.composantFiltres.filterRestaurants()
+        // this.mapRestaurants = this.openRestaurant(restaurants);
+        this.$refs.composantFiltres.filterRestaurants();
       });
     },
-    deleteProposition(){
+    deleteProposition() {
       this.showProposition = false;
     },
-    turnToShowProposition(){
+    turnToShowProposition() {
       this.showProposition = true;
     },
     turnErreurOff() {
-      this.erreurAdresse =false;
+      this.erreurAdresse = false;
     },
     goUp() {
-        window.scrollTo(0,0)
+      window.scrollTo(0, 0);
     },
-    showRestaurants(){
+    showRestaurants() {
       this.showRestaurantsBool = true;
       this.showMapBool = false;
     },
-    showMap(){
+    showMap() {
       this.showMapBool = true;
       this.showRestaurantsBool = false;
     },
-    openRestaurant(restaurants){
-      var allRestaurantsOuverts = []
-      for(var i in restaurants){
-          if(restaurants[i][0].IsOpenNow==true){
-              allRestaurantsOuverts.push(restaurants[i])
+    openRestaurant(restaurants) {
+      var allRestaurantsOuverts = [];
+      if (restaurants.length == 1) {
+        if (restaurants[0].IsOpenNow == true) {
+          allRestaurantsOuverts.push(restaurants);
+        }
+      } else {
+        for (var i in restaurants) {
+          if (restaurants[i][0].IsOpenNow == true) {
+            allRestaurantsOuverts.push(restaurants[i]);
           }
+        }
       }
-      return allRestaurantsOuverts
-    }
+      return allRestaurantsOuverts;
+    },
   },
 };
 </script>
