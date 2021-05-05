@@ -86,11 +86,14 @@
       }
     },
     created() {
-      localStorage.setItem('expiration', Date.now())
-      console.log(JSON.parse(localStorage.getItem('current_restaurant_details')))
-      this.details = JSON.parse(localStorage.getItem('current_restaurant_details'))
-      this.getRestaurant(this.details.restaurant_ids);
-      this.devise = localStorage.getItem('devise') === undefined ? '' : localStorage.getItem('devise')
+      if (localStorage.getItem('current_restaurant_details') === undefined || localStorage.getItem('current_restaurant_details') === null) {
+        this.$router.push({path: '/'});
+      } else {
+        localStorage.setItem('expiration', Date.now())
+        this.details = JSON.parse(localStorage.getItem('current_restaurant_details'))
+        this.getRestaurant(this.details.restaurant_ids);
+        this.devise = localStorage.getItem('devise') === undefined ? '' : localStorage.getItem('devise')
+      }
     },
     methods: {
       getRestaurant(restaurant_ids) {
