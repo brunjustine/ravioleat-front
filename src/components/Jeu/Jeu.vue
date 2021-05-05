@@ -50,12 +50,7 @@ export default {
         box.style.visibility = "hidden";
       }
     }
-    this.onDocumentLoad()
-  },
-  methods: {
-    onDocumentLoad() {
-      new Runner(".interstitial-wrapper");
-    },
+    new Runner(".interstitial-wrapper");
   },
 };
 </script>
