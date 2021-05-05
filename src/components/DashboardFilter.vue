@@ -42,7 +42,8 @@ export default {
         deliveryCost: ["0","3","5","7","7+"],
         deliveryCostFilter:100,
         foodFilter:[],
-        foodTypes: ['Fast Food','Burgers','Pizza','Asiatique','Sushis','Healthy', 'Halal', 'Indien','Petit déjeuner'],
+        foodFilterEnglish:[],
+        foodTypes: ['Fast Food','Burgers','Pizza','Asiatique','Sushi','Healthy', 'Halal', 'Indien','Petit déjeuner'],
         grade:0,
         maxDelay: 120,
         minDelay: 0,
@@ -53,7 +54,9 @@ export default {
     },
     methods: {
         filterRestaurants() {
+          localStorage.setItem('expiration', Date.now())
           let tmpRestaurants = this.allRestaurants
+          this.traductionFoodFilter()
           this.filteredRestaurants = tmpRestaurants.filter(restaurant =>
           {
             let plateformes = this.filterByOffer(restaurant)
@@ -64,10 +67,11 @@ export default {
             return plateformes.length > 0
           })
           this.$emit('filterRestaurants', this.filteredRestaurants)
+          this.initStorage()
         },
         filterByFoodTypes(restaurant){
           if (this.foodFilter.length>0) {
-            return restaurant.filter(plateforme => plateforme.CuisineTypes.find(type => this.foodFilter.includes(type.Name)))
+            return restaurant.filter(plateforme => plateforme.CuisineTypes.find(type => this.foodFilterEnglish.includes(type.Name)))
           } else {
             return restaurant
           }
@@ -81,18 +85,18 @@ export default {
         },
         filterByDeliveryDelay(restaurant){
           return restaurant.filter(plateforme => 
-            (plateforme.DeliveryEtaMinutes !== null) ? (parseInt(plateforme.DeliveryEtaMinutes.RangeUpper) <= this.delay) : false
+            this.delay == this.maxDelay || ((plateforme.DeliveryEtaMinutes !== null) ? (parseInt(plateforme.DeliveryEtaMinutes.RangeUpper) <= this.delay) : false)
           )
           
         },
         filterByDeliveryCost(restaurant){
           return restaurant.filter(plateforme => 
-            (plateforme.DeliveryCost !== null) ? (parseFloat(plateforme.DeliveryCost) <= this.deliveryCostFilter) : false
+            this.deliveryCostFilter == this.maxCost || ((plateforme.DeliveryCost !== null) ? (parseFloat(plateforme.DeliveryCost) <= this.deliveryCostFilter) : false)
           )
         },
         filterByGrade(restaurant){
            return restaurant.filter(plateforme => 
-            (plateforme.Rating !== null) ? (parseFloat(plateforme.Rating.StarRating) >= this.grade) : false
+            this.grade == 0 || ((plateforme.Rating !== null) ? (parseFloat(plateforme.Rating.StarRating) >= this.grade) : false)
           )
         },
         getDelays(e, range){
@@ -111,7 +115,7 @@ export default {
         getSlidersRange(){
           let rangeDelay =[]
           let rangeCost = []
-          if (this.filteredRestaurants.length > 0) {
+          if (this.filteredRestaurants.length > 0 && this.filteredRestaurants.filter(resto => resto[0].IsOpenNow).length > 0) {
             this.filteredRestaurants.forEach(restaurant => 
               restaurant.forEach(e => {
                 rangeDelay = this.getDelays(e,rangeDelay)
@@ -120,7 +124,7 @@ export default {
             this.minDelay = Math.min.apply(Math, rangeDelay)
             this.maxDelay = Math.max.apply(Math, rangeDelay)
             this.minCost = Math.min.apply(Math, rangeCost)
-            this.maxCost = Math.max.apply(Math, rangeCost)
+            this.maxCost = Math.round(Math.max.apply(Math, rangeCost))
           } else {
             this.minDelay = 0
             this.maxDelay = 120
@@ -129,16 +133,63 @@ export default {
           }
         },
         resetFilter(){
+          localStorage.setItem('expiration', Date.now())
           this.$emit('filterRestaurants', this.allRestaurants)
           this.offer = false
           this.foodFilter = []
           this.grade = 0
           this.delay = this.maxDelay
-          this.cost = 100
+          this.deliveryCostFilter = this.maxCost
+          this.initStorage()
+        },
+        traductionFoodFilter(){
+          this.foodFilterEnglish = []
+          for (var food in this.foodFilter) {
+            switch (this.foodFilter[food]) {
+              case 'Asiatique': {
+                this.foodFilterEnglish.push('Asian')
+                this.foodFilterEnglish.push('AsianFusion')
+                break
+              }
+              case 'Indien': {
+                this.foodFilterEnglish.push('Indian')
+                break
+              }
+              case 'Petit déjeuner': {
+                this.foodFilterEnglish.push('Breakfast')
+                this.foodFilterEnglish.push('Breakfast and Brunch')
+                break
+              }
+              default: {
+                this.foodFilterEnglish.push(this.foodFilter[food])
+                break
+              }
+            }
+          }
+        },
+        initStorage() {
+          this.offer ? localStorage.setItem('offer',1) : localStorage.setItem('offer',0)
+          localStorage.setItem('foodFilter', this.foodFilter)
+          localStorage.setItem('delay', this.delay)
+          localStorage.setItem('deliveryCostFilter', this.deliveryCostFilter)
+          localStorage.setItem('grade', this.grade)
+        },
+        rechercheFiltresStockés(){
+          this.offer = (localStorage.getItem('offer')=="1")
+          this.foodFilter = localStorage.getItem('foodFilter')=="" ? [] : localStorage.getItem('foodFilter').split(",")
+          this.delay = localStorage.getItem('delay')
+          this.deliveryCostFilter = localStorage.getItem('deliveryCostFilter')
+          this.grade = +localStorage.getItem('grade')
+          this.filterRestaurants()
         }
     },
     beforeMount() {
       this.getSlidersRange()
+    }, 
+    mounted() {
+      if (localStorage.getItem('alreadySearch') === "true") { 
+        this.rechercheFiltresStockés()
+      }
     }
 }
 </script>
@@ -156,7 +207,7 @@ export default {
 }
 
 .v-btn {
-  color: black!important;
+  color: white!important;;
 }
 </style>
 

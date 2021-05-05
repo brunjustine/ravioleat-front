@@ -95,7 +95,7 @@
           </v-expansion-panel-header>
           <v-expansion-panel-content>
             <div class="item">
-              <item-card v-for="item in items"
+              <item-card v-for="item in filteredItems(items)"
                          :key="item.Id"
                          :item-name="item.Name"
                          :item-description="item.Description"
@@ -138,6 +138,7 @@
       }
     },
     created() {
+      localStorage.setItem('expiration', Date.now())
       console.log(JSON.parse(localStorage.getItem('current_restaurant_details')))
       this.details = JSON.parse(localStorage.getItem('current_restaurant_details'))
       this.getRestaurant(this.details.restaurant_ids);
@@ -149,7 +150,7 @@
         Object.keys(restaurant_ids).forEach(key => {
           if (restaurant_ids[key] !== "") {
             if (first_key === undefined) { first_key = key }
-            axios.post('http://0.0.0.0:5000/restaurant/' + restaurant_ids[key],
+            axios.post(`http://${process.env.VUE_APP_API_IP}:${process.env.VUE_APP_API_PORT}/restaurant/` + restaurant_ids[key].toString(),
               {
                 "lat": this.details.lat,
                 "lon": this.details.lon,
@@ -165,9 +166,11 @@
                   this.items = this.restaurant[key]['Menus'];
                   this.has_menus = true;
                 }
-                this.name = this.restaurant[first_key]['Name'];
-                this.address = this.restaurant[first_key]['Address']['FirstLine'];
-                this.categories = this.restaurant[first_key]['CuisineTypes'];
+                if (this.restaurant[first_key] !== undefined) {
+                  this.name = this.restaurant[first_key]['Name'];
+                  this.address = this.restaurant[first_key]['Address']['FirstLine'];
+                  this.categories = this.restaurant[first_key]['CuisineTypes'];
+                }
               })
               .catch(err => {
                 console.log(err);
@@ -185,6 +188,9 @@
             "rating": restaurant['Rating'],
             "offers": restaurant['Offers']});
       },
+      filteredItems(items){
+        return items.filter((v,i,a)=> a.findIndex(t=>(t.Id === v.Id))===i)
+      },
       priceSort() {
         return this.applications.sort((application1, application2) =>
           application1.deliveryCost - application2.deliveryCost
@@ -196,9 +202,9 @@
       },
       bestSort() {
         return this.applications.sort((application1, application2) =>
-          (application1.deliveryCost + application1.deliveryETA.RangeLower + application1.offers.length) -
-          (application2.deliveryCost + application2.deliveryETA.RangeLower + application2.offers.length))
-      },
+          (application1.deliveryCost + application1.deliveryETA.RangeLower/10 - application1.offers.length - application1.rating.StarRating) -
+          (application2.deliveryCost + application2.deliveryETA.RangeLower/10 - application2.offers.length - application2.rating.StarRating))
+      }, 
       getIsLoading(value) {
         this.isLoading =value;
       }

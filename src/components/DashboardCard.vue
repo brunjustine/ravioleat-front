@@ -1,7 +1,7 @@
 <template>
     <div>
-        <v-card class="listeCards" v-on="restaurant[0].IsOpenNow ? {click: () => moveToDetail()} : {}">
-            <a v-bind:class="{ card1: restaurant[0].IsOpenNow}" href="#">
+        <v-card class="listeCards">
+            <a v-bind:class="{ card1: restaurant[0].IsOpenNow, isDisabled: !restaurant[0].IsOpenNow}" v-on="restaurant[0].IsOpenNow ? {click: () => moveToDetail()} : false" href="#">
             <div v-bind:class="{ open: !restaurant[0].IsOpenNow}">
                 <v-list-item-content class="contenuCards" >
                     <v-row rows="2" class="premiereLigne">
@@ -34,8 +34,8 @@
                                                 </v-col>
                                                 <v-col cols="8">
                                                     <v-chip >  
-                                                        <font v-bind:class="{ best: resto.Id==bestTimeLivraison(restaurant).Id}" v-if="resto.DeliveryEtaMinutes!=null"> {{resto.DeliveryEtaMinutes.RangeLower}} - {{resto.DeliveryEtaMinutes.RangeUpper}} min  
-                                                            <v-icon v-if="resto.Id==bestTimeLivraison(restaurant).Id" color="red darken-2"> mdi-run-fast</v-icon>  
+                                                        <font v-bind:class="{ best: bestTimeLivraison(restaurant,resto)}" v-if="resto.DeliveryEtaMinutes!=null"> {{resto.DeliveryEtaMinutes.RangeLower}} - {{resto.DeliveryEtaMinutes.RangeUpper}} min  
+                                                            <v-icon v-if=" bestTimeLivraison(restaurant,resto)" color="red darken-2"> mdi-run-fast</v-icon>  
                                                         </font> 
                                                     </v-chip>
                                                 </v-col>
@@ -89,7 +89,7 @@
             chargement: true,
         }),
         props: {
-            restaurant: Array, 
+            restaurant: Array,
             devise: String,
             userQuery: String,
             longitude: Number,
@@ -127,20 +127,37 @@
                 }
                 return res
             },
-            bestTimeLivraison(restaurant){
+            bestTimeLivraison(restaurant, resto){
                 var min = restaurant[0]
-                for( var i in restaurant){
-                    if(parseInt(restaurant[i].DeliveryEtaMinutes.RangeLower)<parseInt(min.DeliveryEtaMinutes.RangeLower)){
-                        min=restaurant[i]
-                    }else if(parseInt(restaurant[i].DeliveryEtaMinutes.RangeLower)==parseInt(min.DeliveryEtaMinutes.RangeLower)){
-                        if(parseInt(restaurant[i].DeliveryEtaMinutes.RangeUpper)<parseInt(min.DeliveryEtaMinutes.RangeUpper)){
+                var tabMin =[min]
+                var i =1
+                for( i in restaurant){
+                    if(restaurant[i].DeliveryEtaMinutes.RangeLower!=null){
+                        if(parseInt(restaurant[i].DeliveryEtaMinutes.RangeLower)<parseInt(min.DeliveryEtaMinutes.RangeLower)){
                             min=restaurant[i]
-                        } /*else if(parseInt(restaurant[i].DeliveryEtaMinutes.RangeUpper)==parseInt(min.DeliveryEtaMinutes.RangeUpper)){
-                            tabMin.push()
-                        }*/
+                            tabMin=[]
+                            tabMin.push(min)
+                        }else if(parseInt(restaurant[i].DeliveryEtaMinutes.RangeLower)==parseInt(min.DeliveryEtaMinutes.RangeLower )){
+                            if(parseInt(restaurant[i].DeliveryEtaMinutes.RangeUpper)<parseInt(min.DeliveryEtaMinutes.RangeUpper)){
+                                min=restaurant[i]
+                                tabMin=[]
+                                tabMin.push(restaurant[i])
+                            } else if(parseInt(restaurant[i].DeliveryEtaMinutes.RangeUpper)==parseInt(min.DeliveryEtaMinutes.RangeUpper)){
+                                tabMin.push(restaurant[i])
+                            }
+                        }
                     }
                 }
-                return min
+                return this.restoInTabMin(tabMin,resto)
+            },
+            restoInTabMin(tabMin,resto){
+                var res = false;
+                for(var i in tabMin){
+                    if(tabMin[i]==resto){
+                        res = true;
+                    }
+                }
+                return res
             },
             bestPriceLivraison(restaurant){
                 var min = restaurant[0].DeliveryCost
@@ -248,6 +265,11 @@
 
     .best{
         font-weight: bold;
+    }
+
+    .isDisabled {
+        pointer-events: none;
+        cursor: default;
     }
 
 .listeCards a {

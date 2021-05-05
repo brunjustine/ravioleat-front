@@ -22,6 +22,8 @@
           v-on:keyup.native="onKeypressCity($event)"
           v-on:keydown.native="onKeypressCity($event)"
           color="#FFA000"
+          :append-icon="inputCity.length>0 ? 'mdi-close-circle' : ''"
+          @click:append="clearAdresse"
         ></v-text-field>
         <v-btn
           depressed
@@ -66,7 +68,7 @@ export default {
       suggestionsHere: [], // Tableau qui contiendra les suggestions Here
       suggestionSelected: "", // Adresse selectionnées
       longitude: 0,
-      latitude: 0
+      latitude: 0,
     };
   },
   created(){
@@ -89,7 +91,7 @@ export default {
       if (this.inputCity != undefined && this.inputCity.length > 2) {
         // Call API Suggestions de HERE pour réécupérer les informations
         if (this.PaysChoisit == "Royaume-Uni") {
-          url = "https://api.ideal-postcodes.co.uk/v1/autocomplete/addresses?api_key=iddqd&limit=10&query=".concat(
+          url = "https://api.ideal-postcodes.co.uk/v1/autocomplete/addresses?api_key=ak_ko8p40mbn6kPWLwf6aBjIZzUg8Ghm&limit=10&query=".concat(
             this.inputCity
           );
         } else if (this.PaysChoisit == "France") {
@@ -122,6 +124,7 @@ export default {
                   this.suggestionsHere = datas;
                 }
               }
+              this.$emit('devise', devise);
               localStorage.setItem("devise", devise);
             },
             (error) => {
@@ -133,7 +136,6 @@ export default {
       }
       this.$emit('inputCity', this.inputCity);
       this.$emit('PaysChoisit', this.PaysChoisit);
-      
     },
     changeAdresse(suggestion) {
       this.inputCity = suggestion;
@@ -141,12 +143,16 @@ export default {
       localStorage.setItem('pays', this.PaysChoisit);
       localStorage.setItem('inputCity', this.inputCity);
       this.$emit('inputCity', this.inputCity)
-      this.$emit('inputCity', this.inputCity)
     },
     rechercheSansFiltre(){
         localStorage.setItem('alreadySearch', true);
         this.$emit('filter')
     },
+    clearAdresse(){
+      this.inputCity="";
+      this.$emit('inputCity', this.inputCity);
+
+    }
   },
 };
 </script>
