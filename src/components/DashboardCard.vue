@@ -4,7 +4,7 @@
             <a v-bind:class="{ card1: restaurant[0].IsOpenNow, isDisabled: !restaurant[0].IsOpenNow}" v-on="restaurant[0].IsOpenNow ? {click: () => moveToDetail()} : false" href="#">
             <div v-bind:class="{ open: !restaurant[0].IsOpenNow}">
                 <v-list-item-content class="contenuCards" >
-                    <v-row rows="2" class="premiereLigne">
+                    <v-row class="premiereLigne">
                         <v-col cols="5">
                             <v-list-item class="nomRestaurant"><h1>{{restaurant[0].Name}}</h1></v-list-item> 
                         </v-col>
@@ -210,11 +210,16 @@
         margin-left: 40px;
     }
 
+    .nomRestaurant h1 {
+            font-size:xx-large!important;
+        }
+
     .nomTypes h4{
         margin-top:20%;
         margin-left: 60px;
         font-weight:normal;
         color:#969a9c;
+        font-size:initial!important;
     }
 
     .nomType{
