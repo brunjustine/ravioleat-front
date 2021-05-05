@@ -6,8 +6,8 @@
           <h1>
             {{ name }}
           </h1>
-          <h4>
-            <v-icon dark v-if="!isLoading">
+          <h4 v-if="!(isLoading == endLoading)">
+            <v-icon dark >
               mdi-map-marker
             </v-icon>{{ address }}
           </h4>
@@ -23,7 +23,7 @@
         </v-col>
       </v-row>     
     </v-container>
-    <div v-if="isLoading" class="gif-center">
+    <div v-if="isLoading == endLoading" class="gif-center">
       <!--<div id="chargement" class="gif-center">-->
       <img 
         src="@/assets/ravioli2.gif"
@@ -77,8 +77,6 @@
                               :devise="devise"
                               :offers="application.offers"
                               :isBest="index==0"
-                              :isLoading="!(index == Object.keys(applications).length - 1)"
-                              @isLoading="getIsLoading"
                               style="margin: 20px">
                   </application-card>
                 </v-col>
@@ -134,7 +132,8 @@
         activeClass: 'show-gif',
         hideClass: 'hide-gif',
         isBest: false,
-        isLoading:true       
+        isLoading:0 ,
+        endLoading:-1    
       }
     },
     created() {
@@ -150,7 +149,8 @@
     methods: {
       getRestaurant(restaurant_ids) {
         var first_key;
-        Object.keys(restaurant_ids).forEach(key => {
+        this.endLoading = Object.keys(restaurant_ids).filter(key=> restaurant_ids[key]!=="").length-1;
+        Object.keys(restaurant_ids).forEach((key,i) =>{
           if (restaurant_ids[key] !== "") {
             if (first_key === undefined) { first_key = key }
             axios.post(`http://${process.env.VUE_APP_API_IP}:${process.env.VUE_APP_API_PORT}/restaurant/` + restaurant_ids[key].toString(),
@@ -174,12 +174,14 @@
                   this.address = this.restaurant[first_key]['Address']['FirstLine'];
                   this.categories = this.restaurant[first_key]['CuisineTypes'];
                 }
+                this.isLoading = this.isLoading+1;
               })
               .catch(err => {
                 console.log(err);
               });
           }
         });
+        
       },
       getApplications(restaurant) {
         this.applications.push(

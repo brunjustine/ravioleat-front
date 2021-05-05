@@ -85,10 +85,7 @@
       rating: Object,
       devise: String,
       offers: Array,
-      isBest:Boolean
-    },
-    created() { 
-      this.$emit('isLoading', this.isLoading)
+      isBest:Boolean,
     },
     methods: {
       goToStore() {
