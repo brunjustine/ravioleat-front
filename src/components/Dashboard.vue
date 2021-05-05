@@ -56,7 +56,20 @@
             </v-col>
             <v-col cols="3">
               <div v-if="allRestaurants.length > 1" class="divBoutonRestoMap">
-                <v-btn class="boutonRestoMap" v-bind:class="{ boutonOn: !showMapBool}" text v-on:click="showRestaurants()">Liste</v-btn> <v-btn class="boutonRestoMap" v-bind:class="{ boutonOn: showMapBool}" text v-on:click="showMap()">Plan</v-btn>
+                <v-btn class="boutonRestoMap" v-bind:class="{ boutonOn: !showMapBool}" text v-on:click="showRestaurants()">
+                  <v-icon dark>
+                    mdi-format-list-bulleted-square 
+                  </v-icon>
+                  Liste
+                  
+                </v-btn> 
+                <v-btn class="boutonRestoMap" v-bind:class="{ boutonOn: showMapBool}" text v-on:click="showMap()">
+                  <v-icon dark>
+                    mdi-map-search-outline 
+                  </v-icon>
+                  Plan
+                  
+                </v-btn>
               </div>
             </v-col>
           </v-row>
@@ -155,6 +168,7 @@
 .boutonOn{
   background-color: #ffc1073d;
 }
+
 
 </style>
 
