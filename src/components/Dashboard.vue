@@ -1,6 +1,20 @@
 <template>
   <div>
     <v-app>
+      <v-btn
+        class="mx-2"
+        fab
+        dark
+        color="amber"
+        id="buttonGoTop" 
+        title="Go to top"
+        @click="goUp"
+      >
+      <v-icon dark>
+        mdi-apple-keyboard-caps 
+      </v-icon>
+    </v-btn>
+
       <DashboardLocation
       @inputCity="SetInputCity"
       @PaysChoisit="SetPaysChoisit"
@@ -21,7 +35,6 @@
             width="5%"
           />
       </div>
-
       <div class="filtre-CardsRestaurants" v-on:click="deleteProposition()">
         <!--FILTRAGE-->
         <DashboardFilter
@@ -33,12 +46,14 @@
 
         <!--CARTES RESTAURANTS-->
         <div id="contenantListeCards">
+          <div v-if="allRestaurants.length > 1" class="divBoutonRestoMap">
+            <v-btn class="boutonRestoMap" v-bind:class="{ boutonOn: !showMapBool}" text v-on:click="showRestaurants()">Restaurants</v-btn> <v-btn class="boutonRestoMap" v-bind:class="{ boutonOn: showMapBool}" text v-on:click="showMap()">Map</v-btn>
+          </div>
           <DashboardSearch
             v-if="allRestaurants.length > 1"
             v-bind:allRestaurants="this.filteredRestaurants"
             @searchRestaurants="rechercheParNom"
           ></DashboardSearch>
-
           <div v-if="chargementSearch" class="gif-center">
           <!--<div id="chargement" class="gif-center">-->
             <img
@@ -47,6 +62,17 @@
               width="5%"
             />
           </div>
+          
+          <Map 
+          v-if="this.allRestaurants.length > 1 && showMapBool"
+          v-bind:userQuery="inputName"
+          v-bind:longitude="this.longitude"
+          v-bind:latitude="this.latitude"
+          v-bind:devise="this.devise"
+          v-bind:restaurants="this.mapRestaurants">
+          
+        </Map>
+        <div v-if="showRestaurantsBool">
           <div>
             <jw-pagination :pageSize="50" :items="filteredRestaurants" @changePage="onChangePage" :labels="customLabels"></jw-pagination>
           </div>
@@ -62,9 +88,10 @@
                 v-bind:latitude="latitude"
             ></DashboardCard>
           </v-list-item>
-          <div>
+          <!--<div>
             <jw-pagination :pageSize="50" :items="filteredRestaurants" @changePage="onChangePage" :labels="customLabels"></jw-pagination>
-          </div>
+          </div>-->
+        </div>
         </div>
       </div>
     </v-app>
@@ -103,9 +130,23 @@
   margin-right: 2rem;
 }
 
-.gif-center {
+.boutonRestoMap{
+  border-bottom: solid 2px #FFC107;
+  margin: 8px;
 }
 
+#buttonGoTop {
+  position: fixed;
+  bottom: 20px;
+  right: 30px;
+  z-index: 99;
+  padding: 15px;
+  color:white;
+}
+
+.boutonOn{
+  background-color: #ffc1073d;
+}
 </style>
 
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
@@ -117,7 +158,7 @@ import DashboardCard from "./DashboardCard";
 import DashboardFilter from "@/components/DashboardFilter.vue";
 import DashboardSearch from "@/components/DashboardSearch.vue";
 import DashboardLocation from "@/components/DashboardLocation.vue";
-
+import Map from "@/components/Map.vue";
 const customLabels = {
   first: '<<',
   last: '>>',
@@ -132,6 +173,7 @@ export default {
     DashboardFilter,
     DashboardSearch,
     DashboardLocation,
+    Map
   },
   data: () => ({
     inputCity: "", //adresse
@@ -148,8 +190,11 @@ export default {
     showProposition: false,
     erreurAdresse : false,
     pageOfRestaurants: [],
-    customLabels
-    }),
+    customLabels,
+    showRestaurantsBool:true,
+    showMapBool:false,
+    mapRestaurants : []
+  }),
   created() {
     if (localStorage.getItem('expiration')==null || localStorage.getItem('expiration')<Date.now()-30*60000) {
       localStorage.setItem('alreadySearch', "false")
@@ -172,7 +217,8 @@ export default {
   methods: {
     onChangePage(pageOfRestaurants) {
       this.pageOfRestaurants = pageOfRestaurants;
-      document.getElementById('contenantListeCards') ? document.getElementById('contenantListeCards').scrollIntoView() : {}
+      //document.getElementById('contenantListeCards') ? document.getElementById('contenantListeCards').scrollIntoView() : {}
+      document.getElementById('contenantListeCards') ? window.scrollTo(0,0) : {}
     },
     SetInputCity(value) {
       this.inputCity = value;
@@ -189,7 +235,7 @@ export default {
       this.chargement = true;
       var url;
       if (this.PaysChoisit == "Royaume-Uni") {
-        url = "https://api.ideal-postcodes.co.uk/v1/addresses?api_key=iddqd&query=".concat(
+        url = "https://api.ideal-postcodes.co.uk/v1/addresses?api_key=ak_ko8p40mbn6kPWLwf6aBjIZzUg8Ghm&query=".concat(
           this.inputCity
         );
       } else if ((this.PaysChoisit = "France")) {
@@ -234,7 +280,7 @@ export default {
 
     },
     initRestaurants() {
-      const path = "http://127.0.0.1:5000/restaurants";
+      const path = `http://${process.env.VUE_APP_API_IP}:${process.env.VUE_APP_API_PORT}/restaurants`;
       var params = {
         lat: this.latitude.toString(),
         lon: this.longitude.toString(),
@@ -247,6 +293,10 @@ export default {
       });
     },
     regroupement(restaurants) {
+      if (this.inputCity !== localStorage.getItem("inputCity")) {
+        this.chargement = false;
+        return false;
+      }
       var allRestaurant = [];
       restaurants.forEach(restaurant => {
         var sameRestaurant = [];
@@ -266,17 +316,19 @@ export default {
       allRestaurant.sort(restaurant => { return restaurant[0].IsOpenNow ? -1 : 1 })
       this.allRestaurants = allRestaurant;
       this.filteredRestaurants = this.allRestaurants;
+      this.mapRestaurants = this.openRestaurant(allRestaurant)
       this.affichageFiltre = true;
       this.chargement = false;
       this.chargementSearch = false;
     },
     async filterRestaurants(value){
       this.filteredRestaurants = value
+      this.mapRestaurants = this.openRestaurant(value)
     },
     rechercheParNom(inputName) {
       this.chargementSearch = true;
       this.inputName = inputName
-      const path = "http://127.0.0.1:5000/restaurants/search";
+      const path = `http://${process.env.VUE_APP_API_IP}:${process.env.VUE_APP_API_PORT}/restaurants/search`;
       var params = {
         lat: this.latitude.toString(),
         lon: this.longitude.toString(),
@@ -286,6 +338,7 @@ export default {
       axios.post(path, params).then((res) => {
         var restaurants = res["data"]["data"];
         this.regroupement(restaurants);
+        this.mapRestaurants = this.openRestaurant(restaurants)
         this.$refs.composantFiltres.filterRestaurants()
       });
     },
@@ -297,6 +350,26 @@ export default {
     },
     turnErreurOff() {
       this.erreurAdresse =false;
+    },
+    goUp() {
+        window.scrollTo(0,0)
+    },
+    showRestaurants(){
+      this.showRestaurantsBool = true;
+      this.showMapBool = false;
+    },
+    showMap(){
+      this.showMapBool = true;
+      this.showRestaurantsBool = false;
+    },
+    openRestaurant(restaurants){
+      var allRestaurantsOuverts = []
+      for(var i in restaurants){
+          if(restaurants[i][0].IsOpenNow==true){
+              allRestaurantsOuverts.push(restaurants[i])
+          }
+      }
+      return allRestaurantsOuverts
     }
   },
 };

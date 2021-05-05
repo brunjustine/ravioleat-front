@@ -1,7 +1,7 @@
 <template>
     <div>
-        <v-card class="listeCards" v-on="restaurant[0].IsOpenNow ? {click: () => moveToDetail()} : {}">
-            <a v-bind:class="{ card1: restaurant[0].IsOpenNow}" href="#">
+        <v-card class="listeCards">
+            <a v-bind:class="{ card1: restaurant[0].IsOpenNow, isDisabled: !restaurant[0].IsOpenNow}" v-on="restaurant[0].IsOpenNow ? {click: () => moveToDetail()} : false" href="#">
             <div v-bind:class="{ open: !restaurant[0].IsOpenNow}">
                 <v-list-item-content class="contenuCards" >
                     <v-row rows="2" class="premiereLigne">
@@ -132,17 +132,19 @@
                 var tabMin =[min]
                 var i =1
                 for( i in restaurant){
-                    if(parseInt(restaurant[i].DeliveryEtaMinutes.RangeLower)<parseInt(min.DeliveryEtaMinutes.RangeLower)){
-                        min=restaurant[i]
-                        tabMin=[]
-                        tabMin.push(min)
-                    }else if(parseInt(restaurant[i].DeliveryEtaMinutes.RangeLower)==parseInt(min.DeliveryEtaMinutes.RangeLower )){
-                        if(parseInt(restaurant[i].DeliveryEtaMinutes.RangeUpper)<parseInt(min.DeliveryEtaMinutes.RangeUpper)){
+                    if(restaurant[i].DeliveryEtaMinutes.RangeLower!=null){
+                        if(parseInt(restaurant[i].DeliveryEtaMinutes.RangeLower)<parseInt(min.DeliveryEtaMinutes.RangeLower)){
                             min=restaurant[i]
                             tabMin=[]
-                            tabMin.push(restaurant[i])
-                        } else if(parseInt(restaurant[i].DeliveryEtaMinutes.RangeUpper)==parseInt(min.DeliveryEtaMinutes.RangeUpper)){
-                            tabMin.push(restaurant[i])
+                            tabMin.push(min)
+                        }else if(parseInt(restaurant[i].DeliveryEtaMinutes.RangeLower)==parseInt(min.DeliveryEtaMinutes.RangeLower )){
+                            if(parseInt(restaurant[i].DeliveryEtaMinutes.RangeUpper)<parseInt(min.DeliveryEtaMinutes.RangeUpper)){
+                                min=restaurant[i]
+                                tabMin=[]
+                                tabMin.push(restaurant[i])
+                            } else if(parseInt(restaurant[i].DeliveryEtaMinutes.RangeUpper)==parseInt(min.DeliveryEtaMinutes.RangeUpper)){
+                                tabMin.push(restaurant[i])
+                            }
                         }
                     }
                 }
@@ -263,6 +265,11 @@
 
     .best{
         font-weight: bold;
+    }
+
+    .isDisabled {
+        pointer-events: none;
+        cursor: default;
     }
 
 .listeCards a {

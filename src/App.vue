@@ -1,29 +1,27 @@
 <template>
   <div id="app">
-    <v-card class="overflow-hidden">
-      <v-app-bar elevate-on-scroll fixed>
-
+    <v-card>
+      <v-app-bar elevate-on-scroll fixed class="overflow-hidden">
+        <v-container fill-height fluid>
         <v-row>
-          <v-col>
-            <v-toolbar-title>
-              <v-btn @click="goHome" plain class="title-ravioleat"> Ravioleat</v-btn>
-            </v-toolbar-title>
-          </v-col>
-          
-          <v-col class="slogan-ravioleat">
-            <div class="container">
-                <span @click="easterEgg">Vos bons plans au plus vite</span> 
-            </div>
-          </v-col>
-
-          <v-col>
-            <v-btn style="margin: 10px" @click="goUp" raised>
-              <v-icon>mdi-back</v-icon>
-              Aller en haut
+          <v-col justify="center" align="left">
+            <v-btn @click="goHome"  text class="title-ravioleat" color="black">
+              <v-toolbar-title>
+                Ravioleat
+              </v-toolbar-title>
             </v-btn>
           </v-col>
+          <div class="arrow-right-right"></div>
+          <v-col justify="center" align="center" class="slogan-ravioleat">
+            <h4 @click="easterEgg">Vos bons plans au plus vite</h4> 
+          </v-col>
+          <div class="arrow-right"></div>
+          <v-spacer>
+            
+          </v-spacer>
 
         </v-row>
+        </v-container>
       </v-app-bar>
     </v-card>
     <v-spacer></v-spacer>
@@ -34,9 +32,6 @@
 <script>
 export default {
     methods: {
-      goUp() {
-        window.scrollTo(0,0)
-      },
       goHome() {
         if (this.$route.path === '/') {
           this.$router.go(0);
@@ -77,31 +72,52 @@ export default {
 
 .v-app-bar {
   background-color : #FFC107!important;
-  vertical-align:middle;
   .v-col {
     margin:0 auto;
   }
 }
 
-.title-ravioleat span{
+.v-toolbar__content{
+  padding:0px!important;
+}
+
+.v-toolbar__title {
   font-weight: bold; 
   font-size: x-large;
   color :black!important;
 }
 
 .slogan-ravioleat {
-  font-family: "Snowyy Night",sans-serif;
+  
   background-color:white!important;
-  border-radius:40px;
-  color : #1785B3!important;
-  font-size: x-large;
+  /*border-radius:40px;*/
+  h4 {
+    font-family: 'Amatic SC', cursive;
+    color : black!important;
+    font-size: xx-large;
+  }
 }
 
-
-@font-face {
- font-family: "Snowy Night";
- src: url("/assets/fonts/snowy_night/Snowy-Night.tff") format("truetype");
+.arrow-right {
+    width: 0;
+    height: 0;
+    padding:0;
+    border-top: 32px solid transparent;
+    border-bottom: 32px solid transparent;
+    border-left: 32px solid #ffffff;
 }
+
+.arrow-right-right{
+    width: 0;
+    height: 0;
+    padding:0;
+    border-top: 32px solid #ffffff;
+    border-bottom: 32px solid #ffffff;
+    border-left: 32px solid transparent;
+    border-right: 32px solid #ffffff;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Amatic+SC:wght@700&display=swap');
 
 
 </style>

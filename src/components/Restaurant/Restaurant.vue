@@ -1,18 +1,58 @@
 <template>
-  <div>
-    <div>
-      <h1>
-        {{ name }}
-      </h1>
-      {{ address }} <br/>
-      <span v-for="categorie in categories" :key="categorie.Id" style="color: gray">
-        {{ categorie.Name }}
-      </span>
+  <div id="restaurant-details">
+    <v-container>
+      <v-row>
+        <v-col>
+          <h1>
+            {{ name }}
+          </h1>
+          <h4>
+            <v-icon dark v-if="!isLoading">
+              mdi-map-marker
+            </v-icon>{{ address }}
+          </h4>
+        </v-col>
+        <v-col>
+          <v-chip
+            v-for="categorie in categories" :key="categorie.Id" style="color: gray"
+            link
+            outlined
+          >
+            {{ categorie.Name }}
+          </v-chip>
+        </v-col>
+      </v-row>     
+    </v-container>
+    <div v-if="isLoading" class="gif-center">
+      <!--<div id="chargement" class="gif-center">-->
+      <img 
+        src="@/assets/ravioli2.gif"
+        alt="gif de ravioli qui marche"
+        width="5%"
+      />
     </div>
+
     <div v-if="applications.length > 1">
-      <v-btn class="button" @click="priceSort()">Le moins cher</v-btn>
-      <v-btn class="button" @click="fastSort()">Le plus rapide</v-btn>
-      <v-btn class="button" @click="bestSort()">Le meilleur</v-btn>
+      <v-toolbar>
+        <v-tabs
+          dark
+          background-color="#000000"
+          grow
+        >
+        <v-tabs-slider color="#FFC107"></v-tabs-slider>
+          <v-tab @click="priceSort()">
+              Le moins cher
+          </v-tab>
+
+          <v-tab @click="fastSort()">
+              Le plus rapide
+          </v-tab>
+
+          <v-tab @click="bestSort()">
+              Le meilleur
+          </v-tab>
+        </v-tabs>
+      </v-toolbar>
     </div>
     <div>
       <v-expansion-panels
@@ -21,12 +61,14 @@
         <v-expansion-panel>
           <v-expansion-panel-header>
             <v-spacer></v-spacer>
-              <h2>Applications</h2>
+              <h2>Livreurs</h2>
             <v-spacer></v-spacer>
           </v-expansion-panel-header>
           <v-expansion-panel-content>
-            <application-card v-for="application in applications"
-                              :key="application.name"
+            <v-container>
+              <v-row>
+                <v-col v-for="(application,index) in applications" :key="application.name">
+                  <application-card 
                               :appli-name="application.name"
                               :delivery-e-t-a="application.deliveryETA"
                               :delivery-cost="application.deliveryCost"
@@ -34,8 +76,14 @@
                               :rating="application.rating"
                               :devise="devise"
                               :offers="application.offers"
+                              :isBest="index==0"
+                              :isLoading="!(index == Object.keys(applications).length - 1)"
+                              @isLoading="getIsLoading"
                               style="margin: 20px">
-            </application-card>
+                  </application-card>
+                </v-col>
+              </v-row>
+            </v-container>
           </v-expansion-panel-content>
         </v-expansion-panel>
 
@@ -53,7 +101,7 @@
                          :item-description="item.Description"
                          :item-price="Number(item.Price)"
                          :devise="devise"
-                         style="margin: 5px; width: 31%">
+                         style="margin: 5px auto;">
               </item-card>
             </div>
           </v-expansion-panel-content>
@@ -82,15 +130,22 @@
         items: [],
         devise: '',
         panel: [0,1],
-        has_menus: false
+        has_menus: false,
+        activeClass: 'show-gif',
+        hideClass: 'hide-gif',
+        isBest: false,
+        isLoading:true       
       }
     },
     created() {
-      localStorage.setItem('expiration', Date.now())
-      console.log(JSON.parse(localStorage.getItem('current_restaurant_details')))
-      this.details = JSON.parse(localStorage.getItem('current_restaurant_details'))
-      this.getRestaurant(this.details.restaurant_ids);
-      this.devise = localStorage.getItem('devise') === undefined ? '' : localStorage.getItem('devise')
+      if (localStorage.getItem('current_restaurant_details') === undefined || localStorage.getItem('current_restaurant_details') === null) {
+        this.$router.push({path: '/'});
+      } else {
+        localStorage.setItem('expiration', Date.now())
+        this.details = JSON.parse(localStorage.getItem('current_restaurant_details'))
+        this.getRestaurant(this.details.restaurant_ids);
+        this.devise = localStorage.getItem('devise') === undefined ? '' : localStorage.getItem('devise')
+      }
     },
     methods: {
       getRestaurant(restaurant_ids) {
@@ -98,7 +153,7 @@
         Object.keys(restaurant_ids).forEach(key => {
           if (restaurant_ids[key] !== "") {
             if (first_key === undefined) { first_key = key }
-            axios.post('http://0.0.0.0:5000/restaurant/' + restaurant_ids[key],
+            axios.post(`http://${process.env.VUE_APP_API_IP}:${process.env.VUE_APP_API_PORT}/restaurant/` + restaurant_ids[key].toString(),
               {
                 "lat": this.details.lat,
                 "lon": this.details.lon,
@@ -114,10 +169,11 @@
                   this.items = this.restaurant[key]['Menus'];
                   this.has_menus = true;
                 }
-                console.log(first_key)
-                this.name = this.restaurant[first_key]['Name'];
-                this.address = this.restaurant[first_key]['Address']['FirstLine'];
-                this.categories = this.restaurant[first_key]['CuisineTypes'];
+                if (this.restaurant[first_key] !== undefined) {
+                  this.name = this.restaurant[first_key]['Name'];
+                  this.address = this.restaurant[first_key]['Address']['FirstLine'];
+                  this.categories = this.restaurant[first_key]['CuisineTypes'];
+                }
               })
               .catch(err => {
                 console.log(err);
@@ -149,8 +205,11 @@
       },
       bestSort() {
         return this.applications.sort((application1, application2) =>
-          (application1.deliveryCost + application1.deliveryETA.RangeLower + application1.offers.length) -
-          (application2.deliveryCost + application2.deliveryETA.RangeLower + application2.offers.length))
+          (application1.deliveryCost + application1.deliveryETA.RangeLower/10 - application1.offers.length - application1.rating.StarRating) -
+          (application2.deliveryCost + application2.deliveryETA.RangeLower/10 - application2.offers.length - application2.rating.StarRating))
+      }, 
+      getIsLoading(value) {
+        this.isLoading =value;
       }
     },
   }
@@ -161,10 +220,51 @@
   .button {
     margin: 10px;
   }
-
+  
   .item {
     display: flex;
     flex-wrap: wrap;
   }
+
+  #restaurant-details {
+    margin-top: 50px;
+  }
+
+  .v-expansion-panel-header {
+  }
+
+  .gif-center {
+    width: 100%;
+    height: 100%;
+    left: 0px;
+    top: 0px;
+    z-index: 9999;
+    position: fixed;
+  }
+
+  .gif-center img{
+    margin-top: 50vh; 
+    transform: translateY(-50%); 
+  }
+
+  .theme--light.v-btn.v-btn--has-bg {
+    background-color:#FFC107;
+  }
+
+  .v-tabs--grow>.v-tabs-bar .v-tab {
+    color:white    
+  }
+
+  #restaurant-details h1, #restaurant-details h4 {
+    text-align: left;
+  }
+
+   #restaurant-details .v-ship {
+     text-align:right;
+   }
+   .mdi-map-marker::before {
+     color:#FFC107;
+   }
+  
 
 </style>
