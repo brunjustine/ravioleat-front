@@ -43,27 +43,33 @@
 
         <!--CARTES RESTAURANTS-->
         <div id="contenantListeCards">
-          <div v-if="allRestaurants.length >= 1" class="divBoutonRestoMap">
-            <v-btn
-              class="boutonRestoMap"
-              v-bind:class="{ boutonOn: !showMapBool }"
-              text
-              v-on:click="showRestaurants()"
-              >Restaurants</v-btn
-            >
-            <v-btn
-              class="boutonRestoMap"
-              v-bind:class="{ boutonOn: showMapBool }"
-              text
-              v-on:click="showMap()"
-              >Map</v-btn
-            >
-          </div>
-          <DashboardSearch
-            v-if="allRestaurants.length >=1"
-            v-bind:allRestaurants="this.filteredRestaurants"
-            @searchRestaurants="rechercheParNom"
-          ></DashboardSearch>
+          <v-row>
+            <v-col cols="9">
+              <DashboardSearch
+                v-if="allRestaurants.length >= 1"
+                v-bind:allRestaurants="this.filteredRestaurants"
+                @searchRestaurants="rechercheParNom"
+              ></DashboardSearch>
+            </v-col>
+            <v-col cols="3">
+              <div v-if="allRestaurants.length >= 1" class="divBoutonRestoMap">
+                <v-btn class="boutonRestoMap" v-bind:class="{ boutonOn: !showMapBool}" text v-on:click="showRestaurants()">
+                  <v-icon dark>
+                    mdi-format-list-bulleted-square 
+                  </v-icon>
+                  Liste
+                  
+                </v-btn> 
+                <v-btn class="boutonRestoMap" v-bind:class="{ boutonOn: showMapBool}" text v-on:click="showMap()">
+                  <v-icon dark>
+                    mdi-map-search-outline 
+                  </v-icon>
+                  Plan
+                  
+                </v-btn>
+              </div>
+            </v-col>
+          </v-row>
           <div v-if="chargementSearch" class="gif-center">
             <!--<div id="chargement" class="gif-center">-->
             <img
@@ -72,26 +78,26 @@
               width="5%"
             />
           </div>
-
-          <Map
-            v-if="this.allRestaurants.length >= 1 && showMapBool"
-            v-bind:userQuery="inputName"
-            v-bind:longitude="this.longitude"
-            v-bind:latitude="this.latitude"
-            v-bind:devise="this.devise"
-            v-bind:restaurants="this.mapRestaurants"
-          >
-          </Map>
-          <div v-if="showRestaurantsBool">
-            <div>
-              <jw-pagination
-                :pageSize="50"
-                :items="filteredRestaurants"
-                @changePage="onChangePage"
-                :labels="customLabels"
-              ></jw-pagination>
-            </div>
-            <v-list-item
+          
+          <Map 
+          v-if="this.allRestaurants.length >= 1 && showMapBool"
+          v-bind:userQuery="inputName"
+          v-bind:longitude="this.longitude"
+          v-bind:latitude="this.latitude"
+          v-bind:devise="this.devise"
+          v-bind:restaurants="this.mapRestaurants">
+          
+        </Map>
+        <div v-if="showRestaurantsBool">
+          <div>
+            <Pagination 
+              v-bind:items="this.filteredRestaurants"
+              v-on:changePage="onChangePage"
+              v-bind:pageSize="50"
+              v-bind:labels="this.customLabels">
+            </Pagination>
+          </div>
+          <v-list-item
               v-for="restaurant in pageOfRestaurants"
               :key="restaurant[0].Id"
             >
@@ -101,12 +107,9 @@
                 v-bind:userQuery="inputName"
                 v-bind:longitude="longitude"
                 v-bind:latitude="latitude"
-              ></DashboardCard>
-            </v-list-item>
-            <!--<div>
-            <jw-pagination :pageSize="50" :items="filteredRestaurants" @changePage="onChangePage" :labels="customLabels"></jw-pagination>
-          </div>-->
-          </div>
+            ></DashboardCard>
+          </v-list-item>
+        </div>
         </div>
       </div>
     </v-app>
@@ -161,6 +164,8 @@
 .boutonOn {
   background-color: #ffc1073d;
 }
+
+
 </style>
 
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
@@ -173,12 +178,15 @@ import DashboardFilter from "@/components/DashboardFilter.vue";
 import DashboardSearch from "@/components/DashboardSearch.vue";
 import DashboardLocation from "@/components/DashboardLocation.vue";
 import Map from "@/components/Map.vue";
+import Pagination from "@/components/Pagination.vue"
+
 const customLabels = {
   first: "<<",
   last: ">>",
   previous: "<",
   next: ">",
 };
+
 
 export default {
   name: "Dashboard",
@@ -188,6 +196,7 @@ export default {
     DashboardSearch,
     DashboardLocation,
     Map,
+    Pagination
   },
   data: () => ({
     inputCity: "", //adresse
@@ -347,7 +356,6 @@ export default {
       });
       this.allRestaurants = allRestaurant;
       this.filteredRestaurants = this.allRestaurants;
-      // this.mapRestaurants = this.openRestaurant(allRestaurant);
       this.affichageFiltre = true;
       this.chargement = false;
       this.chargementSearch = false;
@@ -370,7 +378,7 @@ export default {
         var restaurants = res["data"]["data"];
         this.regroupement(restaurants);
         // this.mapRestaurants = this.openRestaurant(restaurants);
-        this.$refs.composantFiltres.filterRestaurants();
+        this.$refs.composantFiltres.filterRestaurants(this.allRestaurants);
       });
     },
     deleteProposition() {
@@ -396,12 +404,12 @@ export default {
     openRestaurant(restaurants) {
       var allRestaurantsOuverts = [];
       if (restaurants.length == 1) {
-        if (restaurants[0].IsOpenNow == true) {
-          allRestaurantsOuverts.push(restaurants);
+        if (restaurants[0][0].IsOpenNow) {
+          allRestaurantsOuverts.push(restaurants[0]);
         }
       } else {
         for (var i in restaurants) {
-          if (restaurants[i][0].IsOpenNow == true) {
+          if (restaurants[i][0].IsOpenNow) {
             allRestaurantsOuverts.push(restaurants[i]);
           }
         }

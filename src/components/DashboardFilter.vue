@@ -53,9 +53,8 @@ export default {
       }
     },
     methods: {
-        filterRestaurants() {
+        filterRestaurants(tmpRestaurants = this.allRestaurants) {
           localStorage.setItem('expiration', Date.now())
-          let tmpRestaurants = this.allRestaurants
           this.traductionFoodFilter()
           this.filteredRestaurants = tmpRestaurants.filter(restaurant =>
           {

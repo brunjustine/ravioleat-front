@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <v-card>
+    <v-card >
       <v-app-bar elevate-on-scroll fixed class="overflow-hidden">
         <v-container fill-height fluid>
         <v-row>
