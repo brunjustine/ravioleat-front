@@ -159,7 +159,6 @@ import DashboardFilter from "@/components/DashboardFilter.vue";
 import DashboardSearch from "@/components/DashboardSearch.vue";
 import DashboardLocation from "@/components/DashboardLocation.vue";
 import Map from "@/components/Map.vue";
-
 const customLabels = {
   first: '<<',
   last: '>>',
