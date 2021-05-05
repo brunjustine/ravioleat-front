@@ -150,7 +150,7 @@
       getRestaurant(restaurant_ids) {
         var first_key;
         this.endLoading = Object.keys(restaurant_ids).filter(key=> restaurant_ids[key]!=="").length-1;
-        Object.keys(restaurant_ids).forEach((key,i) =>{
+        Object.keys(restaurant_ids).forEach((key) =>{
           if (restaurant_ids[key] !== "") {
             if (first_key === undefined) { first_key = key }
             axios.post(`http://${process.env.VUE_APP_API_IP}:${process.env.VUE_APP_API_PORT}/restaurant/` + restaurant_ids[key].toString(),
@@ -163,7 +163,6 @@
               })
               .then(res => {
                 this.restaurant[key] = res.data.data;
-                //console.log(res.data.data);
                 this.getApplications(this.restaurant[key]);
                 if (this.restaurant[key]['Menus'].length !== 0 && this.items.length === 0 ) {
                   this.items = this.restaurant[key]['Menus'];
