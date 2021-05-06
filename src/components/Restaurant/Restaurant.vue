@@ -202,7 +202,7 @@
       },
       fastSort() {
         return this.applications.sort((application1, application2) =>
-          application1.deliveryETA.RangeLower - application2.deliveryETA.RangeLower)
+          (Number(application1.deliveryETA.RangeLower) + Number(application1.deliveryETA.RangeUpper)) - (Number(application2.deliveryETA.RangeLower) + Number(application2.deliveryETA.RangeUpper)))
       },
       bestSort() {
         return this.applications.sort((application1, application2) =>
