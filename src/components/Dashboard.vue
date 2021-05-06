@@ -1,18 +1,6 @@
 <template>
   <div>
     <v-app>
-      <v-btn
-        class="mx-2"
-        fab
-        dark
-        color="amber"
-        id="buttonGoTop"
-        title="Go to top"
-        @click="goUp"
-      >
-        <v-icon dark> mdi-apple-keyboard-caps </v-icon>
-      </v-btn>
-
       <DashboardLocation
         @inputCity="SetInputCity"
         @PaysChoisit="SetPaysChoisit"
@@ -150,15 +138,6 @@
 .boutonRestoMap {
   border-bottom: solid 2px #ffc107;
   margin: 8px;
-}
-
-#buttonGoTop {
-  position: fixed;
-  bottom: 20px;
-  right: 30px;
-  z-index: 99;
-  padding: 15px;
-  color: white;
 }
 
 .boutonOn {
@@ -356,6 +335,7 @@ export default {
       });
       this.allRestaurants = allRestaurant;
       this.filteredRestaurants = this.allRestaurants;
+      this.mapRestaurants = this.openRestaurant(this.allRestaurants);
       this.affichageFiltre = true;
       this.chargement = false;
       this.chargementSearch = false;
@@ -377,7 +357,6 @@ export default {
       axios.post(path, params).then((res) => {
         var restaurants = res["data"]["data"];
         this.regroupement(restaurants);
-        // this.mapRestaurants = this.openRestaurant(restaurants);
         this.$refs.composantFiltres.filterRestaurants(this.allRestaurants);
       });
     },
@@ -389,9 +368,6 @@ export default {
     },
     turnErreurOff() {
       this.erreurAdresse = false;
-    },
-    goUp() {
-      window.scrollTo(0, 0);
     },
     showRestaurants() {
       this.showRestaurantsBool = true;
