@@ -7,5 +7,10 @@ module.exports = {
         args[0].title = 'Ravioleat'
         return args
         })
-    }
+    },
+    devServer: {
+      disableHostCheck: true,
+      port: 8080,
+      public: '0.0.0.0:8080'
+    },
 }
