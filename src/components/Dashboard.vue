@@ -34,7 +34,7 @@
           <v-row>
             <v-col cols="9">
               <DashboardSearch
-                v-if="allRestaurants.length >= 1"
+                v-if="affichageFiltre"
                 v-bind:allRestaurants="this.filteredRestaurants"
                 @searchRestaurants="rechercheParNom"
               ></DashboardSearch>
